@@ -25,11 +25,11 @@ class User extends BaseUser
     protected $deleted;
 
     /**
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=50)
      * @Assert\NotBlank(message="name.notBlank", groups={"Registration", "Profile"})
      * @Assert\Length(
      *     min=3,
-     *     max=15,
+     *     max=50,
      *     minMessage="name.tooShort",
      *     maxMessage="name.tooLong",
      *     groups={"Registration", "Profile"}
@@ -38,11 +38,11 @@ class User extends BaseUser
     protected $name;
 
     /**
-     * @ORM\Column(name="surname", type="string", length=255)
+     * @ORM\Column(name="surname", type="string", length=50)
      * @Assert\NotBlank(message="surname.notBlank", groups={"Registration", "Profile"})
      * @Assert\Length(
      *     min=3,
-     *     max=15,
+     *     max=50,
      *     minMessage="surname.tooShort",
      *     maxMessage="surname.tooLong",
      *     groups={"Registration", "Profile"}
