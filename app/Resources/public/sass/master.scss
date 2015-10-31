@@ -1,0 +1,6 @@
+// Main style file, for including styles from other bundles
+
+$icon-font-path: 'fonts/';
+
+// Include bootstrap styles
+@import '../../../../web/assets/vendor/bootstrap-sass/assets/stylesheets/_bootstrap';

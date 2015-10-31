@@ -1,0 +1,6 @@
+{
+  "name": "illuminati-application",
+  "dependencies": {
+    "bootstrap-sass": "~3.3.5"
+  }
+}
