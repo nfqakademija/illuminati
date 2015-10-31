@@ -83,3 +83,6 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: Illuminati\UserBundle\Entity\User
+    registration:
+            form:
+                type: app_user_registration
