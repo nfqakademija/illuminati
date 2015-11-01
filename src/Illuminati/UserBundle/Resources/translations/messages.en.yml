@@ -1,0 +1,4 @@
+form:
+  name: Name
+  surname: Surname
+  registration.submit: Start ordering !
