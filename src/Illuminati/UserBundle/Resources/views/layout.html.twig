@@ -1,0 +1,15 @@
+{% extends "::base.html.twig" %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ 'assets/master.css' }}" />
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('assets/all.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        {{ block('fos_user_content') }}
+    </div>
+{% endblock %}
