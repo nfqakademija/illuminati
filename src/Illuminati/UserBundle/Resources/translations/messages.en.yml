@@ -1,2 +1,4 @@
-form.name: Name
-form.surname: Surname
+form:
+  name: Name
+  surname: Surname
+  registration.submit: Start ordering !
