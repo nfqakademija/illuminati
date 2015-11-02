@@ -56,6 +56,11 @@ class Order_participants
      */
     private $deleted;
 
+    public function __construct()
+    {
+        $this->deleted = 0;
+        $this->confirmed = 0;
+    }
 
     /**
      * Get id

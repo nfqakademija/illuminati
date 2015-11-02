@@ -56,6 +56,12 @@ class User_order
      */
     private $deleted;
 
+    public function __construct()
+    {
+        $this->confirmed = 0;
+        $this->payed = 0;
+        $this->deleted = 0;
+    }
 
     /**
      * Get id

@@ -63,6 +63,11 @@ class Host_order
      */
     private $deleted;
 
+    public function __construct()
+    {
+        $this->deleted = 0;
+        $this->stateId = 1; //Opened by default;
+    }
 
     /**
      * Get id
