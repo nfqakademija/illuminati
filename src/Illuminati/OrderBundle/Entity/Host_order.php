@@ -50,9 +50,8 @@ class Host_order
     private $closeDate;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="state_id", type="smallint")
+     * @ORM\ManyToOne(targetEntity="Illuminati\OrderBundle\Entity\Host_order_state", inversedBy="host_orders")
+     * @ORM\JoinColumn(name="State_ID", referencedColumnName="id")
      */
     private $stateId;
 

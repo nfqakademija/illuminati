@@ -28,6 +28,11 @@ class Host_order_state
      */
     private $state;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\Host_order", mappedBy="stateId")
+     */
+    private $host_orders;
+
 
     /**
      * Get id
