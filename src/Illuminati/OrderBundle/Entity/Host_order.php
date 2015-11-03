@@ -2,6 +2,7 @@
 
 namespace Illuminati\OrderBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -62,10 +63,16 @@ class Host_order
      */
     private $deleted;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\Order_participants", mappedBy="hostOrderId")
+     */
+    private $order_participants;
+
     public function __construct()
     {
         $this->deleted = 0;
         $this->stateId = 1; //Opened by default;
+        $this->order_participants = new ArrayCollection();
     }
 
     /**
@@ -220,5 +227,15 @@ class Host_order
     public function getDeleted()
     {
         return $this->deleted;
+    }
+
+    /**
+     * Get Order Participants
+     *
+     * @return mixed
+     */
+    public function getOrderParticipants()
+    {
+        return $this->order_participants;
     }
 }

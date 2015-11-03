@@ -22,9 +22,8 @@ class Order_participants
     private $id;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="host_order_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Illuminati\OrderBundle\Entity\Host_order", inversedBy="order_participants")
+     * @ORM\JoinColumn(name="host_order_id", referencedColumnName="id")
      */
     private $hostOrderId;
 
