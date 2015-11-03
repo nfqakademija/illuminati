@@ -68,11 +68,17 @@ class Host_order
      */
     private $order_participants;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order", mappedBy="hostOrderId")
+     */
+    private $user_orders;
+
     public function __construct()
     {
         $this->deleted = 0;
         $this->stateId = 1; //Opened by default;
         $this->order_participants = new ArrayCollection();
+        $this->user_orders = new ArrayCollection();
     }
 
     /**
@@ -238,4 +244,14 @@ class Host_order
     {
         return $this->order_participants;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getUserOrders()
+    {
+        return $this->user_orders;
+    }
+
+
 }
