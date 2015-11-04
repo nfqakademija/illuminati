@@ -28,9 +28,8 @@ class User_order
     private $hostOrderId;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="users_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="Illuminati\UserBundle\Entity\User", inversedBy="user_orders")
+     * @ORM\JoinColumn(name="users_id", referencedColumnName="id")
      */
     private $usersId;
 
