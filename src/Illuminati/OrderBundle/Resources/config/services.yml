@@ -1,0 +1,4 @@
+services:
+  invite_generator:
+      class: Illuminati\OrderBundle\Services\OrderInvitesGenerator
+      arguments: ["@doctrine.orm.entity_manager"]
