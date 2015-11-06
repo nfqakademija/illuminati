@@ -89,7 +89,6 @@ class Host_order
     public function __construct()
     {
         $this->deleted = 0;
-        $this->stateId = 1; //Opened by default;
         $this->order_participants = new ArrayCollection();
         $this->user_orders = new ArrayCollection();
     }
