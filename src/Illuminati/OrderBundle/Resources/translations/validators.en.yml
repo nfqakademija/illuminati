@@ -1,0 +1,6 @@
+min:
+  Title: The title is too short
+  Description: Description is too short
+
+max:
+  Title: Title is too long

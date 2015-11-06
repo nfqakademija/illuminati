@@ -4,6 +4,8 @@ namespace Illuminati\OrderBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * Host_order
@@ -32,6 +34,13 @@ class Host_order
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
+     * @Assert\NotBlank(message="notBlank.title")
+     * @Assert\Length(
+     *      min="3",
+     *      max="255",
+     *      minMessage="min.Title",
+     *      maxMessage="max.Title"
+     * )
      */
     private $title;
 
@@ -39,6 +48,11 @@ class Host_order
      * @var string
      *
      * @ORM\Column(name="description", type="text")
+     * @Assert\NotBlank(message="notBlank.description")
+     * @Assert\Length(
+     *      min="5",
+     *      minMessage="min.Description"
+     * )
      */
     private $description;
 
