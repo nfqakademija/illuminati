@@ -11,7 +11,6 @@ class OrderInvitesGenerator
     protected $participantsEmailsArray;
     protected $em;
     protected $hostOrderInvites = array();
-    private $validEmails = array();
 
     /**
      * @param EntityManagerInterface $em
@@ -60,13 +59,15 @@ class OrderInvitesGenerator
             $this->participantsArray = array_unique($this->participantsEmailsArray);
         }
 
+        $validEmails = array();
+
         foreach ($this->participantsEmailsArray as $email ) {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-                $this->validEmails[] = $email;
+                $validEmails[] = $email;
             }
         }
 
-        foreach($this->validEmails as $email)
+        foreach($validEmails as $email)
         {
             $inviteToken = bin2hex(openssl_random_pseudo_bytes(32));
 
