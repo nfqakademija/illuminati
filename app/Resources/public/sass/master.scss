@@ -4,3 +4,7 @@ $icon-font-path: 'fonts/';
 
 // Include bootstrap styles
 @import '../../../../web/assets/vendor/bootstrap-sass/assets/stylesheets/_bootstrap';
+
+body {
+  padding-top: 80px;
+}
