@@ -16,6 +16,7 @@ class Builder extends ContainerAware
         ));
 
         $menu->addChild('Home', array('route' => 'homepage'));
+        //$menu->addChild('Order', array('route' => 'order'));
 
         if (!$this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
 
@@ -30,6 +31,11 @@ class Builder extends ContainerAware
             ));
 
         } else {
+
+            $menu->addChild('NewHostOrder', array(
+                'route' => 'newHostOrder',
+                'label' => 'New host order'
+            ));
 
             $menu->addChild('UserProfile', array(
                 'route' => 'fos_user_profile_edit',
