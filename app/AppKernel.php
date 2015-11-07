@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new FOS\UserBundle\FOSUserBundle(),
             new Illuminati\UserBundle\IlluminatiUserBundle(),
             new Illuminati\OrderBundle\IlluminatiOrderBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

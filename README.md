@@ -13,3 +13,5 @@
 **bower.json** - for frontend packages  
 **gulpfile.js** - add your bundle JavaScripts files  
 **./app/Resources/public/sass/master.scss** - for including your bundle styles (.scss) or writing common styles  
+
+test
