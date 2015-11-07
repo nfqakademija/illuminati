@@ -1,3 +1,11 @@
+illuminati_supplier:
+    resource: "@SupplierBundle/Resources/config/routing.yml"
+    prefix:   /supplier
+
+illuminati_product:
+    resource: "@ProductBundle/Resources/config/routing.yml"
+    prefix:   /product
+
 illuminati_order:
     resource: "@IlluminatiOrderBundle/Controller/"
     type:     annotation
