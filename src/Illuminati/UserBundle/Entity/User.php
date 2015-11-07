@@ -2,6 +2,7 @@
 
 namespace Illuminati\UserBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -50,11 +51,22 @@ class User extends BaseUser
      */
     protected $surname;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\Host_order", mappedBy="usersId")
+     */
+    protected $hosted_orders;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order", mappedBy="usersId")
+     */
+    protected $user_orders;
+
     public function __construct()
     {
         parent::__construct();
         $this->deleted = 0;
-        // your own logic
+        $this->hosted_orders = new ArrayCollection();
+        $this->user_orders = new ArrayCollection();
     }
 
     /**
@@ -103,6 +115,22 @@ class User extends BaseUser
     public function setDeleted($deleted)
     {
         $this->deleted = $deleted;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHostedOrders()
+    {
+        return $this->hosted_orders;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserOrders()
+    {
+        return $this->user_orders;
     }
 
 

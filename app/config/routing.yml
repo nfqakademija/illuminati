@@ -1,3 +1,8 @@
+illuminati_order:
+    resource: "@IlluminatiOrderBundle/Controller/"
+    type:     annotation
+    prefix:   /order
+
 illuminati_user:
     resource: "@IlluminatiUserBundle/Controller/"
     type:     annotation
