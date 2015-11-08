@@ -22,7 +22,6 @@ class AppKernel extends Kernel
             new Illuminati\OrderBundle\IlluminatiOrderBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Illuminati\ProductBundle\ProductBundle(),
-            new Illuminati\SupplierBundle\SupplierBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -33,6 +32,14 @@ class AppKernel extends Kernel
         }
 
         return $bundles;
+    }
+
+    public function getCacheDir()
+    {
+        /* better for performance and chmod issues */
+        return '/tmp/cache';
+
+        // return $this->rootDir.'/'.$this->environment.'/cache';
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

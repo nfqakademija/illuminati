@@ -16,7 +16,7 @@ class Builder extends ContainerAware
         ));
 
         $menu->addChild('Home', array('route' => 'homepage'));
-        //$menu->addChild('Order', array('route' => 'order'));
+        $menu->addChild('Products', array('route' => 'product'));
 
         if (!$this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
 

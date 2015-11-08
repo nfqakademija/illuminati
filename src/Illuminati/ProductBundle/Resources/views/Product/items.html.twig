@@ -1,0 +1,19 @@
+<div class="products">
+    {% for entity in ProductEntities %}
+        <div class="row">
+            <div class="col-md-4">
+                <a href="{{ path('product_show', { 'id': entity.id }) }}" class="thumbnail" title="{{ entity.title }}">
+                    <img src="{{ entity.image }}" alt="{{ entity.title }}">
+                </a>
+            </div>
+            <div class="col-md-8">
+                <h3 class="product-title">{{ entity.title }}</h3>
+                <span class="price"><strong>Price:</strong> {{ entity.price }}</span>
+                <p>
+                    {{ entity.description }}
+                </p>
+                <a href="#" class="btn btn-primary">Add to cart</a>
+            </div>
+        </div>
+    {% endfor %}
+</div>

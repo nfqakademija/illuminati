@@ -1,0 +1,19 @@
+{% extends 'ProductBundle::layout.html.twig' %}
+
+{% block content_header %}
+    {{ entity.title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ parent() }}
+    <li><a href="{{ path('supplier_show', {id:entity.supplier.id}) }}">{{ entity.supplier.name }}</a></li>
+    <li>{{ entity.title }}</li>
+{% endblock %}
+
+{% block content -%}
+<div class="products">
+    <img src="{{ entity.image }}" title="{{ entity.title }}" alt="{{ entity.title }}" /><br />
+    {{ entity.price }}<br />
+    {{ entity.description }}
+</div>
+{% endblock %}

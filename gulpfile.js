@@ -32,7 +32,11 @@ gulp.task('watch', function () {
     };
 
     // sass
-    gulp.watch('./app/Resources/public/sass/master.scss', ['sass'])
+    gulp.watch([
+        './app/Resources/public/sass/master.scss',
+        './app/Resources/public/sass/common.scss',
+        './src/Illuminati/ProductBundle/Resources/public/sass/product.scss',
+    ], ['sass'])
         .on('change', onChange);
 
     // JavaScripts
