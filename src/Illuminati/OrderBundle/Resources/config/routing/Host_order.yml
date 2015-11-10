@@ -1,0 +1,7 @@
+host_order_index:
+  path: /
+  defaults: { _controller: "IlluminatiOrderBundle:Default:index" }
+
+host_order_new:
+  path: /new
+  defaults: { _controller: "IlluminatiOrderBundle:Default:create" }

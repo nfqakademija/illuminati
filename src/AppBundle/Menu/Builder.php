@@ -33,7 +33,7 @@ class Builder extends ContainerAware
         } else {
 
             $menu->addChild('NewHostOrder', array(
-                'route' => 'newHostOrder',
+                'route' => 'host_order_new',
                 'label' => 'New host order'
             ));
 
