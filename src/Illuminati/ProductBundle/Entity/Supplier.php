@@ -2,25 +2,39 @@
 
 namespace Illuminati\ProductBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Supplier
+ *
+ * @ORM\Table(name="supplier", uniqueConstraints={@ORM\UniqueConstraint(name="name_UNIQUE", columns={"name"})})
+ * @ORM\Entity
  */
 class Supplier
 {
     /**
      * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
      * @var boolean
+     *
+     * @ORM\Column(name="deleted", type="boolean", nullable=true)
      */
     private $deleted = '0';
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
 
 
     /**
@@ -68,15 +82,7 @@ class Supplier
      */
     public function getDeleted()
     {
-        return (boolean)$this->deleted;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->name;
+        return $this->deleted;
     }
 
     /**

@@ -2,45 +2,70 @@
 
 namespace Illuminati\ProductBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Product
+ *
+ * @ORM\Table(name="product", indexes={@ORM\Index(name="fk_product_1_idx", columns={"supplier_id"})})
+ * @ORM\Entity
  */
 class Product
 {
     /**
      * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=45, nullable=true)
      */
     private $title;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="price", type="decimal", precision=10, scale=0, nullable=true)
      */
     private $price;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="image", type="string", length=255, nullable=true)
      */
     private $image;
 
     /**
      * @var boolean
+     *
+     * @ORM\Column(name="deleted", type="boolean", nullable=false)
      */
     private $deleted = '0';
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var \Illuminati\ProductBundle\Entity\Supplier
+     *
+     * @ORM\ManyToOne(targetEntity="Illuminati\ProductBundle\Entity\Supplier")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="supplier_id", referencedColumnName="id")
+     * })
      */
     private $supplier;
+
 
 
     /**
@@ -160,7 +185,7 @@ class Product
      */
     public function getDeleted()
     {
-        return (boolean)$this->deleted;
+        return $this->deleted;
     }
 
     /**
@@ -197,4 +222,3 @@ class Product
         return $this->supplier;
     }
 }
-
