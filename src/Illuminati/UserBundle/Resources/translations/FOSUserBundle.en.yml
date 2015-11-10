@@ -1,0 +1,11 @@
+# Security
+security:
+    login:
+        title: "Login"
+        forgot_password: "Forgot password"
+profile:
+    edit:
+        title: "Edit profile"
+resetting:
+    request:
+        title: "Resset password"

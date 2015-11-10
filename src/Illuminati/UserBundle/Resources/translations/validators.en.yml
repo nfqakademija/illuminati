@@ -1,0 +1,9 @@
+name:
+  notBlank: Please enter your name.
+  tooShort: The name is too short.
+  tooLong: The name is too long.
+
+surname:
+  notBlank: Please enter your surname.
+  tooShort: The surname is too short.
+  tooLong: The surname is too long.

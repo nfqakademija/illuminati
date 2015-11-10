@@ -1,0 +1,14 @@
+{% extends 'ProductBundle::layout.html.twig' %}
+
+{% block content_header %}
+    {{ entity.name }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    {{ parent() }}
+    <li>{{ entity.name }}</li>
+{% endblock %}
+
+{% block content %}
+{% include 'ProductBundle::Product/items.html.twig' %}
+{% endblock %}

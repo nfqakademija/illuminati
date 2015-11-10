@@ -1,0 +1,9 @@
+order:
+  title: Title
+  description: Description
+  closeDate: Order Close date and time
+  participants: Participants
+  submit: Create
+
+  helpBlock:
+    participants: Insert participants emails which you want to invite (Separate emails by comma.).

@@ -17,6 +17,11 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new AppBundle\AppBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
+            new Illuminati\UserBundle\IlluminatiUserBundle(),
+            new Illuminati\OrderBundle\IlluminatiOrderBundle(),
+            new Knp\Bundle\MenuBundle\KnpMenuBundle(),
+            new Illuminati\ProductBundle\ProductBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -27,6 +32,18 @@ class AppKernel extends Kernel
         }
 
         return $bundles;
+    }
+
+    /**
+     * Changes symfony's default cache folder location.
+     *
+     * Used to solve permission problems and increase performance in vagrant
+     *
+     * @return string
+     */
+    public function getCacheDir()
+    {
+        return '/tmp/cache';
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
