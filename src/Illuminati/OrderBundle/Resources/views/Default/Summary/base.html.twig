@@ -1,0 +1,12 @@
+{% extends ":default:index.html.twig" %}
+
+{% block body %}
+    <div class="container">
+        <h1>Order Summary</h1>
+
+        {# summary widget #}
+        {% if (orderParticipants is defined) and (orderParticipants is not empty) %}
+            {% include "IlluminatiOrderBundle:Default/Summary:summaryWidget.html.twig" with orderParticipants %}
+        {% endif %}
+    </div>
+{% endblock %}
