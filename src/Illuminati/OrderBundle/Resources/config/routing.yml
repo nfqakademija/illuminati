@@ -1,0 +1,3 @@
+order_host_order:
+  resource: "@IlluminatiOrderBundle/Resources/config/routing/Host_order.yml"
+  prefix: /order

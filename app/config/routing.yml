@@ -1,7 +1,5 @@
 illuminati_order:
-    resource: "@IlluminatiOrderBundle/Controller/"
-    type:     annotation
-    prefix:   /order
+    resource: "@IlluminatiOrderBundle/Resources/config/routing.yml"
 
 illuminati_user:
     resource: "@IlluminatiUserBundle/Controller/"
