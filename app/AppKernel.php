@@ -33,6 +33,18 @@ class AppKernel extends Kernel
         return $bundles;
     }
 
+    /**
+     * Changes symfony's default cache folder location.
+     *
+     * Used to solve permission problems and increase performance in vagrant
+     *
+     * @return string
+     */
+    public function getCacheDir()
+    {
+        return '/tmp/cache';
+    }
+
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
