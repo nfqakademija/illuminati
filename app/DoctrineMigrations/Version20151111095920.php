@@ -6,6 +6,7 @@ use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema;
 
 /**
+ * ProductBundle database tables creation
  * Auto-generated Migration: Please modify to your needs!
  */
 class Version20151111095920 extends AbstractMigration
