@@ -35,6 +35,10 @@ class Supplier
      */
     private $id;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\Host_order", mappedBy="supplier_id")
+     */
+    private $host_order_id;
 
 
     /**
