@@ -56,7 +56,7 @@ class OrderInvitesGenerator
         else if(is_array($this->participantsEmailsArray))
         {
             // Removing duplicate Emails
-            $this->participantsArray = array_unique($this->participantsEmailsArray);
+            $this->participantsEmailsArray = array_unique($this->participantsEmailsArray);
         }
 
         $validEmails = array();
