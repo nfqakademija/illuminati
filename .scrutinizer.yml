@@ -15,6 +15,10 @@ coding_style:
         concatenation: false
 
 build:
+  environment:
+    php:
+      version: 5.6.9
+
   dependencies:
     override:
       - composer install --no-interaction --prefer-source
