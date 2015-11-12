@@ -13,13 +13,19 @@ class TestController extends Controller
      */
     public function indexAction(Request $request)
     {
-        if(isset($_POST['submit'])) {
-            echo '5';
-            exit;
+        $form = $this->createFormBuilder(array())
+            ->add('save', 'submit', array('label' => 'Create Task'))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            die('5');
         }
 
         // replace this example code with whatever you need
         return $this->render('AppBundle:Default:form.html.twig', array(
+            'test_form' => $form->createView(),
         ));
     }
 }

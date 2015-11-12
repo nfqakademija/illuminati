@@ -4,9 +4,7 @@
 <div id="wrapper">
     <div class="container">
         {% block content -%}
-            <form method="post">
-                <button class="btn btn-primary" name="submit" type="submit">Submit</button>
-            </form>
+            {{ form(test_form) }}
         {% endblock %}
     </div>
 </div>
