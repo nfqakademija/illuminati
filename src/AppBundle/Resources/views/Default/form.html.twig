@@ -1,0 +1,11 @@
+{% extends ":default:index.html.twig" %}
+
+{% block body %}
+<div id="wrapper">
+    <div class="container">
+        {% block content -%}
+            {{ form(test_form) }}
+        {% endblock %}
+    </div>
+</div>
+{% endblock %}
