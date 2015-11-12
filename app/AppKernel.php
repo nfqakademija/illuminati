@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Illuminati\OrderBundle\IlluminatiOrderBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Illuminati\ProductBundle\ProductBundle(),
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
