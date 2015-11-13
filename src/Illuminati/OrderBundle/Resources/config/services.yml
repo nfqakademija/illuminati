@@ -2,3 +2,7 @@ services:
   invite_generator:
       class: Illuminati\OrderBundle\Services\OrderInvitesGenerator
       arguments: ["@doctrine.orm.entity_manager"]
+
+  host_order_participation_checker:
+      class: Illuminati\OrderBundle\Services\HostOrderParticipationChecker
+      arguments: ["@doctrine.orm.entity_manager","@security.token_storage"]
