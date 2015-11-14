@@ -75,6 +75,10 @@ class DefaultController extends Controller
             $listGenerator->setParticipantsEmailsArray($orderParticipantsEmails);
             $listGenerator->generate();
             $listGenerator->flush();
+
+            return $this->redirectToRoute(
+                'host_order_summary', ['id'=>$hostOrder->getId()]
+            );
         }
 
         return $this->render(
@@ -91,9 +95,10 @@ class DefaultController extends Controller
      */
     public function summaryAction($id)
     {
-
         if (($hostOrderObj = $this->get('host_order_participation_checker')->check((int)$id))) {
-            return $this->render("IlluminatiOrderBundle:Default/Summary:base.html.twig");
+            return $this->render(
+                "IlluminatiOrderBundle:Default/Summary:base.html.twig"
+            );
         } else {
             return $this->redirectToRoute('homepage');
         }
