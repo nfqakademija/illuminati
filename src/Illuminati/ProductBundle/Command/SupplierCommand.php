@@ -10,6 +10,24 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class SupplierCommand extends ContainerAwareCommand
 {
+    protected $provider;
+
+    /**
+     * @return mixed
+     */
+    public function getProvider()
+    {
+        return $this->provider;
+    }
+
+    /**
+     * @param mixed $provider
+     */
+    public function setProvider($provider)
+    {
+        $this->provider = $provider;
+    }
+
     protected function configure()
     {
         $this
@@ -24,12 +42,18 @@ class SupplierCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+
         $provider_name = $input->getArgument('provider');
         if ($provider_name) {
 
-            $provider =  $this->getContainer()->get($provider_name);
+            $supplier = $em->getRepository('ProductBundle:Supplier')->findOneBy([
+                'provider' => $provider_name
+            ]);
+
+            $provider = $this->getContainer()->get($provider_name);
             if($provider instanceof ProductProviderInterface) {
-                $provider->import();
+                $provider->import($supplier, $em);
             }
         }
 

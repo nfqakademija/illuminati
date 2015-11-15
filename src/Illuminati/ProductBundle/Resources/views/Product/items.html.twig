@@ -7,12 +7,16 @@
                 </a>
             </div>
             <div class="col-md-8">
-                <h3 class="product-title">{{ entity.title }}</h3>
-                <span class="price"><strong>Price:</strong> {{ entity.price }}</span>
+                <h3 class="product-title">
+                    <a href="{{ path('product_show', { 'id': entity.id }) }}" title="{{ entity.title }}">
+                        {{ entity.title }}
+                    </a>
+                    <div class="price pull-right">{{ entity.price }} {{ entity.currency }}</div>
+                </h3>
                 <p>
-                    {{ entity.description }}
+                    {{ entity.description | raw }}
                 </p>
-                <a href="#" class="btn btn-primary">Add to cart</a>
+                <a href="#" class="pull-right btn btn-xs btn-primary">{{ 'product.add_to_cart'|trans }}</a>
             </div>
         </div>
     {% endfor %}

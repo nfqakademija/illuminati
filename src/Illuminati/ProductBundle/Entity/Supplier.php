@@ -15,24 +15,24 @@ class Supplier
     /**
      * @var string
      *
-     * @ORM\Column(name="provider_class", type="string", length=255, nullable=false)
+     * @ORM\Column(name="provider", type="string", length=255, nullable=false)
      */
-    private $provider_class;
+    private $provider;
 
     /**
      * @return string
      */
-    public function getProviderClass()
+    public function getProvider()
     {
-        return $this->provider_class;
+        return $this->provider;
     }
 
     /**
-     * @param string $provider_class
+     * @param string $provider
      */
-    public function setProviderClass($provider_class)
+    public function setProvider($provider)
     {
-        $this->provider_class = $provider_class;
+        $this->provider = $provider;
     }
 
     /**

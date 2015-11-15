@@ -29,6 +29,29 @@ class Product
     /**
      * @var string
      *
+     * @ORM\Column(name="currency", type="string", length=45, nullable=true)
+     */
+    private $currency;
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+    }
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;

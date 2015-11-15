@@ -10,5 +10,3 @@ services:
     product.CiliPicaProductProvider:
         class: Illuminati\ProductBundle\Providers\CiliPicaProductProvider
         arguments: [@product.DataSourceInterface, %product.import_io%, 'http://www.cili.lt/']
-        calls:
-            - [setEntityManager, ["@doctrine.orm.entity_manager"]]

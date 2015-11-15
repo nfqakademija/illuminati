@@ -10,10 +10,12 @@
     <li>{{ entity.title }}</li>
 {% endblock %}
 
-{% block content -%}
+{% block content %}
 <div class="products">
-    <img src="{{ entity.image }}" title="{{ entity.title }}" alt="{{ entity.title }}" /><br />
-    {{ entity.price }}<br />
+    <a href="{{ path('product_show', { 'id': entity.id }) }}" class="thumbnail" title="{{ entity.title }}">
+        <img src="{{ entity.image }}" title="{{ entity.title }}" alt="{{ entity.title }}" />
+    </a>
+    <p class="price"><strong>Price:</strong> {{ entity.price }} {{ entity.currency }}</p>
     {{ entity.description }}
 </div>
 {% endblock %}

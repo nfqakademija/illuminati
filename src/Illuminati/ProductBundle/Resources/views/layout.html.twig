@@ -12,20 +12,11 @@
     </ol>
 
     <div class="row">
-        <div class="col-md-3">
-            {% block sidebar_left %}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        {{ knp_menu_render('ProductBundle:Builder:suppliersMenu', {'currentClass':'active', 'compressed': true}) }}
-                    </div>
-                </div>
-            {% endblock %}
-        </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
             {% block content %}
             {% endblock %}
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             {% block sidebar_right %}
                 <div class="panel panel-default">
                     <div class="panel-body">
