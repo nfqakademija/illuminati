@@ -11,7 +11,7 @@ use Doctrine\Orm\Repository;
  */
 class Host_orderRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function findOrderParticipantsOrders($id)
+    public function findParticipantsOrders($id)
     {
         return $this->getEntityManager()
             ->createQuery(

@@ -76,14 +76,17 @@ class DefaultController extends Controller
             $listGenerator->generate();
             $listGenerator->flush();
 
+            $this->get('session')->getFlashBag()
+                ->add('success', 'Order has been successfully created!');
+
             return $this->redirectToRoute(
-                'host_order_summary', ['id'=>$hostOrder->getId()]
+                'host_order_summary', ['id' => $hostOrder->getId()]
             );
         }
 
         return $this->render(
             "IlluminatiOrderBundle:Default:orderCreation.html.twig",
-            ["form"=>$form->createView()]
+            ["form" => $form->createView()]
         );
     }
 
@@ -96,8 +99,21 @@ class DefaultController extends Controller
     public function summaryAction($id)
     {
         if (($hostOrderObj = $this->get('host_order_participation_checker')->check((int)$id))) {
+
+            //getting participants
+
+            $participants = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository("IlluminatiOrderBundle:Host_order")
+                ->findParticipantsOrders($id);
+
             return $this->render(
-                "IlluminatiOrderBundle:Default/Summary:base.html.twig"
+                "IlluminatiOrderBundle:Default/Summary:base.html.twig",
+                [
+                    'hostOrder'    => $hostOrderObj,
+                    'orderParticipants' => $participants
+                ]
             );
         } else {
             return $this->redirectToRoute('homepage');

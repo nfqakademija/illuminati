@@ -1,31 +1,52 @@
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Participant email</th>
-            <th class="col-sm-2  text-center">Order status</th>
-            <th class="col-sm-1  text-center">Prepayed</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr class="orderParticipant">
-            <td>LoremIpsum2@gmail.com</td>
-            <td class="warning  text-center">Choosing</td>
-            <td class="success text-center"><span class="glyphicon glyphicon-ok"></span></td>
-        </tr>
-        <tr>
-            <td>LoremIpsum3@gmail.com</td>
-            <td class="success  text-center">Confirmed</td>
-            <td class="text-center"><span class="glyphicon glyphicon-remove"></span></td>
-        </tr>
-        <tr>
-            <td>LoremIpsum4@gmail.com</td>
-            <td class="warning text-center">Choosing</td>
-            <td class="success text-center"><span class="glyphicon glyphicon-ok"></span></td>
-        </tr>
-        <tr>
-            <td>LoremIpsum5@gmail.com</td>
-            <td class="success text-center">Confirmed</td>
-            <td class="success text-center"><span class="glyphicon glyphicon-ok"></span></td>
-        </tr>
-    </tbody>
-</table>
+{% set paricipantsCount = orderParticipants|length // 4 %}
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    {% for i in 0..paricipantsCount-1 %}
+        <div class="panel panel-default success">
+            <div class="panel-heading" role="tab" id="heading{{ i }}">
+                <div class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ i }}" aria-expanded="false" aria-controls="collapse{{ i }}">
+                    {%  if i == 0 %}
+                        {{ orderParticipants[i].email }}
+                    {% else %}
+                        {{ orderParticipants[i*4].email }}
+                    {% endif %}
+
+                    <div class="pull-right">
+                        {% if orderParticipants[i*4+1].confirmed == 1 %} {# Participant confiremd his order #}
+                            Status: <span class="glyphicon glyphicon-ok success" data-toggle="tooltip" data-placement="top" title="Participant has confirmed his order!"></span>
+                        {% else %} {# Participant still choosing #}
+                            Status: <span class="glyphicon glyphicon-shopping-cart" data-toggle="tooltip" data-placement="top" title="Participant is still choosing products"></span>
+                        {% endif %}
+
+                        {% if orderParticipants[i*4+1].payed == 1 %}
+                            Prepayed: <strong><span class="glyphicon glyphicon-ok"></span></strong>
+                        {% else %}
+                            Prepayed: <strong><span class="glyphicon glyphicon-remove"></span></strong>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            <div id="collapse{{ i }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ i }}">
+                <div class="panel-body success">
+                    <table class="table table-responsive">
+                        <tr>
+                            <th>Product</th>
+                            <th class="col-sm-2">Qty</th>
+                            <th class="col-sm-2">Price</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>1</td>
+                            <td>1</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
