@@ -2,6 +2,7 @@
 
 namespace Illuminati\OrderBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -34,6 +35,11 @@ class User_order
     private $usersId;
 
     /**
+     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order_details", mappedBy="userOrderId")
+     */
+    private $orderDetails;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="confirmed", type="smallint")
@@ -59,6 +65,7 @@ class User_order
         $this->confirmed = 0;
         $this->payed = 0;
         $this->deleted = 0;
+        $this->orderDetails = new ArrayCollection();
     }
 
     /**
@@ -190,5 +197,15 @@ class User_order
     {
         return $this->deleted;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderDetails()
+    {
+        return $this->orderDetails;
+    }
+
+
 }
 
