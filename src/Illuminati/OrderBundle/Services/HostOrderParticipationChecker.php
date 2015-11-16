@@ -9,6 +9,10 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class HostOrderParticipationChecker
 {
+
+    protected $em;
+
+    protected $securityToken;
     /**
      * Injecting dependencies
      *

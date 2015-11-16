@@ -20,7 +20,7 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
                     INNER JOIN Illuminati\OrderBundle\Entity\Host_order ho WITH (ho.id = ur.hostOrderId)
                     LEFT JOIN Illuminati\OrderBundle\Entity\User_order_details urd WITH (ur.id = urd.userOrderId )
                     LEFT JOIN Illuminati\ProductBundle\Entity\Product p WITH (urd.productId = p.id)
-                    WHERE ur.deleted = 0 AND ho.deleted = 0 AND ho = '.$id.' GROUP BY u.id'
-            )->getResult();
+                    WHERE ur.deleted = 0 AND ho.deleted = 0 AND ho = :hostOrderId GROUP BY u.id'
+            )->setParameter('hostOrderId',$id)->getResult();
     }
 }
