@@ -5,3 +5,7 @@ host_order_index:
 host_order_new:
   path: /new
   defaults: { _controller: "IlluminatiOrderBundle:Default:create" }
+
+host_order_summary:
+  path: /summary/{id}
+  defaults: { _controller: "IlluminatiOrderBundle:Default:summary"}

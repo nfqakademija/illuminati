@@ -2,11 +2,39 @@
 
 {% block body %}
     <div class="container">
+        {# success notification #}
+            {% for successMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success fade in col-sm-6 col-sm-offset-6">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Success!</strong>  {{ successMessage }}
+            </div>
+            {% endfor %}
+
         <h1>Order Summary</h1>
+
+        <div class="jumbotron">
+            <h2>{{ hostOrder.title }}</h2>
+            <p>{{ hostOrder.description }}</p>
+            <p><em><strong>Due Date: {{ hostOrder.closeDate|date('Y-m-d H:i') }}</strong></em></p>
+        </div>
+
+
+        <a href="{{ path('product') }}"><button class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> Go to shop </button></a>
+        <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Edit your order </button></a>
+        <hr>
 
         {# summary widget #}
         {% if (orderParticipants is defined) and (orderParticipants is not empty) %}
             {% include "IlluminatiOrderBundle:Default/Summary:summaryWidget.html.twig" with orderParticipants %}
+        {% endif %}
+
+
+        {# Checking if the logged in user is the host of the main order #}
+        {% if hostOrder.usersId.id == app.user.id %}
+            <hr>
+            <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-envelope"></span> Remind about payments </button></a>
+            <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-lock"></span> Confirm and lock order </button></a>
+            <br>
         {% endif %}
     </div>
 {% endblock %}

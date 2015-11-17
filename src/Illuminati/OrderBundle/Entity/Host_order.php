@@ -86,6 +86,12 @@ class Host_order
      */
     private $user_orders;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Illuminati\ProductBundle\Entity\Supplier", inversedBy="host_order_id")
+     * @ORM\JoinColumn(name="supplier_id", referencedColumnName="id")
+     */
+    private $supplier_id;
+
     public function __construct()
     {
         $this->deleted = 0;
@@ -264,6 +270,24 @@ class Host_order
     {
         return $this->user_orders;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSupplierId()
+    {
+        return $this->supplier_id;
+    }
+
+    /**
+     * @param mixed $supplier_id
+     */
+    public function setSupplierId($supplier_id)
+    {
+        $this->supplier_id = $supplier_id;
+    }
+
+
 
 
 }

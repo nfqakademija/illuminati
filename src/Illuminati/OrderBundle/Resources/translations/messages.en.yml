@@ -3,6 +3,7 @@ order:
   description: Description
   closeDate: Order Close date and time
   participants: Participants
+  supplier: Supplier
   submit: Create
 
   helpBlock:
