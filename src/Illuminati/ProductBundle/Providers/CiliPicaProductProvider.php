@@ -34,9 +34,10 @@ class CiliPicaProductProvider implements ProductProviderInterface
         $result = $this->DataSource->query($this->importIoConfig['connectorGuid'], $params);
         if($result = json_decode($result)) {
 
-            $query = $em->createQuery('DELETE FROM Illuminati\ProductBundle\Entity\Product');
-            //$query->setParameter('supplier_id', $supplier->getId());
-            $query->execute();
+            // delete all supplier products
+            $em->createQuery('DELETE ProductBundle:Product p WHERE p.supplier = :supplier')
+                ->setParameter('supplier', $supplier)
+                ->execute();
 
             $this->createProducts($em, $supplier, $result);
         }

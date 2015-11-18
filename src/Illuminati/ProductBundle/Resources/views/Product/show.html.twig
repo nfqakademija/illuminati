@@ -12,10 +12,22 @@
 
 {% block content %}
 <div class="products">
-    <a href="{{ path('product_show', { 'id': entity.id }) }}" class="thumbnail" title="{{ entity.title }}">
-        <img src="{{ entity.image }}" title="{{ entity.title }}" alt="{{ entity.title }}" />
-    </a>
-    <p class="price"><strong>Price:</strong> {{ entity.price }} {{ entity.currency }}</p>
-    {{ entity.description }}
+    <div class="row">
+        <div class="col-md-6">
+            <a href="{{ entity.image }}" target="_blank" class="thumbnail" title="{{ entity.title }}">
+                <img src="{{ entity.image }}" title="{{ entity.title }}" alt="{{ entity.title }}" />
+            </a>
+        </div>
+        <div class="col-md-6">
+            <p class="price"><strong>Price:</strong> {{ entity.price }} {{ entity.currency }}</p>
+            <p>{{ entity.description | raw }}</p>
+            <p>
+                <a href="#" class="btn btn-sm btn-success">
+                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                    {{ 'product.add_to_cart'|trans }}
+                </a>
+            </p>
+        </div>
+    </div>
 </div>
 {% endblock %}
