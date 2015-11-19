@@ -6,7 +6,7 @@
             {% for successMessage in app.session.flashbag.get('success') %}
             <div class="alert alert-success fade in col-sm-6 col-sm-offset-6">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                <strong>{% trans %}order.summary.dueDate{% endtrans %}</strong>  {{ successMessage }}
+                <strong>{% trans %}order.summary.success{% endtrans %}</strong>  {{ successMessage }}
             </div>
             {% endfor %}
 

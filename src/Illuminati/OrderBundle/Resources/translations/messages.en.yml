@@ -17,7 +17,7 @@ order:
     editOrderButton: Edit your order
     remindAboutPaymentsButton: Remind about paymentss
     confirmOrderButton: Confirm and Lock orders
-    suscess: Success!
+    success: Success!
 
     widget:
       product: Products
