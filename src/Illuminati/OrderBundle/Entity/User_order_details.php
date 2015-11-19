@@ -22,14 +22,26 @@ class User_order_details
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Illuminati\OrderBundle\Entity\User_order", inversedBy="orderDetails")
-     * @ORM\JoinColumn(name="userOrderId", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Illuminati\UserBundle\Entity\User", inversedBy="orderDetails");
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $userOrderId;
+    private $userId;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Illuminati\OrderBundle\Entity\Host_order", inversedBy="orderDetails")
+     * @ORM\JoinColumn(name="host_order_id", referencedColumnName="id")
+     */
+    private $hostOrderId;
+
+    //    /**
+    //     * @ORM\ManyToOne(targetEntity="Illuminati\OrderBundle\Entity\User_order", inversedBy="orderDetails")
+    //     * @ORM\JoinColumn(name="userOrderId", referencedColumnName="id")
+    //     */
+    //    private $userOrderId;
 
     /**
      * @ORM\ManyToOne(targetEntity="Illuminati\ProductBundle\Entity\Product", inversedBy="orderDetails")
-     * @ORM\JoinColumn(name="productId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
      */
     private $productId;
 
@@ -51,29 +63,29 @@ class User_order_details
         return $this->id;
     }
 
-    /**
-     * Set userOrderId
-     *
-     * @param integer $userOrderId
-     *
-     * @return User_order_details
-     */
-    public function setUserOrderId($userOrderId)
-    {
-        $this->userOrderId = $userOrderId;
-
-        return $this;
-    }
-
-    /**
-     * Get userOrderId
-     *
-     * @return integer
-     */
-    public function getUserOrderId()
-    {
-        return $this->userOrderId;
-    }
+    //    /**
+    //     * Set userOrderId
+    //     *
+    //     * @param integer $userOrderId
+    //     *
+    //     * @return User_order_details
+    //     */
+    //    public function setUserOrderId($userOrderId)
+    //    {
+    //        $this->userOrderId = $userOrderId;
+    //
+    //        return $this;
+    //    }
+    //
+    //    /**
+    //     * Get userOrderId
+    //     *
+    //     * @return integer
+    //     */
+    //    public function getUserOrderId()
+    //    {
+    //        return $this->userOrderId;
+    //    }
 
     /**
      * Set productId
@@ -122,5 +134,40 @@ class User_order_details
     {
         return $this->quantity;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getHostOrderId()
+    {
+        return $this->hostOrderId;
+    }
+
+    /**
+     * @param mixed $hostOrderId
+     */
+    public function setHostOrderId($hostOrderId)
+    {
+        $this->hostOrderId = $hostOrderId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * @param mixed $userId
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+    }
+
+
+
 }
 

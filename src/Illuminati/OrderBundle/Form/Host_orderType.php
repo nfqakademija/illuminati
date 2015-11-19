@@ -27,7 +27,6 @@ class Host_orderType extends AbstractType
                 'label'=>'order.supplier'
             ))
             ->add('closeDate','datetime', array("label"=>"order.closeDate"))
-            ->add('orderPatricipants','textarea',array('mapped' => false,"label"=>"order.participants" ))
             ->add('submit','submit',array("label"=>"order.submit"));
         ;
     }
