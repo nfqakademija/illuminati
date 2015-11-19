@@ -63,11 +63,11 @@ class Host_order
      */
     private $closeDate;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Illuminati\OrderBundle\Entity\Host_order_state", inversedBy="host_orders")
-     * @ORM\JoinColumn(name="State_ID", referencedColumnName="id")
-     */
-    private $stateId;
+        /**
+         * @var integer
+         * @ORM\Column(name="state_id", type="smallint")
+         */
+        private $stateId;
 
     /**
      * @var integer
@@ -76,10 +76,17 @@ class Host_order
      */
     private $deleted;
 
+    //    /**
+    //     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\Order_participants", mappedBy="hostOrderId")
+    //     */
+    //    private $order_participants;
+
     /**
-     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\Order_participants", mappedBy="hostOrderId")
+     * @var string
+     *
+     * @ORM\Column(name="host_order_token", type="string", length=32, unique=true)
      */
-    private $order_participants;
+    private $host_order_token;
 
     /**
      * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order", mappedBy="hostOrderId")
@@ -94,8 +101,10 @@ class Host_order
 
     public function __construct()
     {
+        $this->stateId = 1;
+        $this->host_order_token = hex2bin(openssl_random_pseudo_bytes(32));
         $this->deleted = 0;
-        $this->order_participants = new ArrayCollection();
+        //$this->order_participants = new ArrayCollection();
         $this->user_orders = new ArrayCollection();
     }
 
@@ -253,15 +262,15 @@ class Host_order
         return $this->deleted;
     }
 
-    /**
-     * Get Order Participants
-     *
-     * @return mixed
-     */
-    public function getOrderParticipants()
-    {
-        return $this->order_participants;
-    }
+    //    /**
+    //     * Get Order Participants
+    //     *
+    //     * @return mixed
+    //     */
+    //    public function getOrderParticipants()
+    //    {
+    //        return $this->order_participants;
+    //    }
 
     /**
      * @return mixed
@@ -287,7 +296,12 @@ class Host_order
         $this->supplier_id = $supplier_id;
     }
 
-
-
+    /**
+     * @return string
+     */
+    public function getHostOrderToken()
+    {
+        return $this->host_order_token;
+    }
 
 }
