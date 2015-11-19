@@ -22,6 +22,8 @@ class LoadProductData extends AbstractFixture implements FixtureInterface
             $product->setDescription('Virtas kiaulienos kumpis, dešrelės, mocarela, sūris, pomidorų padažas, aliejaus ir česnako padažas, raudonėliai.');
             $product->setSupplier($this->getReference('supplier'));
 
+            $this->addReference("product{$i}",$product);
+
             $manager->persist($product);
             $manager->flush();
         }
