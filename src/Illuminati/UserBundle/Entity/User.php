@@ -61,12 +61,18 @@ class User extends BaseUser
      */
     protected $user_orders;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order_details", mappedBy="userId")
+     */
+    protected $orderDetails;
+
     public function __construct()
     {
         parent::__construct();
         $this->deleted = 0;
         $this->hosted_orders = new ArrayCollection();
         $this->user_orders = new ArrayCollection();
+        $this->orderDetails = new ArrayCollection();
     }
 
     /**
@@ -133,5 +139,12 @@ class User extends BaseUser
         return $this->user_orders;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getOrderDetails()
+    {
+        return $this->orderDetails;
+    }
 
 }

@@ -84,9 +84,9 @@ class Host_order
     /**
      * @var string
      *
-     * @ORM\Column(name="host_order_token", type="string", length=32, unique=true)
+     * @ORM\Column(name="order_token", type="string", length=32, unique=true)
      */
-    private $host_order_token;
+    private $order_token;
 
     /**
      * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order", mappedBy="hostOrderId")
@@ -99,13 +99,19 @@ class Host_order
      */
     private $supplier_id;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order_details", mappedBy="hostOrderId")
+     */
+    private $orderDetails;
+
     public function __construct()
     {
         $this->stateId = 1;
-        $this->host_order_token = hex2bin(openssl_random_pseudo_bytes(32));
+        $this->order_token = bin2hex(openssl_random_pseudo_bytes(32));
         $this->deleted = 0;
         //$this->order_participants = new ArrayCollection();
         $this->user_orders = new ArrayCollection();
+        $this->orderDetails = new ArrayCollection();
     }
 
     /**
@@ -299,9 +305,19 @@ class Host_order
     /**
      * @return string
      */
-    public function getHostOrderToken()
+    public function getOrderToken()
     {
-        return $this->host_order_token;
+        return $this->order_token;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderDetails()
+    {
+        return $this->orderDetails;
+    }
+
+
 
 }
