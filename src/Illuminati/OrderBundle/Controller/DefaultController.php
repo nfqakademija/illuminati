@@ -44,12 +44,6 @@ class DefaultController extends Controller
         if ($form->isValid()) {
 
             $em = $this->getDoctrine()->getManager();
-
-            // Getting default orderState for the order
-            $stateId = $em->getRepository("IlluminatiOrderBundle:Host_order_state")
-                ->find(1);
-            $hostOrder->setStateId($stateId);
-
             $em->persist($hostOrder);
             $em->flush();
 
@@ -60,21 +54,6 @@ class DefaultController extends Controller
             $userOrder->setUsersId($userObject);
             $em->persist($userOrder);
             $em->flush();
-
-            $orderParticipantsEmails = $request->request
-                ->get("illuminati_orderbundle_host_order")["orderPatricipants"];
-
-            $orderParticipantsEmails = array_map(
-                "trim", explode(",", $orderParticipantsEmails)
-            );
-
-            //Assigning participants to the host order
-
-            $listGenerator = $this->get("invite_generator");
-            $listGenerator->setHostOrder($hostOrder);
-            $listGenerator->setParticipantsEmailsArray($orderParticipantsEmails);
-            $listGenerator->generate();
-            $listGenerator->flush();
 
             $this->get('session')->getFlashBag()
                 ->add('success', 'Order has been successfully created!');

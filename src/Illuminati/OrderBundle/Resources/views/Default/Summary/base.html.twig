@@ -16,6 +16,7 @@
             <h2>{{ hostOrder.title }}</h2>
             <p>{{ hostOrder.description }}</p>
             <p><em><strong>Due Date: {{ hostOrder.closeDate|date('Y-m-d H:i') }}</strong></em></p>
+            <p>Invitation link : <mark>{{ hostOrder.orderToken }}</mark></p>
         </div>
 
 
