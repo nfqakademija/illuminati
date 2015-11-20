@@ -2,6 +2,7 @@
 
 namespace Illuminati\OrderBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,12 +34,17 @@ class User_order
      */
     private $usersId;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="confirmed", type="smallint")
-     */
-    private $confirmed;
+    //    /**
+    //     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order_details", mappedBy="userOrderId")
+    //     */
+    //    private $orderDetails;
+
+    //    /**
+    //     * @var integer
+    //     *
+    //     * @ORM\Column(name="confirmed", type="smallint")
+    //     */
+    //    private $confirmed;
 
     /**
      * @var integer
@@ -56,9 +62,10 @@ class User_order
 
     public function __construct()
     {
-        $this->confirmed = 0;
+        //$this->confirmed = 0;
         $this->payed = 0;
         $this->deleted = 0;
+        //$this->orderDetails = new ArrayCollection();
     }
 
     /**
@@ -119,29 +126,29 @@ class User_order
         return $this->usersId;
     }
 
-    /**
-     * Set confirmed
-     *
-     * @param integer $confirmed
-     *
-     * @return User_order
-     */
-    public function setConfirmed($confirmed)
-    {
-        $this->confirmed = $confirmed;
-
-        return $this;
-    }
-
-    /**
-     * Get confirmed
-     *
-     * @return integer
-     */
-    public function getConfirmed()
-    {
-        return $this->confirmed;
-    }
+    //    /**
+    //     * Set confirmed
+    //     *
+    //     * @param integer $confirmed
+    //     *
+    //     * @return User_order
+    //     */
+    //    public function setConfirmed($confirmed)
+    //    {
+    //        $this->confirmed = $confirmed;
+    //
+    //        return $this;
+    //    }
+    //
+    //    /**
+    //     * Get confirmed
+    //     *
+    //     * @return integer
+    //     */
+    //    public function getConfirmed()
+    //    {
+    //        return $this->confirmed;
+    //    }
 
     /**
      * Set payed
@@ -190,5 +197,15 @@ class User_order
     {
         return $this->deleted;
     }
+
+    //    /**
+    //     * @return mixed
+    //     */
+    //    public function getOrderDetails()
+    //    {
+    //        return $this->orderDetails;
+    //    }
+
+
 }
 

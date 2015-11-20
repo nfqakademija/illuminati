@@ -1,31 +1,44 @@
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th>Participant email</th>
-            <th class="col-sm-2  text-center">Order status</th>
-            <th class="col-sm-1  text-center">Prepayed</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr class="orderParticipant">
-            <td>LoremIpsum2@gmail.com</td>
-            <td class="warning  text-center">Choosing</td>
-            <td class="success text-center"><span class="glyphicon glyphicon-ok"></span></td>
-        </tr>
-        <tr>
-            <td>LoremIpsum3@gmail.com</td>
-            <td class="success  text-center">Confirmed</td>
-            <td class="text-center"><span class="glyphicon glyphicon-remove"></span></td>
-        </tr>
-        <tr>
-            <td>LoremIpsum4@gmail.com</td>
-            <td class="warning text-center">Choosing</td>
-            <td class="success text-center"><span class="glyphicon glyphicon-ok"></span></td>
-        </tr>
-        <tr>
-            <td>LoremIpsum5@gmail.com</td>
-            <td class="success text-center">Confirmed</td>
-            <td class="success text-center"><span class="glyphicon glyphicon-ok"></span></td>
-        </tr>
-    </tbody>
-</table>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    {% for i in 0..participants|length-1 %}
+        <div class="panel panel-default success">
+            <div class="panel-heading" role="tab" id="heading{{ i }}">
+                <div class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ i }}" aria-expanded="false" aria-controls="collapse{{ i }}">
+                    {{ participants[i].usersId.name }}
+                    {{ participants[i].usersId.surname }}
+                    ( {{ participants[i].usersId.email }} )
+
+                    <div class="pull-right">
+                        {% if participants[i].payed == 1 %}
+                            {% trans %}order.summary.widget.prepaid{% endtrans %} : <strong><span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.participantPaid{% endtrans %}"></span></strong>
+                        {% else %}
+                            {% trans %}order.summary.widget.prepaid{% endtrans %} : <strong><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.participantNotPaid{% endtrans %}"></span></strong>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            <div id="collapse{{ i }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ i }}">
+                <div class="panel-body success">
+                    <table class="table table-responsive">
+                        <tr>
+                            <th>{% trans %}order.summary.widget.product{% endtrans %}</th>
+                            <th class="col-sm-2">{% trans %}order.summary.widget.quantity{% endtrans %}</th>
+                            <th class="col-sm-2">{% trans %}order.summary.widget.price{% endtrans %}</th>
+                        </tr>
+                       {% if participantsOrders is not empty %}
+                           {% for y in 0..participantsOrders|length-1 %}
+                               {% if participantsOrders[y].userId.id == participants[i].usersId.id %}
+                                   <tr>
+                                       <td><a href="{{ path('product_show',{'id':participantsOrders[y].productId.id}) }}">{{ participantsOrders[y].productId.title }}</a></td>
+                                       <td>{{ participantsOrders[y].quantity }}</td>
+                                       <td>{{ participantsOrders[y].productId.price }}</td>
+                                   </tr>
+                               {% endif %}
+                           {% endfor %}
+                       {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

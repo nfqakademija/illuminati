@@ -2,6 +2,7 @@
 
 namespace Illuminati\OrderBundle\Entity;
 
+use Doctrine\Orm\Repository;
 /**
  * Host_orderRepository
  *
@@ -10,4 +11,59 @@ namespace Illuminati\OrderBundle\Entity;
  */
 class Host_orderRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Fetches Host order participants orders details
+     *
+     * @param integer $id Host order id
+     *
+     * @return array participants orders details
+     */
+    public function findUsersOrderDetails($id)
+    {
+        $participantsOrders = $this->getEntityManager()->createQuery(
+            'SELECT uod,p FROM Illuminati\OrderBundle\Entity\Host_order ho
+            INNER JOIN Illuminati\OrderBundle\Entity\User_order_details uod WITH (ho.id = uod.hostOrderId)
+            INNER JOIN Illuminati\ProductBundle\Entity\Product p WITH (uod.productId = p.id)
+            WHERE  ho.id = :host_order_id AND ho.deleted = 0 AND p.deleted = 0'
+        )->setParameter('host_order_id',$id)->getResult();
+
+        // removing product entities from array for better iteration
+        foreach ($participantsOrders as $key=>$value) {
+            if ($value instanceof \Illuminati\ProductBundle\Entity\Product) {
+                unset($participantsOrders[$key]);
+            }
+        }
+
+        // returning a reindexed array;
+        return array_values($participantsOrders);
+    }
+
+    /**
+     * Fetches host order participants orders
+     *
+     * @param integer $id Host Order id
+     *
+     * @return array Array of participants orders
+     */
+    public function findUserOrders($id)
+    {
+        $participants = $this->getEntityManager()->createQuery(
+            'SELECT uo,u FROM Illuminati\UserBundle\Entity\User u
+            INNER JOIN Illuminati\OrderBundle\Entity\User_order uo WITH (u.id = uo.usersId)
+            INNER JOIN Illuminati\OrderBundle\Entity\Host_order ho WITH (uo.hostOrderId = ho.id)
+            WHERE ho.id = :host_order_id AND uo.deleted = 0 AND u.deleted = 0 AND ho.deleted = 0'
+        )->setParameter('host_order_id',$id)->getResult();
+
+        // removing User entities from array for better iteration
+        foreach ($participants as $key=>$value) {
+            if ($value instanceof \Illuminati\UserBundle\Entity\User) {
+                unset($participants[$key]);
+            }
+        }
+
+        // returning reindexed array;
+        return array_values($participants);
+
+    }
+
 }

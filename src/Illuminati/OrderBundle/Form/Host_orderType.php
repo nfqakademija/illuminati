@@ -2,6 +2,7 @@
 
 namespace Illuminati\OrderBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -17,8 +18,15 @@ class Host_orderType extends AbstractType
         $builder
             ->add('title','text', array("label"=>"order.title"))
             ->add('description','textarea', array("label"=>"order.description"))
+            ->add('supplier_id','entity',array(
+                'class' => 'Illuminati\ProductBundle\Entity\Supplier',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('s')
+                        ->orderBy('s.name','ASC');
+                },
+                'label'=>'order.supplier'
+            ))
             ->add('closeDate','datetime', array("label"=>"order.closeDate"))
-            ->add('orderPatricipants','textarea',array('mapped' => false,"label"=>"order.participants" ))
             ->add('submit','submit',array("label"=>"order.submit"));
         ;
     }

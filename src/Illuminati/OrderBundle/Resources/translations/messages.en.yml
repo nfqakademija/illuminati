@@ -3,7 +3,26 @@ order:
   description: Description
   closeDate: Order Close date and time
   participants: Participants
+  supplier: Supplier
   submit: Create
 
   helpBlock:
     participants: Insert participants emails which you want to invite (Separate emails by comma.).
+
+  summary:
+    title: Order Summary
+    dueDate: Due Date
+    inviteLink: Invitation Link
+    goToShopButton: Go to Shop
+    editOrderButton: Edit your order
+    remindAboutPaymentsButton: Remind about paymentss
+    confirmOrderButton: Confirm and Lock orders
+    success: Success!
+
+    widget:
+      product: Products
+      quantity: Qty
+      price: Price (per unit)
+      prepaid: Prepaid
+      participantPaid: Participant paid fo his orders
+      participantNotPaid: Participant hasn't paid for his orders

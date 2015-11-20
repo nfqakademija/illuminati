@@ -71,6 +71,11 @@ class Product
     private $deleted = '0';
 
     /**
+     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order_details", mappedBy="productId")
+     */
+    private $orderDetails;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
