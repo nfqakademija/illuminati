@@ -110,46 +110,38 @@ class DefaultController extends Controller
      */
     public function editHostOrderAction(Request $request, $id)
     {
-        $em = $this
-            ->getDoctrine()
-            ->getManager();
+        if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
 
-        $hostOrder = $em
-            ->getRepository('IlluminatiOrderBundle:Host_order')
-            ->find($id);
+            $em = $this
+                ->getDoctrine()
+                ->getManager();
 
-        if (empty($hostOrder)) {
-            return $this->redirectToRoute('homepage');
-        }
+            $form = $this->createForm(new Host_orderType, $hostOrder);
 
-        // checking if the logged in user is the host order creator
-        if ($hostOrder->getUsersId() != $this->get('security.token_storage')->getToken()->getUser()) {
-            return $this->redirectToRoute('homepage');
-        }
+            // changing submit button label
+            $form->remove('submit');
+            $form->add('submit', 'submit', array("label" => "order.update"));
 
-        $form = $this->createForm(new Host_orderType, $hostOrder);
+            $form->handleRequest($request);
 
-        // changing submit button label
-        $form->remove('submit');
-        $form->add('submit', 'submit', array("label" => "order.update"));
+            if ($form->isValid()) {
+                $em->flush();
 
-        $form->handleRequest($request);
+                $this->get('session')->getFlashBag()
+                    ->add('success', 'order.summary.successUpdate');
 
-        if ($form->isValid()) {
-            $em->flush();
+                return $this->redirectToRoute(
+                    'host_order_summary', ['id' => $hostOrder->getId()]
+                );
+            }
 
-            $this->get('session')->getFlashBag()
-                ->add('success', 'order.summary.successUpdate');
-
-            return $this->redirectToRoute(
-                'host_order_summary', ['id' => $hostOrder->getId()]
+            return $this->render(
+                "IlluminatiOrderBundle:Default:orderCreation.html.twig",
+                ["form" => $form->createView(), 'pageTitle' => 'order.edit']
             );
+        } else {
+            return $this->redirectToRoute('homepage');
         }
-
-        return $this->render(
-            "IlluminatiOrderBundle:Default:orderCreation.html.twig",
-            ["form" => $form->createView(), 'pageTitle' => 'order.edit']
-        );
 
     }
 
