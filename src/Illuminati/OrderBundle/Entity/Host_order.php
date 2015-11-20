@@ -60,6 +60,7 @@ class Host_order
      * @var \DateTime
      *
      * @ORM\Column(name="close_date", type="datetime")
+     * @Assert\GreaterThan("+1 minutes",message="pastDate")
      */
     private $closeDate;
 
