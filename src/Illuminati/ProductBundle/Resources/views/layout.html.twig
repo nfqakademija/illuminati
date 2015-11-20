@@ -18,11 +18,10 @@
         </div>
         <div class="col-md-4">
             {% block sidebar_right %}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        Cart
-                    </div>
-                </div>
+                {{ render(controller(
+                    'CartBundle:Cart:sidebarWidget',
+                    { 'max': 3 }
+                )) }}
             {% endblock %}
         </div>
     </div>

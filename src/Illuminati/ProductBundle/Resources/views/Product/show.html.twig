@@ -19,6 +19,11 @@
             </a>
         </div>
         <div class="col-md-6">
+            <h2 class="product-title">
+                <a href="{{ path('product_show', { 'id': entity.id }) }}" title="{{ entity.title }}">
+                    {{ entity.title }}
+                </a>
+            </h2>
             <p class="price"><strong>Price:</strong> {{ entity.price }} {{ entity.currency }}</p>
             <p>{{ entity.description | raw }}</p>
             <p>

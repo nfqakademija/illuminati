@@ -1,3 +1,6 @@
+illuminati_cart:
+    resource: "@CartBundle/Resources/config/routing.yml"
+
 illuminati_product:
     resource: "@ProductBundle/Resources/config/routing.yml"
 

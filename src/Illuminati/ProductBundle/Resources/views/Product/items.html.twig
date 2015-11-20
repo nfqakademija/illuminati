@@ -16,7 +16,7 @@
                 <p>
                     {{ entity.description | raw }}
                 </p>
-                <a href="#" class="pull-right btn btn-sm btn-success">
+                <a href="{{ path('cart_add', { 'product_id': entity.id }) }}" class="pull-right btn btn-sm btn-default">
                     <span class="glyphicon glyphicon-shopping-cart"></span>
                     {{ 'product.add_to_cart'|trans }}
                 </a>

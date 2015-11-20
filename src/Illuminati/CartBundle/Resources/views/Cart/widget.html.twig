@@ -1,0 +1,35 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        Cart
+    </div>
+    <div class="panel-body">
+        {% if cart %}
+            {% for product in items %}
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="{{ path('product_show', { 'id': product.id }) }}" class="thumbnail">
+                            <img src="{{ product.image }}" />
+                        </a>
+                    </div>
+                    <div class="col-md-8">
+                        <a href="{{ path('product_show', { 'id': product.id }) }}">
+                            {{ product.title }}
+                        </a>
+                        <span>{{ cart[product.id] }}</span>
+                        <a class="pull-right" href="{{ path('cart_remove', { 'product_id': product.id }) }}">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="text-center">
+                <a class="btn btn-success" href="{{ path('cart_checkout') }}">
+                    <span class="glyphicon glyphicon-shopping-cart"></span> Checkout
+                </a>
+            </div>
+        {% else %}
+            Your cart is empty
+        {% endif %}
+    </div>
+</div>

@@ -1,0 +1,47 @@
+{% extends 'ProductBundle::layout.html.twig' %}
+
+{% block body %}
+<div class="container">
+
+    <h2 class="page-header">
+        {% block content_header %}
+            Checkout
+        {% endblock %}
+    </h2>
+
+    <ol class="breadcrumb">
+        {% block breadcrumbs %}
+            {{ parent() }}
+            <li><a href="{{ path('product') }}">Products</a></li>
+            <li>Checkout</li>
+        {% endblock %}
+    </ol>
+
+    <div class="row">
+        <div class="col-md-12">
+            {% block content %}
+                <div class="checkout">
+                    {% for product in items %}
+                        <div class="row">
+                            <div class="col-md-2">
+                                <a href="{{ path('product_show', { 'id': product.id }) }}" class="thumbnail">
+                                    <img src="{{ product.image }}" />
+                                </a>
+                            </div>
+                            <div class="col-md-8">
+                                <a href="{{ path('product_show', { 'id': product.id }) }}">
+                                    {{ product.title }}
+                                </a>
+                                <span>{{ cart[product.id] }}</span>
+                                <a class="pull-right" href="{{ path('cart_remove', { 'product_id': product.id }) }}">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}

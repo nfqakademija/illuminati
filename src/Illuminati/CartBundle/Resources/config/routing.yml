@@ -1,0 +1,9 @@
+cart_add:
+    path:     /cart/add/{product_id}
+    defaults: { _controller: CartBundle:Cart:add }
+cart_remove:
+    path:     /cart/remove/{product_id}
+    defaults: { _controller: CartBundle:Cart:remove }
+cart_checkout:
+    path:     /checkout
+    defaults: { _controller: CartBundle:Cart:checkout }
