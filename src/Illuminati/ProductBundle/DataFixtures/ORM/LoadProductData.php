@@ -3,11 +3,11 @@
 namespace Illuminati\ProductBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\FixtureInterface;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Illuminati\ProductBundle\Entity\Product;
 
-class LoadProductData extends AbstractFixture implements FixtureInterface
+class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
