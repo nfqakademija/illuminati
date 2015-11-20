@@ -1,26 +1,17 @@
-{% set paricipantsCount = orderParticipants|length // 4 %}
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-    {% for i in 0..paricipantsCount-1 %}
+    {% for i in 0..participants|length-1 %}
         <div class="panel panel-default success">
             <div class="panel-heading" role="tab" id="heading{{ i }}">
                 <div class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ i }}" aria-expanded="false" aria-controls="collapse{{ i }}">
-                    {%  if i == 0 %}
-                        {{ orderParticipants[i].email }}
-                    {% else %}
-                        {{ orderParticipants[i*4].email }}
-                    {% endif %}
+                    {{ participants[i].usersId.name }}
+                    {{ participants[i].usersId.surname }}
+                    ( {{ participants[i].usersId.email }} )
 
                     <div class="pull-right">
-                        {% if orderParticipants[i*4+1].confirmed == 1 %} {# Participant confiremd his order #}
-                            Status: <span class="glyphicon glyphicon-ok success" data-toggle="tooltip" data-placement="top" title="Participant has confirmed his order!"></span>
-                        {% else %} {# Participant still choosing #}
-                            Status: <span class="glyphicon glyphicon-shopping-cart" data-toggle="tooltip" data-placement="top" title="Participant is still choosing products"></span>
-                        {% endif %}
-
-                        {% if orderParticipants[i*4+1].payed == 1 %}
-                            Prepayed: <strong><span class="glyphicon glyphicon-ok"></span></strong>
+                        {% if participants[i].payed == 1 %}
+                            {% trans %}order.summary.widget.prepaid{% endtrans %} : <strong><span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.participantPaid{% endtrans %}"></span></strong>
                         {% else %}
-                            Prepayed: <strong><span class="glyphicon glyphicon-remove"></span></strong>
+                            {% trans %}order.summary.widget.prepaid{% endtrans %} : <strong><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.participantNotPaid{% endtrans %}"></span></strong>
                         {% endif %}
                     </div>
 
@@ -30,20 +21,21 @@
                 <div class="panel-body success">
                     <table class="table table-responsive">
                         <tr>
-                            <th>Product</th>
-                            <th class="col-sm-2">Qty</th>
-                            <th class="col-sm-2">Price</th>
+                            <th>{% trans %}order.summary.widget.product{% endtrans %}</th>
+                            <th class="col-sm-2">{% trans %}order.summary.widget.quantity{% endtrans %}</th>
+                            <th class="col-sm-2">{% trans %}order.summary.widget.price{% endtrans %}</th>
                         </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>1</td>
-                            <td>1</td>
-                        </tr>
+                       {% if participantsOrders is not empty %}
+                           {% for y in 0..participantsOrders|length-1 %}
+                               {% if participantsOrders[y].userId.id == participants[i].usersId.id %}
+                                   <tr>
+                                       <td><a href="{{ path('product_show',{'id':participantsOrders[y].productId.id}) }}">{{ participantsOrders[y].productId.title }}</a></td>
+                                       <td>{{ participantsOrders[y].quantity }}</td>
+                                       <td>{{ participantsOrders[y].productId.price }}</td>
+                                   </tr>
+                               {% endif %}
+                           {% endfor %}
+                       {% endif %}
                     </table>
                 </div>
             </div>

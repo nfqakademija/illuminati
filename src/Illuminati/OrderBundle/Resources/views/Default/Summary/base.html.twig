@@ -6,35 +6,36 @@
             {% for successMessage in app.session.flashbag.get('success') %}
             <div class="alert alert-success fade in col-sm-6 col-sm-offset-6">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                <strong>Success!</strong>  {{ successMessage }}
+                <strong>{% trans %}order.summary.success{% endtrans %}</strong>  {{ successMessage }}
             </div>
             {% endfor %}
 
-        <h1>Order Summary</h1>
+        <h1>{% trans %}order.summary.title{% endtrans %}</h1>
 
         <div class="jumbotron">
             <h2>{{ hostOrder.title }}</h2>
             <p>{{ hostOrder.description }}</p>
-            <p><em><strong>Due Date: {{ hostOrder.closeDate|date('Y-m-d H:i') }}</strong></em></p>
-            <p>Invitation link : <mark>{{ hostOrder.orderToken }}</mark></p>
+            <p><em><strong>{% trans %}order.summary.dueDate{% endtrans %} : {{ hostOrder.closeDate|date('Y-m-d H:i') }}</strong></em></p>
+            <p>{% trans %}order.summary.inviteLink{% endtrans %} : <mark>{{ hostOrder.orderToken }}</mark></p>
         </div>
 
 
-        <a href="{{ path('product') }}"><button class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> Go to shop </button></a>
-        <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> Edit your order </button></a>
+        <a href="{{ path('product') }}"><button class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> {% trans %}order.summary.goToShopButton{% endtrans %} </button></a>
+        <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> {% trans %}order.summary.editOrderButton{% endtrans %} </button></a>
         <hr>
 
         {# summary widget #}
-        {% if (orderParticipants is defined) and (orderParticipants is not empty) %}
-            {% include "IlluminatiOrderBundle:Default/Summary:summaryWidget.html.twig" with orderParticipants %}
+        {% if (participants is defined) and (participants is not empty) %}
+            {% set vars = { 'participants': participants , 'participantsOrders' : participantsOrders  } %}
+            {% include "IlluminatiOrderBundle:Default/Summary:summaryWidget.html.twig" with vars %}
         {% endif %}
 
 
         {# Checking if the logged in user is the host of the main order #}
         {% if hostOrder.usersId.id == app.user.id %}
             <hr>
-            <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-envelope"></span> Remind about payments </button></a>
-            <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-lock"></span> Confirm and lock order </button></a>
+            <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-envelope"></span> {% trans %}order.summary.remindAboutPaymentsButton{% endtrans %} </button></a>
+            <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-lock"></span> {% trans %}order.summary.confirmOrderButton{% endtrans %} </button></a>
             <br>
         {% endif %}
     </div>

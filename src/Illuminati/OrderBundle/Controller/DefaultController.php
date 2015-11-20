@@ -45,7 +45,6 @@ class DefaultController extends Controller
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($hostOrder);
-            $em->flush();
 
             // Creating User_order for the host user
 
@@ -81,17 +80,18 @@ class DefaultController extends Controller
 
             //getting participants
 
-            $participants = $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository("IlluminatiOrderBundle:Host_order")
-                ->findParticipantsOrders($id);
+            $em = $this->getDoctrine()->getManager()
+                ->getRepository("IlluminatiOrderBundle:Host_order");
+
+            $participants = $em->findUserOrders($id);
+            $participantsOrders = $em->findUsersOrderDetails($id);
 
             return $this->render(
                 "IlluminatiOrderBundle:Default/Summary:base.html.twig",
                 [
                     'hostOrder'    => $hostOrderObj,
-                    'orderParticipants' => $participants
+                    'participants' => $participants,
+                    'participantsOrders' => $participantsOrders
                 ]
             );
         } else {
