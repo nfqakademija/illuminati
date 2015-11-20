@@ -55,7 +55,7 @@ class DefaultController extends Controller
             $em->flush();
 
             $this->get('session')->getFlashBag()
-                ->add('success', 'Order has been successfully created!');
+                ->add('success', 'order.summary.successCreate');
 
             return $this->redirectToRoute(
                 'host_order_summary', ['id' => $hostOrder->getId()]
@@ -64,7 +64,7 @@ class DefaultController extends Controller
 
         return $this->render(
             "IlluminatiOrderBundle:Default:orderCreation.html.twig",
-            ["form" => $form->createView()]
+            ["form" => $form->createView(), 'pageTitle' => 'order.create']
         );
     }
 
@@ -89,15 +89,67 @@ class DefaultController extends Controller
             return $this->render(
                 "IlluminatiOrderBundle:Default/Summary:base.html.twig",
                 [
-                    'hostOrder'    => $hostOrderObj,
-                    'participants' => $participants,
+                    'hostOrder'          => $hostOrderObj,
+                    'participants'       => $participants,
                     'participantsOrders' => $participantsOrders
                 ]
             );
         } else {
             return $this->redirectToRoute('homepage');
         }
+    }
 
+    /**
+     * Host order edit page
+     *
+     * @param Request $request Submitted form request
+     * @param integer $id      Host order id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|
+     *          \Symfony\Component\HttpFoundation\Response
+     */
+    public function editHostOrderAction(Request $request, $id)
+    {
+        $em = $this
+            ->getDoctrine()
+            ->getManager();
+
+        $hostOrder = $em
+            ->getRepository('IlluminatiOrderBundle:Host_order')
+            ->find($id);
+
+        if (empty($hostOrder)) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        // checking if the logged in user is the host order creator
+        if ($hostOrder->getUsersId() != $this->get('security.token_storage')->getToken()->getUser()) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        $form = $this->createForm(new Host_orderType, $hostOrder);
+
+        // changing submit button label
+        $form->remove('submit');
+        $form->add('submit', 'submit', array("label" => "order.update"));
+
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $em->flush();
+
+            $this->get('session')->getFlashBag()
+                ->add('success', 'order.summary.successUpdate');
+
+            return $this->redirectToRoute(
+                'host_order_summary', ['id' => $hostOrder->getId()]
+            );
+        }
+
+        return $this->render(
+            "IlluminatiOrderBundle:Default:orderCreation.html.twig",
+            ["form" => $form->createView(), 'pageTitle' => 'order.edit']
+        );
 
     }
 

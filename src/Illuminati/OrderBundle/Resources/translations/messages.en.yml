@@ -5,6 +5,9 @@ order:
   participants: Participants
   supplier: Supplier
   submit: Create
+  update: Update
+  create: New order creation
+  edit: Host order edit
 
   helpBlock:
     participants: Insert participants emails which you want to invite (Separate emails by comma.).
@@ -14,10 +17,12 @@ order:
     dueDate: Due Date
     inviteLink: Invitation Link
     goToShopButton: Go to Shop
-    editOrderButton: Edit your order
-    remindAboutPaymentsButton: Remind about paymentss
+    editOrderButton: Edit host order info
+    remindAboutPaymentsButton: Remind about payments
     confirmOrderButton: Confirm and Lock orders
     success: Success!
+    successCreate: Order has been successfully created!
+    successUpdate: Order has been successfully updated!
 
     widget:
       product: Products

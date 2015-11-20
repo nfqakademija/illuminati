@@ -6,7 +6,7 @@
             {% for successMessage in app.session.flashbag.get('success') %}
             <div class="alert alert-success fade in col-sm-6 col-sm-offset-6">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                <strong>{% trans %}order.summary.success{% endtrans %}</strong>  {{ successMessage }}
+                <strong>{% trans %}order.summary.success{% endtrans %}</strong>  {{ successMessage|trans }}
             </div>
             {% endfor %}
 
@@ -21,7 +21,9 @@
 
 
         <a href="{{ path('product') }}"><button class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> {% trans %}order.summary.goToShopButton{% endtrans %} </button></a>
-        <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> {% trans %}order.summary.editOrderButton{% endtrans %} </button></a>
+        {% if app.user.id == hostOrder.usersId.id %}
+            <a href="{{ path('host_order_edit',{'id':hostOrder.id}) }}"><button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> {% trans %}order.summary.editOrderButton{% endtrans %} </button></a>
+        {% endif %}
         <hr>
 
         {# summary widget #}

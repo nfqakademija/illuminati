@@ -5,4 +5,4 @@ min:
 max:
   Title: Title is too long
 
-pastDate: You cannot create order with passed date.
+pastDate: You cannot set a passed date.
