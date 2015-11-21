@@ -4,7 +4,7 @@
     </div>
     <div class="panel-body">
         {% if cart %}
-            {% for product in items %}
+            {% for product in cart.getItems %}
                 <div class="row">
                     <div class="col-md-4">
                         <a href="{{ path('product_show', { 'id': product.id }) }}" class="thumbnail">
@@ -12,20 +12,27 @@
                         </a>
                     </div>
                     <div class="col-md-8">
-                        <a href="{{ path('product_show', { 'id': product.id }) }}">
-                            {{ product.title }}
-                        </a>
-                        <span>{{ cart[product.id] }}</span>
                         <a class="pull-right" href="{{ path('cart_remove', { 'product_id': product.id }) }}">
                             <span class="glyphicon glyphicon-remove"></span>
                         </a>
+                        <a href="{{ path('product_show', { 'id': product.id }) }}">
+                            {{ product.title }}
+                        </a>
+                        <br />
+                        {{ product.price }} EUR
+                        <span class="pull-right">{{ cart.getQuantity(product.id) }} Qty.</span>
                     </div>
                 </div>
+                <hr />
             {% endfor %}
+
+            <p class="text-center">
+                Your order amount is {{ cart.getAmount }} EUR
+            </p>
 
             <div class="text-center">
                 <a class="btn btn-success" href="{{ path('cart_checkout') }}">
-                    <span class="glyphicon glyphicon-shopping-cart"></span> Checkout
+                    Checkout
                 </a>
             </div>
         {% else %}

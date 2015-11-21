@@ -3,76 +3,34 @@
 namespace Illuminati\CartBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 
 class CartController extends Controller
 {
-    public function checkoutAction(Request $request)
+    public function checkoutAction()
     {
-        $session = $request->getSession();
         return $this->render('CartBundle:Cart:checkout.html.twig', [
-            'items' => $this->getCartProducts($request),
-            'cart' => $session->get('cart'),
+            'cart' => $this->get('cart.provider'),
         ]);
     }
 
-    public function addAction($product_id, Request $request)
+    public function addAction($product_id)
     {
-        $session = $request->getSession();
-
-        if($cart = $session->get('cart')) {
-            if(isset($cart[$product_id])) {
-                $cart[$product_id] += 1;
-            } else {
-                $cart[$product_id] = 1;
-            }
-        } else {
-            $cart = [
-                $product_id => 1
-            ];
-        }
-
-        $session->set('cart', $cart);
-
+        $cart = $this->get('cart.provider');
+        $cart->addItem($product_id);
         return $this->redirectToRoute('product');
     }
 
-    public function removeAction($product_id, Request $request)
+    public function removeAction($product_id)
     {
-        $session = $request->getSession();
-        $cart = $session->get('cart');
-
-        if(isset($cart[$product_id])) {
-            unset($cart[$product_id]);
-            $session->set('cart', $cart);
-        }
-
+        $cart = $this->get('cart.provider');
+        $cart->removeItem($product_id);
         return $this->redirectToRoute('product');
     }
 
-    private function getCartProducts(Request $request)
+    public function sidebarWidgetAction()
     {
-        $items = []; // items added to cart
-
-        $session = $request->getSession();
-        $cart = $session->get('cart');
-
-        if($cart) {
-            foreach ($cart as $product_id => $quantity) {
-                $items[] = $this->getDoctrine()->getRepository('ProductBundle:Product')->find($product_id);
-            }
-        }
-
-        return $items;
-    }
-
-    public function sidebarWidgetAction(Request $request)
-    {
-        $session = $request->getSession();
-        return $this->render('CartBundle:Cart:widget.html.twig',
-            [
-                'items' => $this->getCartProducts($request),
-                'cart' => $session->get('cart'),
+        return $this->render('CartBundle:Cart:widget.html.twig', [
+                'cart' => $this->get('cart.provider'),
             ]
         );
     }

@@ -3,6 +3,7 @@
 namespace Illuminati\ProductBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Product
@@ -93,8 +94,6 @@ class Product
      * })
      */
     private $supplier;
-
-
 
     /**
      * Set title
