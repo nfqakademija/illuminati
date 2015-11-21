@@ -31,16 +31,16 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
     public function load(ObjectManager $manager)
     {
         $users = array(
-            array('user1@gmail.com','pass',array('ROLE_USER'),'Tomas','Tomukas','user1'),
-            array('user2@gmail.com','pass',array('ROLE_USER'),'Petras','Petraitis','user2'),
-            array('user3@gmail.com','pass',array('ROLE_USER'),'Jonas','Jonaitis','user3'),
-            array('user4@gmail.com','pass',array('ROLE_USER'),'Mindaugas','Minde','user4'),
-            array('user5@gmail.com','pass',array('ROLE_USER'),'Dmitrij','Medvedev','user5'),
-            array('user6@gmail.com','pass',array('ROLE_USER'),'Evaldas','Evaldass','user6'),
-            array('user7@gmail.com','pass',array('ROLE_USER'),'Marius','Mariuss','user7'),
-            array('user8@gmail.com','pass',array('ROLE_USER'),'Andrius','Andriuss','user8'),
-            array('user9@gmail.com','pass',array('ROLE_USER'),'Arturas','Arturass','user9'),
-            array('user10@gmail.com','pass',array('ROLE_USER'),'Tadas','Tadass','user10'),
+            array('user1@mailinator.com','pass',array('ROLE_USER'),'Tomas','Tomukas','user1'),
+            array('user2@mailinator.com','pass',array('ROLE_USER'),'Petras','Petraitis','user2'),
+            array('user3@mailinator.com','pass',array('ROLE_USER'),'Jonas','Jonaitis','user3'),
+            array('user4@mailinator.com','pass',array('ROLE_USER'),'Mindaugas','Minde','user4'),
+            array('user5@mailinator.com','pass',array('ROLE_USER'),'Dmitrij','Medvedev','user5'),
+            array('user6@mailinator.com','pass',array('ROLE_USER'),'Evaldas','Evaldass','user6'),
+            array('user7@mailinator.com','pass',array('ROLE_USER'),'Marius','Mariuss','user7'),
+            array('user8@mailinator.com','pass',array('ROLE_USER'),'Andrius','Andriuss','user8'),
+            array('user9@mailinator.com','pass',array('ROLE_USER'),'Arturas','Arturass','user9'),
+            array('user10@mailinator.com','pass',array('ROLE_USER'),'Tadas','Tadass','user10'),
         );
         $userManager = $this->container->get('fos_user.user_manager');
 
