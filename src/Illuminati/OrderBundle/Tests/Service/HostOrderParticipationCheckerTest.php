@@ -31,6 +31,41 @@ class HostOrderParticipationCheckerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($em->check(69));
     }
 
+    public function testNoHostOrderFound()
+    {
+        $repositoryMock = $this
+            ->getMockBuilder('Doctrine\ORM\EntityRepository')
+            ->disableOriginalConstructor()
+            ->setMethods(['find'])
+            ->getMock();
+
+        $repositoryMock
+            ->expects($this->once())
+            ->method('find')
+            ->willReturn(null);
+
+        $entityManagerMock = $this
+            ->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->setMethods(['getRepository'])
+            ->getMock();
+
+        $entityManagerMock->expects($this->once())
+            ->method('getRepository')
+            ->willReturn($repositoryMock);
+
+        $tokenStorageMock = $this
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $em = new HostOrderParticipationChecker(
+            $entityManagerMock, $tokenStorageMock
+        );
+
+        $this->assertFalse($em->check(69));
+    }
+
     public function testInvalidArgumentException()
     {
 
