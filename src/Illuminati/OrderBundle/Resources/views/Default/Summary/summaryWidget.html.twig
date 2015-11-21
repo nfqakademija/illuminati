@@ -9,9 +9,9 @@
 
                     <div class="pull-right">
                         {% if participants[i].payed == 1 %}
-                            {% trans %}order.summary.widget.prepaid{% endtrans %} : <strong><span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.participantPaid{% endtrans %}"></span></strong>
+                            <span class="hidden-xs">{% trans %}order.summary.widget.prepaid{% endtrans %}</span> <strong><span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.participantPaid{% endtrans %}"></span></strong>
                         {% else %}
-                            {% trans %}order.summary.widget.prepaid{% endtrans %} : <strong><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.participantNotPaid{% endtrans %}"></span></strong>
+                            <span class="hidden-xs">{% trans %}order.summary.widget.prepaid{% endtrans %}</span> <strong><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.participantNotPaid{% endtrans %}"></span></strong>
                         {% endif %}
                     </div>
 

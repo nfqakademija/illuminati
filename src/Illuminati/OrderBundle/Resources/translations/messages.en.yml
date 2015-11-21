@@ -23,11 +23,12 @@ order:
     success: Success!
     successCreate: Order has been successfully created!
     successUpdate: Order has been successfully updated!
+    successEmailSent_%count%: %count% reminder emails successfully sent!
 
     widget:
       product: Products
       quantity: Qty
       price: Price (per unit)
-      prepaid: Prepaid
+      prepaid: Prepaid :
       participantPaid: Participant paid fo his orders
       participantNotPaid: Participant hasn't paid for his orders

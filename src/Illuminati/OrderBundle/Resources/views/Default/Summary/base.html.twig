@@ -6,7 +6,7 @@
             {% for successMessage in app.session.flashbag.get('success') %}
             <div class="alert alert-success fade in col-sm-6 col-sm-offset-6">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                <strong>{% trans %}order.summary.success{% endtrans %}</strong>  {{ successMessage|trans }}
+                <strong>{% trans %}order.summary.success{% endtrans %}</strong>  {{ successMessage }}
             </div>
             {% endfor %}
 
@@ -36,7 +36,7 @@
         {# Checking if the logged in user is the host of the main order #}
         {% if hostOrder.usersId.id == app.user.id %}
             <hr>
-            <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-envelope"></span> {% trans %}order.summary.remindAboutPaymentsButton{% endtrans %} </button></a>
+            <a href="{{ path('host_order_email_remiders',{'id':hostOrder.id}) }}"><button id="send-reminder-emails" class="btn btn-default"><span class="glyphicon glyphicon-envelope"></span> {% trans %}order.summary.remindAboutPaymentsButton{% endtrans %} </button></a>
             <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-lock"></span> {% trans %}order.summary.confirmOrderButton{% endtrans %} </button></a>
             <br>
         {% endif %}
