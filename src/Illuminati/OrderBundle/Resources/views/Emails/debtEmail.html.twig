@@ -1,0 +1,11 @@
+<h3>Hey there, {{ debtor.name }}</h3>
+
+<p>
+    {{ hostOrder.usersId.name }} wants to remind you,
+    that you're participating in his group food order and you
+    <strong>haven't payed for your products.</strong>
+</p>
+
+<p>
+    Group order link : <a href="{{ app.request.getSchemeAndHttpHost() ~ path('host_order_summary',{'id':hostOrder.id}) }}">{{ hostOrder.title }}</a>
+</p>

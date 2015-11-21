@@ -54,8 +54,11 @@ class DefaultController extends Controller
             $em->persist($userOrder);
             $em->flush();
 
+            $notificationMessage = $this->get('translator')
+                ->trans('order.summary.successCreate');
+
             $this->get('session')->getFlashBag()
-                ->add('success', 'order.summary.successCreate');
+                ->add('success', $notificationMessage);
 
             return $this->redirectToRoute(
                 'host_order_summary', ['id' => $hostOrder->getId()]
@@ -127,8 +130,11 @@ class DefaultController extends Controller
             if ($form->isValid()) {
                 $em->flush();
 
+                $notificationMessage = $this->get('translator')
+                    ->trans('order.summary.successUpdate');
+
                 $this->get('session')->getFlashBag()
-                    ->add('success', 'order.summary.successUpdate');
+                    ->add('success', $notificationMessage);
 
                 return $this->redirectToRoute(
                     'host_order_summary', ['id' => $hostOrder->getId()]
@@ -139,6 +145,61 @@ class DefaultController extends Controller
                 "IlluminatiOrderBundle:Default:orderCreation.html.twig",
                 ["form" => $form->createView(), 'pageTitle' => 'order.edit']
             );
+        } else {
+            return $this->redirectToRoute('homepage');
+        }
+
+    }
+
+    /**
+     * Sends reminder emails to order participants who owe money
+     *
+     * @param integer $id Host order id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deptReminderAction($id)
+    {
+        if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
+            $em = $this->getDoctrine()->getManager();
+            $debtors = $em
+                ->getRepository('IlluminatiOrderBundle:Host_order')
+                ->findOrderDebtors($id);
+
+            $emailSentCount = 0;
+
+            foreach ($debtors as $debtor) {
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Group order product payment reminder')
+                    ->setFrom("Team5@gmail.com")
+                    ->setTo($debtor->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'IlluminatiOrderBundle:Emails:debtEmail.html.twig',
+                            [
+                                'hostOrder' => $hostOrder,
+                                'debtor'    => $debtor
+                            ]
+                        ), 'text/html'
+                    );
+
+                $this->get('mailer')->send($message);
+
+                $emailSentCount++;
+            }
+
+            $notificationMessage = $this->get('translator')->trans(
+                'order.summary.successEmailSent_%count%',
+                ['%count%' => $emailSentCount]
+            );
+
+            $this->get('session')->getFlashBag()
+                ->add('success', $notificationMessage);
+
+            return $this->redirectToRoute(
+                "host_order_summary", ['id' => $hostOrder->getId()]
+            );
+
         } else {
             return $this->redirectToRoute('homepage');
         }

@@ -13,3 +13,7 @@ host_order_summary:
 host_order_edit:
   path: /{id}/edit
   defaults: { _controller: "IlluminatiOrderBundle:Default:editHostOrder"}
+
+host_order_email_remiders:
+  path: /{id}/payments_reminder
+  defaults: { _controller: "IlluminatiOrderBundle:Default:deptReminder"}
