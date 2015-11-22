@@ -43,9 +43,9 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
             array('user10@mailinator.com','pass',array('ROLE_USER'),'Tadas','Tadass','user10'),
         );
         $userManager = $this->container->get('fos_user.user_manager');
-
+        $i = 0;
         foreach ($users as $userData) {
-
+            $i++;
             $User = $userManager->createUser();
 
             $User->setUsername($userData[0]);
@@ -60,7 +60,7 @@ class LoadUserData extends AbstractFixture implements OrderedFixtureInterface, C
 
             $manager->persist($User);
 
-            $this->addReference($userData[5], $User);
+            $this->addReference("user{$i}", $User);
         }
 
         $manager->flush();
