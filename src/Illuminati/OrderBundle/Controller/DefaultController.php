@@ -54,8 +54,11 @@ class DefaultController extends Controller
             $em->persist($userOrder);
             $em->flush();
 
+            $notificationMessage = $this->get('translator')
+                ->trans('order.summary.successCreate');
+
             $this->get('session')->getFlashBag()
-                ->add('success', 'Order has been successfully created!');
+                ->add('success', $notificationMessage);
 
             return $this->redirectToRoute(
                 'host_order_summary', ['id' => $hostOrder->getId()]
@@ -64,7 +67,7 @@ class DefaultController extends Controller
 
         return $this->render(
             "IlluminatiOrderBundle:Default:orderCreation.html.twig",
-            ["form" => $form->createView()]
+            ["form" => $form->createView(), 'pageTitle' => 'order.create']
         );
     }
 
@@ -89,15 +92,117 @@ class DefaultController extends Controller
             return $this->render(
                 "IlluminatiOrderBundle:Default/Summary:base.html.twig",
                 [
-                    'hostOrder'    => $hostOrderObj,
-                    'participants' => $participants,
+                    'hostOrder'          => $hostOrderObj,
+                    'participants'       => $participants,
                     'participantsOrders' => $participantsOrders
                 ]
             );
         } else {
             return $this->redirectToRoute('homepage');
         }
+    }
 
+    /**
+     * Host order edit page
+     *
+     * @param Request $request Submitted form request
+     * @param integer $id      Host order id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|
+     *          \Symfony\Component\HttpFoundation\Response
+     */
+    public function editHostOrderAction(Request $request, $id)
+    {
+        if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
+
+            $em = $this
+                ->getDoctrine()
+                ->getManager();
+
+            $form = $this->createForm(new Host_orderType, $hostOrder);
+
+            // changing submit button label
+            $form->remove('submit');
+            $form->add('submit', 'submit', array("label" => "order.update"));
+
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $em->flush();
+
+                $notificationMessage = $this->get('translator')
+                    ->trans('order.summary.successUpdate');
+
+                $this->get('session')->getFlashBag()
+                    ->add('success', $notificationMessage);
+
+                return $this->redirectToRoute(
+                    'host_order_summary', ['id' => $hostOrder->getId()]
+                );
+            }
+
+            return $this->render(
+                "IlluminatiOrderBundle:Default:orderCreation.html.twig",
+                ["form" => $form->createView(), 'pageTitle' => 'order.edit']
+            );
+        } else {
+            return $this->redirectToRoute('homepage');
+        }
+
+    }
+
+    /**
+     * Sends reminder emails to order participants who owe money
+     *
+     * @param integer $id Host order id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deptReminderAction($id)
+    {
+        if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
+            $em = $this->getDoctrine()->getManager();
+            $debtors = $em
+                ->getRepository('IlluminatiOrderBundle:Host_order')
+                ->findOrderDebtors($id);
+
+            $emailSentCount = 0;
+
+            foreach ($debtors as $debtor) {
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Group order product payment reminder')
+                    ->setFrom("Team5@gmail.com")
+                    ->setTo($debtor->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'IlluminatiOrderBundle:Emails:debtEmail.html.twig',
+                            [
+                                'hostOrder' => $hostOrder,
+                                'debtor'    => $debtor
+                            ]
+                        ), 'text/html'
+                    );
+
+                $this->get('mailer')->send($message);
+
+                $emailSentCount++;
+            }
+
+            $notificationMessage = $this->get('translator')->trans(
+                'order.summary.successEmailSent_%count%',
+                ['%count%' => $emailSentCount]
+            );
+
+            $this->get('session')->getFlashBag()
+                ->add('success', $notificationMessage);
+
+            return $this->redirectToRoute(
+                "host_order_summary", ['id' => $hostOrder->getId()]
+            );
+
+        } else {
+            return $this->redirectToRoute('homepage');
+        }
 
     }
 

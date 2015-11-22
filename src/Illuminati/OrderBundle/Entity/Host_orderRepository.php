@@ -66,4 +66,21 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
 
     }
 
+    /**
+     * Fetches host order debtors
+     *
+     * @param $id Host order id
+     */
+    public function findOrderDebtors($id)
+    {
+        $debtors = $this->getEntityManager()->createQuery(
+            'SELECT u FROM Illuminati\OrderBundle\Entity\Host_order ho
+            INNER JOIN Illuminati\OrderBundle\Entity\User_order uo WITH (ho.id = uo.hostOrderId)
+            INNER JOIN Illuminati\UserBundle\Entity\User u WITH (uo.usersId = u.id)
+            WHERE ho.id = :host_order_id AND uo.payed = 0 AND uo.deleted = 0 AND u.deleted = 0 AND ho.deleted = 0'
+        )->setParameter('host_order_id',$id)->getResult();
+
+        return $debtors;
+    }
+
 }

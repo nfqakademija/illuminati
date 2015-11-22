@@ -21,7 +21,9 @@
 
 
         <a href="{{ path('product') }}"><button class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> {% trans %}order.summary.goToShopButton{% endtrans %} </button></a>
-        <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> {% trans %}order.summary.editOrderButton{% endtrans %} </button></a>
+        {% if app.user.id == hostOrder.usersId.id %}
+            <a href="{{ path('host_order_edit',{'id':hostOrder.id}) }}"><button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> {% trans %}order.summary.editOrderButton{% endtrans %} </button></a>
+        {% endif %}
         <hr>
 
         {# summary widget #}
@@ -34,7 +36,7 @@
         {# Checking if the logged in user is the host of the main order #}
         {% if hostOrder.usersId.id == app.user.id %}
             <hr>
-            <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-envelope"></span> {% trans %}order.summary.remindAboutPaymentsButton{% endtrans %} </button></a>
+            <a href="{{ path('host_order_email_remiders',{'id':hostOrder.id}) }}"><button id="send-reminder-emails" class="btn btn-default"><span class="glyphicon glyphicon-envelope"></span> {% trans %}order.summary.remindAboutPaymentsButton{% endtrans %} </button></a>
             <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-lock"></span> {% trans %}order.summary.confirmOrderButton{% endtrans %} </button></a>
             <br>
         {% endif %}

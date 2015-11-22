@@ -6,3 +6,7 @@ services:
   host_order_participation_checker:
       class: Illuminati\OrderBundle\Services\HostOrderParticipationChecker
       arguments: ["@doctrine.orm.entity_manager","@security.token_storage"]
+
+  host_order_host_checker:
+      class: Illuminati\OrderBundle\Services\HostOrderHostChecker
+      arguments: ["@doctrine.orm.entity_manager","@security.token_storage"]
