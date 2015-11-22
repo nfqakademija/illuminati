@@ -210,7 +210,7 @@ class DefaultController extends Controller
     public function showHistoryAction($type)
     {
         $userId = $this->container->get('security.context')->getToken()->getUser()->getId();
-        if($type == 'hosted')
+        if($type === 'hosted')
         {
             $sql="
             SELECT HO.title, HO.close_date, HOS.state, COUNT(UO.host_order_id) AS pCnt
@@ -223,10 +223,32 @@ class DefaultController extends Controller
             $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sql);
             $stmt->execute();
             $orders = $stmt->fetchAll();
+
+            return $this->render('IlluminatiOrderBundle:Default/History:history.html.twig', array(
+                'orders'=>$orders,
+                'type'=>$type
+            ));
+        }
+        elseif($type === 'joined')
+        {
+            $sql="
+            SELECT HO.title, HO.close_date, HOS.state, COUNT(UO.host_order_id) AS pCnt
+            FROM host_order HO
+            JOIN host_order_state HOS ON HO.state_id = HOS.id
+            JOIN user_order UO ON HO.id = UO.host_order_id
+            WHERE UO.users_id = {$userId} AND HO.users_id <> {$userId}
+            GROUP BY HO.title, HO.close_date, HOS.state
+            ";
+            $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sql);
+            $stmt->execute();
+            $orders = $stmt->fetchAll();
+
+            return $this->render('IlluminatiOrderBundle:Default/History:history.html.twig', array(
+                'orders'=>$orders,
+                'type'=>$type
+            ));
         }
 
-        return $this->render('IlluminatiOrderBundle:Default/History:hosted.html.twig', array(
-            'orders'=>$orders
-        ));
+
     }
 }
