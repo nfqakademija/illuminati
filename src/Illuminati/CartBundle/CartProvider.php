@@ -36,12 +36,14 @@ class CartProvider implements CartProviderInterface
 
     /**
      * @param $product_id
-     * @return mixed
+     * @return bool|object
      */
     public function getItem($product_id)
     {
         if(isset($this->cart[$product_id])) {
-            return $this->cart[$product_id];
+            return $this->em
+                ->getRepository('ProductBundle:Product')
+                ->find($product_id);
         }
         return false;
     }
@@ -84,7 +86,7 @@ class CartProvider implements CartProviderInterface
      */
     public function removeItem($product_id)
     {
-        if($item = $this->getItem($product_id)) {
+        if(isset($this->cart[$product_id])) {
             unset($this->cart[$product_id]);
             $this->session->set('cart', $this->cart);
             return true;
@@ -99,9 +101,7 @@ class CartProvider implements CartProviderInterface
 
         if($this->cart) {
             foreach ($this->cart as $product_id => $quantity) {
-                $items[] = $this->em
-                    ->getRepository('ProductBundle:Product')
-                    ->find($product_id);
+                $items[$product_id] = $this->getItem($product_id);
             }
         }
 
@@ -119,4 +119,12 @@ class CartProvider implements CartProviderInterface
         }
         return $amount;
     }
+
+    public function geItemTotalAmount($id, $price)
+    {
+        $quantity = $this->getQuantity($id);
+        return ($quantity * $price);
+    }
+
+
 }

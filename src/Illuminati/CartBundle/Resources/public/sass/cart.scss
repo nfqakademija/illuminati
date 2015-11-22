@@ -1,0 +1,21 @@
+
+#checkout {
+  table {
+    thead {
+      tr {
+        th.photo {
+          width:180px;
+        }
+      }
+    }
+    tbody {
+      tr {
+        td {
+          a.thumbnail {
+            width: 180px;
+          }
+        }
+      }
+    }
+  }
+}

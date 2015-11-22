@@ -9,4 +9,4 @@ services:
         class: Illuminati\ProductBundle\ImportIoDataSource
     product.CiliPicaProductProvider:
         class: Illuminati\ProductBundle\Providers\CiliPicaProductProvider
-        arguments: [@product.DataSourceInterface, %product.import_io%, 'http://www.cili.lt/']
+        arguments: [@product.DataSourceInterface, %product.import_io%, 'http://www.cili.lt/', 'EUR']

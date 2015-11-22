@@ -10,19 +10,63 @@ use Illuminati\ProductBundle\ProductProviderInterface;
 
 class CiliPicaProductProvider implements ProductProviderInterface
 {
+    /**
+     * @var DataSourceInterface
+     */
     public $DataSource;
 
+    /**
+     * @var array
+     */
     public $importIoConfig;
 
+    /**
+     * @var string
+     */
     public $url;
 
-    public function __construct(DataSourceInterface $DataSource, $importIoConfig, $url)
+    /**
+     * @var string
+     */
+    public $currency;
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param $currency
+     * @return $this
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+        return $this;
+    }
+
+    /**
+     * CiliPicaProductProvider constructor.
+     * @param DataSourceInterface $DataSource
+     * @param $importIoConfig
+     * @param $url
+     * @param $currency
+     */
+    public function __construct(DataSourceInterface $DataSource, $importIoConfig, $url, $currency)
     {
         $this->importIoConfig = $importIoConfig;
         $this->DataSource = $DataSource;
         $this->url = $url;
+        $this->currency = $currency;
     }
 
+    /**
+     * @param Supplier $supplier
+     * @param EntityManagerInterface $em
+     */
     public function import(Supplier $supplier, EntityManagerInterface $em)
     {
         $params = array(
@@ -43,6 +87,11 @@ class CiliPicaProductProvider implements ProductProviderInterface
         }
     }
 
+    /**
+     * @param EntityManagerInterface $em
+     * @param Supplier $supplier
+     * @param $result
+     */
     private function createProducts(EntityManagerInterface $em, Supplier $supplier, $result)
     {
         foreach ($result->results as $item) {

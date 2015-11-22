@@ -1,5 +1,5 @@
 product:
-    path:     /
+    path:     /{order_id}
     defaults: { _controller: "ProductBundle:Product:index" }
 
 product_show:

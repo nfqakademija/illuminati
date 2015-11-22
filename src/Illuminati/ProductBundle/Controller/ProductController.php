@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Illuminati\ProductBundle\Entity\Product;
 use Illuminati\ProductBundle\Form\ProductType;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Product controller.
@@ -14,19 +15,37 @@ use Illuminati\ProductBundle\Form\ProductType;
  */
 class ProductController extends Controller
 {
+    /**
+     * @param $order_id
+     * @return object Host_order
+     */
+    public function getRelatedOrder($order_id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $order = $em->getRepository('IlluminatiOrderBundle:Host_order')->find($order_id);
+        if(!$order) {
+            throw new NotFoundHttpException("An order doesn't exists");
+        }
+        return $order;
+    }
 
     /**
-     * Lists all Product entities.
-     *
+     * @param $order_id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction()
+    public function indexAction($order_id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $ProductEntities = $em->getRepository('ProductBundle:Product')->findAll();
+        $order = $this->getRelatedOrder($order_id);
+
+        $ProductEntities = $em->getRepository('ProductBundle:Product')->findBy([
+            'supplier' => $order->getSupplierId()
+        ]);
 
         return $this->render('ProductBundle:Product:index.html.twig', array(
             'ProductEntities' => $ProductEntities,
+            'order_id' => $order->getId(),
         ));
     }
     /**

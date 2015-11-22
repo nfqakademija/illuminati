@@ -3,27 +3,17 @@
 {% block body %}
 <div class="container">
 
-    <h2 class="page-header">{% block content_header %}{% endblock %}</h2>
+    <h2 class="page-header">
+        {% block content_header %}{% endblock %}
+    </h2>
 
     <ol class="breadcrumb">
-    {% block breadcrumbs %}
-        <li><a href="{{ path('homepage') }}">Home</a></li>
-    {% endblock %}
+        {% block breadcrumbs %}
+            <li><a href="{{ path('homepage') }}">Home</a></li>
+        {% endblock %}
     </ol>
 
-    <div class="row">
-        <div class="col-md-8">
-            {% block content %}
-            {% endblock %}
-        </div>
-        <div class="col-md-4">
-            {% block sidebar_right %}
-                {{ render(controller(
-                    'CartBundle:Cart:sidebarWidget',
-                    { 'max': 3 }
-                )) }}
-            {% endblock %}
-        </div>
-    </div>
+    {% block content %}{% endblock %}
+
 </div>
 {% endblock %}

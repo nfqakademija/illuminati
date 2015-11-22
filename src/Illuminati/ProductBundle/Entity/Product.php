@@ -3,7 +3,6 @@
 namespace Illuminati\ProductBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Product
@@ -212,7 +211,7 @@ class Product
      */
     public function getDeleted()
     {
-        return $this->deleted;
+        return (boolean)$this->deleted;
     }
 
     /**
@@ -232,7 +231,7 @@ class Product
      *
      * @return Product
      */
-    public function setSupplier(\Illuminati\ProductBundle\Entity\Supplier $supplier = null)
+    public function setSupplier(Supplier $supplier = null)
     {
         $this->supplier = $supplier;
 

@@ -1,7 +1,21 @@
 {% extends 'ProductBundle::layout.html.twig' %}
 
-{% block content_header %}Product list{% endblock %}
+{% block content_header %}
+    Product list
+{% endblock %}
 
 {% block content %}
-    {% include 'ProductBundle::Product/items.html.twig' %}
+    <div class="row">
+        <div class="col-md-9">
+            {% include 'ProductBundle::Product/items.html.twig' %}
+        </div>
+        <div class="col-md-3">
+            {% block sidebar_right %}
+                {{ render(controller(
+                'CartBundle:Cart:sidebarWidget',
+                { 'order_id': order_id }
+                )) }}
+            {% endblock %}
+        </div>
+    </div>
 {% endblock %}

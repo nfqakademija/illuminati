@@ -12,33 +12,57 @@
     <ol class="breadcrumb">
         {% block breadcrumbs %}
             {{ parent() }}
-            <li><a href="{{ path('product') }}">Products</a></li>
+            <li><a href="{{ path('product', {'order_id':order_id}) }}">Products</a></li>
             <li>Checkout</li>
         {% endblock %}
     </ol>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12" id="checkout">
             {% block content %}
-                <div class="checkout">
-                    {% for product in cart.getItems %}
-                        <div class="row">
-                            <div class="col-md-2">
-                                <a href="{{ path('product_show', { 'id': product.id }) }}" class="thumbnail">
-                                    <img src="{{ product.image }}" />
-                                </a>
-                            </div>
-                            <div class="col-md-8">
-                                <a href="{{ path('product_show', { 'id': product.id }) }}">
-                                    {{ product.title }}
-                                </a>
-                                <span></span>
-                                <a class="pull-right" href="{{ path('cart_remove', { 'product_id': product.id }) }}">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </a>
-                            </div>
-                        </div>
-                    {% endfor %}
+                <div class="panel panel-default checkout">
+                    <div class="panel-body">
+                        {{ form_start(checkout_form) }}
+                        <table class="table table-responsive">
+                            <thead>
+                            <tr>
+                                <th class="photo">&nbsp;</th>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in checkout_form.items %}
+                                {% set product = products[item.vars.value.product_id] %}
+                                <tr>
+                                    <td>
+                                        <a href="" class="thumbnail">
+                                            <img src="{{ product.image }}" />
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="">{{ product.title }}</a>
+                                    </td>
+                                    <td>
+                                        {{ form_widget(item.quantity) }}
+                                        {{ form_widget(item.product_id) }}
+                                    </td>
+                                    <td>{{ product.price }}</td>
+                                    <td>{{ cart.geItemTotalAmount(product.id, product.price) }}</td>
+                                    <td>
+                                        <a class="pull-right" href="">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        {{ form_end(checkout_form) }}
+                    </div>
                 </div>
             {% endblock %}
         </div>

@@ -40,4 +40,11 @@ interface CartProviderInterface
      * @return integer
      */
     public function getQuantity($id);
+
+    /**
+     * @param $id
+     * @param $price
+     * @return mixed
+     */
+    public function geItemTotalAmount($id, $price);
 }

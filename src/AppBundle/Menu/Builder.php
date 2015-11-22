@@ -4,11 +4,14 @@ namespace AppBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\HttpFoundation\Request;
 
 class Builder extends ContainerAware
 {
     public function mainMenu(FactoryInterface $factory, array $options)
     {
+        // $request = $this->container->get('request');
+
         $menu = $factory->createItem('root', array(
             'childrenAttributes' => array(
                 'class' => 'nav navbar-nav navbar-right',
@@ -16,7 +19,15 @@ class Builder extends ContainerAware
         ));
 
         $menu->addChild('Home', array('route' => 'homepage'));
-        $menu->addChild('Products', array('route' => 'product'));
+
+        /*
+        $menu->addChild('Products', [
+            'route' => 'product',
+            'routeParameters' => [
+                'order_id' => $request->get('order_id')
+            ]
+        ]);
+        */
 
         if (!$this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
 
