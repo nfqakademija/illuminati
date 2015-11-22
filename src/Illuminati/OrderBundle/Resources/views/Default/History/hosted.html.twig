@@ -1,0 +1,20 @@
+{% extends ":default:index.html.twig" %}
+
+{% block body %}
+ <h1>Orders you have hosted</h1>
+ {% for i in 0..orders|length-1 %}
+  <div style="border: 4px solid black; width:50%;margin:0 auto">
+     <div>
+      <h3 style="display:inline-block">{{ orders[i]['title'] }}</h3>
+      <h3 style="display:inline-block;float: right">Status:{{ orders[i]['state'] }}</h3>
+     </div>
+     <div>
+      <h3 style="display:inline-block">Closes:{{ orders[i]['close_date'] }}</h3>
+      <h3 style="display:inline-block;float: right">Participants:{{ orders[i]['pCnt'] }}</h3>
+    </div>
+    <div style="float: right">
+      <button class="btn btn-success btn">View</button>
+    </div>
+  </div>
+ {% endfor %}
+{% endblock %}

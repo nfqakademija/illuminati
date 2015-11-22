@@ -206,4 +206,26 @@ class DefaultController extends Controller
 
     }
 
+
+    public function showHistoryAction($type)
+    {
+        $userId = $this->container->get('security.context')->getToken()->getUser()->getId();
+        if($type == 'hosted')
+        {
+            $sql="
+            SELECT HO.title, HO.close_date, HOS.state, COUNT(UO.host_order_id) AS pCnt
+            FROM host_order HO
+            JOIN host_order_state HOS ON HO.state_id = HOS.id
+            JOIN user_order UO ON HO.id = UO.host_order_id
+            WHERE HO.users_id = {$userId}
+            ";
+            $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sql);
+            $stmt->execute();
+            $orders = $stmt->fetchAll();
+        }
+
+        return $this->render('IlluminatiOrderBundle:Default/History:hosted.html.twig', array(
+            'orders'=>$orders
+        ));
+    }
 }
