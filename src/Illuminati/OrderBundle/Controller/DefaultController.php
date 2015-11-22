@@ -218,6 +218,7 @@ class DefaultController extends Controller
             JOIN host_order_state HOS ON HO.state_id = HOS.id
             JOIN user_order UO ON HO.id = UO.host_order_id
             WHERE HO.users_id = {$userId}
+            GROUP BY HO.title, HO.close_date, HOS.state
             ";
             $stmt = $this->getDoctrine()->getManager()->getConnection()->prepare($sql);
             $stmt->execute();
