@@ -23,7 +23,10 @@
             <h2>{{ hostOrder.title }}</h2>
             <p>{{ hostOrder.description }}</p>
             <p><em><strong>{% trans %}order.summary.dueDate{% endtrans %} : {{ hostOrder.closeDate|date('Y-m-d H:i') }}</strong></em></p>
-            <p>{% trans %}order.summary.inviteLink{% endtrans %} : <mark>{{ hostOrder.orderToken }}</mark></p>
+            <div class="has-success">
+                <label for="inv_link">{% trans %}order.summary.inviteLink{% endtrans %} :</label>
+                <input class="form-control" id="inv_link" type="text" value="{{ app.request.getSchemeAndHttpHost() ~ path('host_order_join',{'hostOrderToken':hostOrder.orderToken}) }}" readonly>
+            </div>
         </div>
 
 
