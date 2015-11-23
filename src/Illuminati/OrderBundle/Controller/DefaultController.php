@@ -210,10 +210,11 @@ class DefaultController extends Controller
     public function showHistoryAction($type)
     {
         $userId = $this->container->get('security.context')->getToken()->getUser()->getId();
+
         if($type === 'hosted')
         {
             $sql="
-            SELECT HO.title, HO.close_date, HOS.state, COUNT(UO.host_order_id) AS pCnt
+            SELECT HO.id ,HO.title, HO.close_date, HOS.state, COUNT(UO.host_order_id) AS pCnt
             FROM host_order HO
             JOIN host_order_state HOS ON HO.state_id = HOS.id
             JOIN user_order UO ON HO.id = UO.host_order_id
@@ -226,13 +227,13 @@ class DefaultController extends Controller
 
             return $this->render('IlluminatiOrderBundle:Default/History:history.html.twig', array(
                 'orders'=>$orders,
-                'type'=>$type
+                'type'=>$type,
             ));
         }
         elseif($type === 'joined')
         {
             $sql="
-            SELECT HO.title, HO.close_date, HOS.state, COUNT(UO.host_order_id) AS pCnt
+            SELECT HO.id, HO.title, HO.close_date, HOS.state, COUNT(UO.host_order_id) AS pCnt
             FROM host_order HO
             JOIN host_order_state HOS ON HO.state_id = HOS.id
             JOIN user_order UO ON HO.id = UO.host_order_id
@@ -245,7 +246,7 @@ class DefaultController extends Controller
 
             return $this->render('IlluminatiOrderBundle:Default/History:history.html.twig', array(
                 'orders'=>$orders,
-                'type'=>$type
+                'type'=>$type,
             ));
         }
 

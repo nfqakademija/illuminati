@@ -17,15 +17,13 @@
                 <h3 style="display:inline-block">Closes:{{ orders[i]['close_date'] }}</h3>
                 <h3 style="display:inline-block;float: right">Participants:{{ orders[i]['pCnt'] }}</h3>
             </div>
-            <div style="float: right">
-                <button class="btn btn-success btn">View</button>
-            </div>
+                <a style="float:right; padding-top: 1%" href="/order/summary/{{ orders[i]['id'] }}"><button class="btn btn-default">View order</button></a>
         </div>
         {% endfor %}
     {% elseif type == 'hosted' %}
-        <h1>You havent hosted any orders.</h1>
+        <h1>You haven't hosted any orders, <a href="/order/">create an order.</a></h1>
     {% else %}
-        <h1>You havent joined any orders</h1>
+        <h1>You haven't joined any orders, <a href="/order/">create an order.</a></h1>
     {% endif %}
 
 
