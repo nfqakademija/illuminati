@@ -151,6 +151,4 @@ class HostOrderJoinCheckerTest extends \PHPUnit_Framework_TestCase
             'hostOrderMock' => $hostOrderMock
         ];
     }
-
-
 }

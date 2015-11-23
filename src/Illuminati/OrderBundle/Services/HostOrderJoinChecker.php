@@ -17,6 +17,13 @@ class HostOrderJoinChecker
         $this->tokenStorage = $ts;
     }
 
+    /**
+     * Checks if the currently logged in user can join the host order
+     *
+     * @param string $hostOrderToken Host order invite token
+     *
+     * @return bool|\Illuminati\OrderBundle\Entity\Host_order|int
+     */
     public function check($hostOrderToken)
     {
         $hostOrder = $this->em
@@ -54,5 +61,4 @@ class HostOrderJoinChecker
 
         return $hostOrder;
     }
-
 }
