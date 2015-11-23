@@ -10,6 +10,13 @@
             </div>
             {% endfor %}
 
+            {% for infoMessage in app.session.flashbag.get('info') %}
+                <div class="alert alert-info fade in col-sm-6 col-sm-offset-6">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>{% trans %}order.summary.info{% endtrans %}</strong>  {{ infoMessage }}
+                </div>
+            {% endfor %}
+
         <h1>{% trans %}order.summary.title{% endtrans %}</h1>
 
         <div class="jumbotron">
