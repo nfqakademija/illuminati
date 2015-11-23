@@ -158,7 +158,7 @@ class DefaultController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deptReminderAction($id)
+    public function debtReminderAction($id)
     {
         if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
             $em = $this->getDoctrine()->getManager();

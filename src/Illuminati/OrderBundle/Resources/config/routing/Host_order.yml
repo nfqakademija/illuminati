@@ -14,9 +14,9 @@ host_order_edit:
   path: /{id}/edit
   defaults: { _controller: "IlluminatiOrderBundle:Default:editHostOrder"}
 
-host_order_email_remiders:
+host_order_email_reminders:
   path: /{id}/payments_reminder
-  defaults: { _controller: "IlluminatiOrderBundle:Default:deptReminder"}
+  defaults: { _controller: "IlluminatiOrderBundle:Default:debtReminder"}
 
 host_order_join:
     path: /join/{hostOrderToken}
