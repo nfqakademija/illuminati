@@ -206,4 +206,60 @@ class DefaultController extends Controller
 
     }
 
+    /**
+     * Host order joining
+     *
+     * @param string $hostOrderToken Host order join token
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function joinOrderAction($hostOrderToken)
+    {
+        $hostOrder = $this->get('host_order_join_checker')->check($hostOrderToken);
+
+        if (is_object($hostOrder)) {
+
+            // Joining user to the host order
+
+            $userOrder = new User_order();
+            $userOrder->setHostOrderId($hostOrder);
+            $userOrder->setUsersId(
+                $this->get('security.token_storage')->getToken()->getUser()
+            );
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($userOrder);
+            $em->flush();
+
+            $notificationMessage = $this->get('translator')
+                ->trans('order.summary.successJoined');
+
+            $this->get('session')->getFlashBag()
+                ->add('success', $notificationMessage);
+
+            return $this->redirectToRoute(
+                'host_order_summary', ['id'=>$hostOrder->getId()]
+            );
+
+        } elseif (is_int($hostOrder)) {
+
+            // user already participates in the order
+
+            $notificationMessage = $this->get('translator')
+                ->trans('order.summary.infoAlreadyParticipates');
+
+            $this->get('session')->getFlashBag()
+                ->add('info', $notificationMessage);
+
+            return $this->redirectToRoute(
+                'host_order_summary', ['id'=>$hostOrder]
+            );
+
+        } else {
+
+            return $this->redirectToRoute('homepage');
+
+        }
+    }
+
 }
