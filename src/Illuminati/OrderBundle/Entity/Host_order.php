@@ -87,7 +87,7 @@ class Host_order
      *
      * @ORM\Column(name="order_token", type="string", length=32, unique=true)
      */
-    private $order_token;
+    private $orderToken;
 
     /**
      * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order", mappedBy="hostOrderId")
@@ -108,7 +108,7 @@ class Host_order
     public function __construct()
     {
         $this->stateId = 1;
-        $this->order_token = bin2hex(openssl_random_pseudo_bytes(32));
+        $this->orderToken = bin2hex(openssl_random_pseudo_bytes(32));
         $this->deleted = 0;
         //$this->order_participants = new ArrayCollection();
         $this->user_orders = new ArrayCollection();
@@ -308,7 +308,7 @@ class Host_order
      */
     public function getOrderToken()
     {
-        return $this->order_token;
+        return $this->orderToken;
     }
 
     /**

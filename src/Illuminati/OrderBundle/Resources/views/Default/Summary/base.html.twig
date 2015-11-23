@@ -10,13 +10,23 @@
             </div>
             {% endfor %}
 
+            {% for infoMessage in app.session.flashbag.get('info') %}
+                <div class="alert alert-info fade in col-sm-6 col-sm-offset-6">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>{% trans %}order.summary.info{% endtrans %}</strong>  {{ infoMessage }}
+                </div>
+            {% endfor %}
+
         <h1>{% trans %}order.summary.title{% endtrans %}</h1>
 
         <div class="jumbotron">
             <h2>{{ hostOrder.title }}</h2>
             <p>{{ hostOrder.description }}</p>
             <p><em><strong>{% trans %}order.summary.dueDate{% endtrans %} : {{ hostOrder.closeDate|date('Y-m-d H:i') }}</strong></em></p>
-            <p>{% trans %}order.summary.inviteLink{% endtrans %} : <mark>{{ hostOrder.orderToken }}</mark></p>
+            <div class="has-success">
+                <label for="inv_link">{% trans %}order.summary.inviteLink{% endtrans %} :</label>
+                <input class="form-control" id="inv_link" type="text" value="{{ app.request.getSchemeAndHttpHost() ~ path('host_order_join',{'hostOrderToken':hostOrder.orderToken}) }}" readonly>
+            </div>
         </div>
 
 
@@ -36,7 +46,7 @@
         {# Checking if the logged in user is the host of the main order #}
         {% if hostOrder.usersId.id == app.user.id %}
             <hr>
-            <a href="{{ path('host_order_email_remiders',{'id':hostOrder.id}) }}"><button id="send-reminder-emails" class="btn btn-default"><span class="glyphicon glyphicon-envelope"></span> {% trans %}order.summary.remindAboutPaymentsButton{% endtrans %} </button></a>
+            <a href="{{ path('host_order_email_reminders',{'id':hostOrder.id}) }}"><button id="send-reminder-emails" class="btn btn-default"><span class="glyphicon glyphicon-envelope"></span> {% trans %}order.summary.remindAboutPaymentsButton{% endtrans %} </button></a>
             <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-lock"></span> {% trans %}order.summary.confirmOrderButton{% endtrans %} </button></a>
             <br>
         {% endif %}

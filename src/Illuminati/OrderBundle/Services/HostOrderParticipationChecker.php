@@ -71,5 +71,4 @@ class HostOrderParticipationChecker
 
         return false;
     }
-
 }

@@ -21,8 +21,11 @@ order:
     remindAboutPaymentsButton: Remind about payments
     confirmOrderButton: Confirm and Lock orders
     success: Success!
+    info: Notice :
     successCreate: Order has been successfully created!
     successUpdate: Order has been successfully updated!
+    successJoined: You have successfully joined the order!
+    infoAlreadyParticipates: You already participate in this order.
     successEmailSent_%count%: %count% reminder emails successfully sent!
 
     widget:
