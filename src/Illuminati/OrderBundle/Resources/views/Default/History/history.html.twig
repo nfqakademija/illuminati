@@ -3,11 +3,12 @@
 {% block body %}
     {% if orders %}
         {% if type == 'hosted' %}
-            <h1>Orders you have hosted</h1>
+            <h1 class="history">Orders you have hosted</h1>
         {% elseif type == 'joined' %}
-            <h1>Orders you have joined</h1>
+            <h1 class="history">Orders you have joined</h1>
         {% endif %}
         {% for i in 0..orders|length-1 %}
+            <hr>
             <div class="orders">
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -25,12 +26,11 @@
                     </div>
                 </div>
             </div>
-            <hr>
         {% endfor %}
     {% elseif type == 'hosted' %}
-        <h1>You haven't hosted any orders, <a href="/order/">create an order.</a></h1>
+        <h1 class="history">You haven't hosted any orders, <a href="/order/">create an order.</a></h1>
     {% else %}
-        <h1>You haven't joined any orders, <a href="/order/">create an order.</a></h1>
+        <h1 class="history">You haven't joined any orders, <a href="/order/">create an order.</a></h1>
     {% endif %}
 
 
