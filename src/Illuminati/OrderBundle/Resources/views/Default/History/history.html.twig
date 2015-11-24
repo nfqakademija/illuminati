@@ -8,17 +8,24 @@
             <h1>Orders you have joined</h1>
         {% endif %}
         {% for i in 0..orders|length-1 %}
-        <div style="border: 4px solid black; width:50%;margin:0 auto;margin-bottom: 3%">
-            <div>
-                <h3 style="display:inline-block">{{ orders[i]['title'] }}</h3>
-                <h3 style="display:inline-block;float: right">Status:{{ orders[i]['state'] }}</h3>
+            <div class="orders">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ orders[i]['title'] }}</h3>
+                    </div>
+                    <div class="panel-body">
+                    <div class="pull-left">
+                        <h3>Closes: {{ orders[i]['closeDate'] }}</h3>
+                        <h3>Participants: {{ orders[i]['pCnt'] }}</h3>
+                    </div>
+                    <div class="pull-right">
+                        <h3>Status: {{ orders[i]['state'] }}</h3>
+                        <a href="/order/summary/{{ orders[i]['id'] }}"><button class="btn btn-default">View order</button></a>
+                    </div>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h3 style="display:inline-block">Closes:{{ orders[i]['close_date'] }}</h3>
-                <h3 style="display:inline-block;float: right">Participants:{{ orders[i]['pCnt'] }}</h3>
-            </div>
-                <a style="float:right; padding-top: 1%" href="/order/summary/{{ orders[i]['id'] }}"><button class="btn btn-default">View order</button></a>
-        </div>
+            <hr>
         {% endfor %}
     {% elseif type == 'hosted' %}
         <h1>You haven't hosted any orders, <a href="/order/">create an order.</a></h1>
