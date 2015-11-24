@@ -108,7 +108,8 @@ class ProductController extends Controller
 
     /**
      * Finds and displays a Product entity.
-     *
+     * @param $id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function showAction($id)
     {

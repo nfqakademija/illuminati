@@ -8,6 +8,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CartController extends Controller
 {
+    function __construct()
+    {
+        $cart = $this->get('cart.provider');
+        dump($cart); exit;
+    }
+
     public function checkoutAction($order_id, Request $request)
     {
         $cart = $this->get('cart.provider');
@@ -24,11 +30,13 @@ class CartController extends Controller
         $form = $this->createForm(new CheckoutType(), $data);
 
         $form->handleRequest($request);
-
         if ($form->isValid()) {
-            // data is an array with "name", "email", and "message" keys
-            $data = $form->getData();
-            // print_r($data); exit;
+            $data = $form->get('items')->getData();
+            foreach($data as $cart_item) {
+                $cart->updateQuantity(
+                    $cart_item['product_id'], $cart_item['quantity']
+                );
+            }
         }
 
         return $this->render('CartBundle:Cart:checkout.html.twig', [

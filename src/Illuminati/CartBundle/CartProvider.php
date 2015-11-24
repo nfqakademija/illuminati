@@ -23,11 +23,20 @@ class CartProvider implements CartProviderInterface
     public $em;
 
     /**
+     * @var array
+     */
+    public $parameters;
+
+    /**
      * CartProvider constructor.
      * @param Session $session
+     * @param EntityManagerInterface $em
+     * @param $parameters
      */
-    function __construct(Session $session, EntityManagerInterface $em)
+    function __construct(Session $session, EntityManagerInterface $em, $parameters)
     {
+        $this->parameters = $parameters;
+
         $this->session = $session;
         $this->cart = $this->session->get('cart');
 
@@ -114,7 +123,9 @@ class CartProvider implements CartProviderInterface
 
         if($items = $this->getItems()) {
             foreach($items as $item) {
-                $amount += $item->getPrice() * $this->cart[$item->getId()];
+                $amount += $item->getPrice() * $this->getQuantity(
+                        $item->getId()
+                    );
             }
         }
         return $amount;
@@ -126,5 +137,18 @@ class CartProvider implements CartProviderInterface
         return ($quantity * $price);
     }
 
+    public function updateQuantity($id, $quantity)
+    {
+        if(isset($this->cart[$id])) {
+            $this->cart[$id] = $quantity;
+        }
+    }
 
+    /**
+     * @return bool|string
+     */
+    public function getProviderCurrency()
+    {
+        return isset($this->parameters['currency']) ? $this->parameters['currency'] : false;
+    }
 }

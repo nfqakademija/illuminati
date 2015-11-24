@@ -26,10 +26,10 @@
                         <table class="table table-responsive">
                             <thead>
                             <tr>
-                                <th class="photo">&nbsp;</th>
+                                <th>&nbsp;</th>
                                 <th>Product</th>
                                 <th>Quantity</th>
-                                <th>Price</th>
+                                <th>Price for item</th>
                                 <th>Total</th>
                                 <th>&nbsp;</th>
                             </tr>
@@ -39,7 +39,7 @@
                                 {% set product = products[item.vars.value.product_id] %}
                                 <tr>
                                     <td>
-                                        <a href="" class="thumbnail">
+                                        <a href="{{ path('product_show', {id:product.id}) }}" class="thumbnail">
                                             <img src="{{ product.image }}" />
                                         </a>
                                     </td>
@@ -47,19 +47,27 @@
                                         <a href="">{{ product.title }}</a>
                                     </td>
                                     <td>
-                                        {{ form_widget(item.quantity) }}
+                                        {{ form_widget(item.quantity, { 'attr': {'class': 'form-control quantity'} }) }}
+                                        {{ form_errors(item.quantity) }}
                                         {{ form_widget(item.product_id) }}
                                     </td>
-                                    <td>{{ product.price }}</td>
-                                    <td>{{ cart.geItemTotalAmount(product.id, product.price) }}</td>
+                                    <td>{{ product.price }} {{ cart.getProviderCurrency }}</td>
+                                    <td>{{ cart.geItemTotalAmount(product.id, product.price) }} {{ cart.getProviderCurrency }}</td>
                                     <td>
-                                        <a class="pull-right" href="">
+                                        <a class="pull-right" href="{{ path('cart_remove', {product_id:product.id, order_id:order_id}) }}">
                                             <span class="glyphicon glyphicon-remove"></span>
                                         </a>
                                     </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="6">
+                                        Total: <strong>{{ cart.getAmount }}</strong> {{ cart.getProviderCurrency }}
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
                         {{ form_end(checkout_form) }}
                     </div>
