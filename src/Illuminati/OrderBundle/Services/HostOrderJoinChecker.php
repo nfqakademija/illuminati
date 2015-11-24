@@ -50,7 +50,8 @@ class HostOrderJoinChecker
             ->findOneBy(
                 [
                     'hostOrderId' => $hostOrder,
-                    'usersId'     => $user
+                    'usersId'     => $user,
+                    'deleted'     => 0
                 ]
             );
 
