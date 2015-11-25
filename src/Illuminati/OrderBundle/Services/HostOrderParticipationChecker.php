@@ -2,10 +2,8 @@
 
 namespace Illuminati\OrderBundle\Services;
 
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
 
 class HostOrderParticipationChecker
 {
@@ -19,9 +17,8 @@ class HostOrderParticipationChecker
      * @param EntityManagerInterface $em Entity manager
      * @param TokenStorageInterface  $st Security token thing
      */
-    public function __construct(
-        EntityManagerInterface $em, TokenStorageInterface $st
-    ) {
+    public function __construct(EntityManagerInterface $em, TokenStorageInterface $st)
+    {
         $this->em = $em;
         $this->securityToken = $st;
     }

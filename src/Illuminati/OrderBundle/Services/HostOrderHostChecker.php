@@ -2,10 +2,8 @@
 
 namespace Illuminati\OrderBundle\Services;
 
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
 
 class HostOrderHostChecker
 {
@@ -51,5 +49,4 @@ class HostOrderHostChecker
 
         return $hostOrder;
     }
-
 }

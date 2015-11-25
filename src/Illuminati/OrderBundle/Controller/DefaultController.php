@@ -42,7 +42,6 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($hostOrder);
 
@@ -61,7 +60,8 @@ class DefaultController extends Controller
                 ->add('success', $notificationMessage);
 
             return $this->redirectToRoute(
-                'host_order_summary', ['id' => $hostOrder->getId()]
+                'host_order_summary',
+                ['id' => $hostOrder->getId()]
             );
         }
 
@@ -80,7 +80,6 @@ class DefaultController extends Controller
     public function summaryAction($id)
     {
         if (($hostOrderObj = $this->get('host_order_participation_checker')->check((int)$id))) {
-
             //getting participants
 
             $em = $this->getDoctrine()->getManager()
@@ -114,7 +113,6 @@ class DefaultController extends Controller
     public function editHostOrderAction(Request $request, $id)
     {
         if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
-
             $em = $this
                 ->getDoctrine()
                 ->getManager();
@@ -137,7 +135,8 @@ class DefaultController extends Controller
                     ->add('success', $notificationMessage);
 
                 return $this->redirectToRoute(
-                    'host_order_summary', ['id' => $hostOrder->getId()]
+                    'host_order_summary',
+                    ['id' => $hostOrder->getId()]
                 );
             }
 
@@ -180,7 +179,8 @@ class DefaultController extends Controller
                                 'hostOrder' => $hostOrder,
                                 'debtor'    => $debtor
                             ]
-                        ), 'text/html'
+                        ),
+                        'text/html'
                     );
 
                 $this->get('mailer')->send($message);
@@ -197,7 +197,8 @@ class DefaultController extends Controller
                 ->add('success', $notificationMessage);
 
             return $this->redirectToRoute(
-                "host_order_summary", ['id' => $hostOrder->getId()]
+                "host_order_summary",
+                ['id' => $hostOrder->getId()]
             );
 
         } else {
@@ -218,7 +219,6 @@ class DefaultController extends Controller
         $hostOrder = $this->get('host_order_join_checker')->check($hostOrderToken);
 
         if (is_object($hostOrder)) {
-
             // Joining user to the host order
 
             $userOrder = new User_order();
@@ -238,11 +238,11 @@ class DefaultController extends Controller
                 ->add('success', $notificationMessage);
 
             return $this->redirectToRoute(
-                'host_order_summary', ['id'=>$hostOrder->getId()]
+                'host_order_summary',
+                ['id'=>$hostOrder->getId()]
             );
 
         } elseif (is_int($hostOrder)) {
-
             // user already participates in the order
 
             $notificationMessage = $this->get('translator')
@@ -252,11 +252,11 @@ class DefaultController extends Controller
                 ->add('info', $notificationMessage);
 
             return $this->redirectToRoute(
-                'host_order_summary', ['id'=>$hostOrder]
+                'host_order_summary',
+                ['id'=>$hostOrder]
             );
 
         } else {
-
             return $this->redirectToRoute('homepage');
 
         }
