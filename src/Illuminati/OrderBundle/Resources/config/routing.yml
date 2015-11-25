@@ -1,3 +1,7 @@
 order_host_order:
   resource: "@IlluminatiOrderBundle/Resources/config/routing/Host_order.yml"
   prefix: /order
+
+order_history:
+  path: /history/{type}
+  defaults: { _controller:"IlluminatiOrderBundle:Default:showHistory" }

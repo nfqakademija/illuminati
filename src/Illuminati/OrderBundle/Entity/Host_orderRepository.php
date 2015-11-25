@@ -83,4 +83,46 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
         return $debtors;
     }
 
+    public function findHostedOrders($id)
+    {
+        $orders = $this->getEntityManager()
+            ->createQuery(
+                "SELECT HO.id ,HO.title, HO.closeDate, HOS.state, COUNT(UO.hostOrderId) AS pCnt
+                FROM Illuminati\OrderBundle\Entity\Host_order HO
+                INNER JOIN Illuminati\OrderBundle\Entity\Host_order_state HOS WITH (HO.stateId = HOS.id)
+                INNER JOIN Illuminati\OrderBundle\Entity\User_order UO WITH (HO.id = UO.hostOrderId)
+                WHERE HO.usersId = :HO_id AND HO.deleted = 0
+                GROUP BY HO.title, HO.closeDate, HOS.state"
+            )
+            ->setParameter('HO_id',$id)
+            ->getResult();
+        for($i = 0; $i < sizeof($orders); $i++)
+        {
+            $date = $orders[$i]['closeDate'];
+            $orders[$i]['closeDate']=$date->format('Y-m-d H:i:s');
+        }
+        return $orders;
+    }
+
+    public function findJoinedOrders($id)
+    {
+        $orders = $this->getEntityManager()
+            ->createQuery(
+                "SELECT HO.id, HO.title, HO.closeDate, HOS.state, COUNT(UO.hostOrderId) AS pCnt
+                FROM Illuminati\OrderBundle\Entity\Host_order HO
+                INNER JOIN Illuminati\OrderBundle\Entity\Host_order_state HOS WITH (HO.stateId = HOS.id)
+                INNER JOIN Illuminati\OrderBundle\Entity\User_order UO WITH (HO.id = UO.hostOrderId)
+                WHERE UO.usersId = :HO_id AND HO.usersId <> :HO_id AND HO.deleted = 0
+                GROUP BY HO.title, HO.closeDate, HOS.state"
+            )
+            ->setParameter('HO_id',$id)
+            ->getResult();
+        for($i = 0; $i < sizeof($orders); $i++)
+        {
+            $date = $orders[$i]['closeDate'];
+            $orders[$i]['closeDate']=$date->format('Y-m-d H:i:s');
+        }
+        return $orders;
+    }
+
 }
