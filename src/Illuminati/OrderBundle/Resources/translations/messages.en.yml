@@ -18,10 +18,9 @@ order:
     inviteLink: Invitation Link
     goToShopButton: Go to Shop
     editOrderButton: Edit host order info
+    leaveOrder: Leave group order
     remindAboutPaymentsButton: Remind about payments
     confirmOrderButton: Confirm and Lock orders
-    success: Success!
-    info: Notice :
     successCreate: Order has been successfully created!
     successUpdate: Order has been successfully updated!
     successJoined: You have successfully joined the order!
@@ -35,3 +34,8 @@ order:
       prepaid: Prepaid :
       participantPaid: Participant paid fo his orders
       participantNotPaid: Participant hasn't paid for his orders
+
+notify:
+  success: Success!
+  info: Notice :
+  error: Warning :
