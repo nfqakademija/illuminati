@@ -2,10 +2,8 @@
 
 namespace Illuminati\OrderBundle\Services;
 
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
 
 class HostOrderParticipationChecker
 {
@@ -19,9 +17,8 @@ class HostOrderParticipationChecker
      * @param EntityManagerInterface $em Entity manager
      * @param TokenStorageInterface  $st Security token thing
      */
-    public function __construct(
-        EntityManagerInterface $em, TokenStorageInterface $st
-    ) {
+    public function __construct(EntityManagerInterface $em, TokenStorageInterface $st)
+    {
         $this->em = $em;
         $this->securityToken = $st;
     }
@@ -45,7 +42,13 @@ class HostOrderParticipationChecker
         }
 
         $hostOrderObj = $this->em->getRepository("IlluminatiOrderBundle:Host_order")
-            ->find($hostOrderId);
+            ->findOneBy(
+                [
+                    'id'        => $hostOrderId,
+                    'stateId'   => 1,
+                    'deleted'   => 0
+                ]
+            );
 
         if (empty($hostOrderObj)) {
             // No host order found with provided ID
@@ -64,12 +67,11 @@ class HostOrderParticipationChecker
         }
 
         foreach ($userOrders as $usrOrd) {
-            if ($usrOrd->getUsersId() === $userObj) {
+            if (($usrOrd->getUsersId() === $userObj) && ($usrOrd->getDeleted() == 0)) {
                 return $hostOrderObj;
             }
         }
 
         return false;
     }
-
 }

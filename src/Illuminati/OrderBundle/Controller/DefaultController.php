@@ -42,7 +42,6 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($hostOrder);
 
@@ -61,7 +60,8 @@ class DefaultController extends Controller
                 ->add('success', $notificationMessage);
 
             return $this->redirectToRoute(
-                'host_order_summary', ['id' => $hostOrder->getId()]
+                'host_order_summary',
+                ['id' => $hostOrder->getId()]
             );
         }
 
@@ -80,7 +80,6 @@ class DefaultController extends Controller
     public function summaryAction($id)
     {
         if (($hostOrderObj = $this->get('host_order_participation_checker')->check((int)$id))) {
-
             //getting participants
 
             $em = $this->getDoctrine()->getManager()
@@ -114,7 +113,6 @@ class DefaultController extends Controller
     public function editHostOrderAction(Request $request, $id)
     {
         if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
-
             $em = $this
                 ->getDoctrine()
                 ->getManager();
@@ -137,7 +135,8 @@ class DefaultController extends Controller
                     ->add('success', $notificationMessage);
 
                 return $this->redirectToRoute(
-                    'host_order_summary', ['id' => $hostOrder->getId()]
+                    'host_order_summary',
+                    ['id' => $hostOrder->getId()]
                 );
             }
 
@@ -158,7 +157,7 @@ class DefaultController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deptReminderAction($id)
+    public function debtReminderAction($id)
     {
         if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
             $em = $this->getDoctrine()->getManager();
@@ -180,7 +179,8 @@ class DefaultController extends Controller
                                 'hostOrder' => $hostOrder,
                                 'debtor'    => $debtor
                             ]
-                        ), 'text/html'
+                        ),
+                        'text/html'
                     );
 
                 $this->get('mailer')->send($message);
@@ -197,7 +197,8 @@ class DefaultController extends Controller
                 ->add('success', $notificationMessage);
 
             return $this->redirectToRoute(
-                "host_order_summary", ['id' => $hostOrder->getId()]
+                "host_order_summary",
+                ['id' => $hostOrder->getId()]
             );
 
         } else {
@@ -206,14 +207,17 @@ class DefaultController extends Controller
 
     }
 
-
+    /**
+     * Shows Order History
+     * @param $type
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function showHistoryAction($type)
     {
         $userId = $this->container->get('security.token_storage')->getToken()->getUser()->getId();
         $em = $this->getDoctrine()->getManager();
 
-        if($type === 'hosted')
-        {
+        if ($type === 'hosted') {
             $orders = $em->getRepository('IlluminatiOrderBundle:Host_order')
                 ->findHostedOrders($userId);
 
@@ -221,9 +225,7 @@ class DefaultController extends Controller
                 'orders'=>$orders,
                 'type'=>$type,
             ));
-        }
-        elseif($type === 'joined')
-        {
+        } elseif ($type === 'joined') {
             $orders = $em->getRepository('IlluminatiOrderBundle:Host_order')
                 ->findJoinedOrders($userId);
 
@@ -232,7 +234,92 @@ class DefaultController extends Controller
                 'type'=>$type,
             ));
         }
+    }
 
+    /**
+     * Host order joining
+     *
+     * @param string $hostOrderToken Host order join token
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function joinOrderAction($hostOrderToken)
+    {
+        $hostOrder = $this->get('host_order_join_checker')->check($hostOrderToken);
 
+        if (is_object($hostOrder)) {
+            // Joining user to the host order
+
+            $userOrder = new User_order();
+            $userOrder->setHostOrderId($hostOrder);
+            $userOrder->setUsersId(
+                $this->get('security.token_storage')->getToken()->getUser()
+            );
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($userOrder);
+            $em->flush();
+
+            $notificationMessage = $this->get('translator')
+                ->trans('order.summary.successJoined');
+
+            $this->get('session')->getFlashBag()
+                ->add('success', $notificationMessage);
+
+            return $this->redirectToRoute(
+                'host_order_summary',
+                ['id'=>$hostOrder->getId()]
+            );
+
+        } elseif (is_int($hostOrder)) {
+            // user already participates in the order
+
+            $notificationMessage = $this->get('translator')
+                ->trans('order.summary.infoAlreadyParticipates');
+
+            $this->get('session')->getFlashBag()
+                ->add('info', $notificationMessage);
+
+            return $this->redirectToRoute(
+                'host_order_summary',
+                ['id'=>$hostOrder]
+            );
+
+        } else {
+            return $this->redirectToRoute('homepage');
+
+        }
+    }
+
+    /**
+     * Leaving group order
+     *
+     * @param integer $id Host Order id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function leaveOrderAction($id)
+    {
+        $hostOrder = $this->get('host_order_participation_checker')->check((int)$id);
+
+        if (is_object($hostOrder)) {
+            $userId = $this->get('security.token_storage')->getToken()->getUser()->getId();
+
+            $deletedParticipant = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository('IlluminatiOrderBundle:Host_order')
+                ->deleteParticipant($hostOrder, $userId);
+
+            if ($deletedParticipant) {
+                $notificationMessage = $this
+                    ->get('translator')
+                    ->trans('notify.messages.success.orderLeft');
+
+                $this->get('session')->getFlashBag()->add('success', $notificationMessage);
+            }
+        }
+
+        return $this->redirectToRoute('homepage');
     }
 }

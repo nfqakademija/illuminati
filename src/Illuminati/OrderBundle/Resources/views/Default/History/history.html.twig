@@ -1,37 +1,39 @@
 {% extends ":default:index.html.twig" %}
 
 {% block body %}
-    {% if orders %}
-        {% if type == 'hosted' %}
-            <h1 class="history">Orders you have hosted</h1>
-        {% elseif type == 'joined' %}
-            <h1 class="history">Orders you have joined</h1>
-        {% endif %}
-        {% for i in 0..orders|length-1 %}
-            <hr>
-            <div class="orders">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">{{ orders[i]['title'] }}</h3>
-                    </div>
-                    <div class="panel-body">
-                    <div class="pull-left">
-                        <h3>Closes: {{ orders[i]['closeDate'] }}</h3>
-                        <h3>Participants: {{ orders[i]['pCnt'] }}</h3>
-                    </div>
-                    <div class="pull-right">
-                        <h3>Status: {{ orders[i]['state'] }}</h3>
-                        <a href="/order/summary/{{ orders[i]['id'] }}"><button class="btn btn-default">View order</button></a>
-                    </div>
+    <div class="container">
+        {% if orders %}
+            {% if type == 'hosted' %}
+                <h1 class="history">Orders you have hosted</h1>
+            {% elseif type == 'joined' %}
+                <h1 class="history">Orders you have joined</h1>
+            {% endif %}
+            {% for i in 0..orders|length-1 %}
+                <hr>
+                <div class="orders">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ orders[i]['title'] }}</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="pull-left">
+                                <h3>Closes: {{ orders[i]['closeDate'] }}</h3>
+                                <h3>Participants: {{ orders[i]['pCnt'] }}</h3>
+                            </div>
+                            <div class="pull-right">
+                                <h3>Status: {{ orders[i]['state'] }}</h3>
+                                <a href="/order/summary/{{ orders[i]['id'] }}"><button class="btn btn-default">View order</button></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
-    {% elseif type == 'hosted' %}
-        <h1 class="history">You haven't hosted any orders, <a href="/order/">create an order.</a></h1>
-    {% else %}
-        <h1 class="history">You haven't joined any orders, <a href="/order/">create an order.</a></h1>
-    {% endif %}
+            {% endfor %}
+        {% elseif type == 'hosted' %}
+            <h1 class="history">You haven't hosted any orders, <a href="/order/">create an order.</a></h1>
+        {% else %}
+            <h1 class="history">You haven't joined any orders, <a href="/order/">create an order.</a></h1>
+        {% endif %}
+    </div>
 
 
 

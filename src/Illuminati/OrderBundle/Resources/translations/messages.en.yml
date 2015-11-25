@@ -18,11 +18,13 @@ order:
     inviteLink: Invitation Link
     goToShopButton: Go to Shop
     editOrderButton: Edit host order info
+    leaveOrder: Leave group order
     remindAboutPaymentsButton: Remind about payments
     confirmOrderButton: Confirm and Lock orders
-    success: Success!
     successCreate: Order has been successfully created!
     successUpdate: Order has been successfully updated!
+    successJoined: You have successfully joined the order!
+    infoAlreadyParticipates: You already participate in this order.
     successEmailSent_%count%: %count% reminder emails successfully sent!
 
     widget:
@@ -32,3 +34,13 @@ order:
       prepaid: Prepaid :
       participantPaid: Participant paid fo his orders
       participantNotPaid: Participant hasn't paid for his orders
+
+notify:
+  success: Success!
+  info: Notice :
+  error: Warning :
+  messages:
+    success:
+      orderLeft: You have successfully left the order.
+    warning:
+      hostLeavesGroupOrder: You're the <strong>host</strong> of the group order, if you leave the order, group order will be closed.
