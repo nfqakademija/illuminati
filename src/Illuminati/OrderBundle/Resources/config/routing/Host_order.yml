@@ -22,3 +22,6 @@ host_order_join:
     path: /join/{hostOrderToken}
     defaults: { _controller: "IlluminatiOrderBundle:Default:joinOrder"}
 
+host_order_leave:
+    path: /leave/{id}
+    defaults: { _controller: "IlluminatiOrderBundle:Default:leaveOrder"}

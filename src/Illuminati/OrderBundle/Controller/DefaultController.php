@@ -262,4 +262,35 @@ class DefaultController extends Controller
         }
     }
 
+    /**
+     * Leaving group order
+     *
+     * @param integer $id Host Order id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function leaveOrderAction($id)
+    {
+        $hostOrder = $this->get('host_order_participation_checker')->check((int)$id);
+
+        if (is_object($hostOrder)) {
+            $userId = $this->get('security.token_storage')->getToken()->getUser()->getId();
+
+            $deletedParticipant = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository('IlluminatiOrderBundle:Host_order')
+                ->deleteParticipant($hostOrder->getId(), $userId);
+
+            if ($deletedParticipant) {
+                $notificationMessage = $this
+                    ->get('translator')
+                    ->trans('notify.messages.success.orderLeft');
+
+                $this->get('session')->getFlashBag()->add('success', $notificationMessage);
+            }
+        }
+
+        return $this->redirectToRoute('homepage');
+    }
 }
