@@ -3,6 +3,7 @@
 namespace Illuminati\OrderBundle\Entity;
 
 use Doctrine\Orm\Repository;
+
 /**
  * Host_orderRepository
  *
@@ -25,10 +26,10 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
             INNER JOIN Illuminati\OrderBundle\Entity\User_order_details uod WITH (ho.id = uod.hostOrderId)
             INNER JOIN Illuminati\ProductBundle\Entity\Product p WITH (uod.productId = p.id)
             WHERE  ho.id = :host_order_id AND ho.deleted = 0 AND p.deleted = 0'
-        )->setParameter('host_order_id',$id)->getResult();
+        )->setParameter('host_order_id', $id)->getResult();
 
         // removing product entities from array for better iteration
-        foreach ($participantsOrders as $key=>$value) {
+        foreach ($participantsOrders as $key => $value) {
             if ($value instanceof \Illuminati\ProductBundle\Entity\Product) {
                 unset($participantsOrders[$key]);
             }
@@ -48,14 +49,14 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
     public function findUserOrders($id)
     {
         $participants = $this->getEntityManager()->createQuery(
-            'SELECT uo,u FROM Illuminati\UserBundle\Entity\User u
+            'SELECT uo,u FROM Illuminati\UserBundle\Entity\USER u
             INNER JOIN Illuminati\OrderBundle\Entity\User_order uo WITH (u.id = uo.usersId)
             INNER JOIN Illuminati\OrderBundle\Entity\Host_order ho WITH (uo.hostOrderId = ho.id)
             WHERE ho.id = :host_order_id AND uo.deleted = 0 AND u.deleted = 0 AND ho.deleted = 0'
-        )->setParameter('host_order_id',$id)->getResult();
+        )->setParameter('host_order_id', $id)->getResult();
 
         // removing User entities from array for better iteration
-        foreach ($participants as $key=>$value) {
+        foreach ($participants as $key => $value) {
             if ($value instanceof \Illuminati\UserBundle\Entity\User) {
                 unset($participants[$key]);
             }
@@ -76,11 +77,46 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
         $debtors = $this->getEntityManager()->createQuery(
             'SELECT u FROM Illuminati\OrderBundle\Entity\Host_order ho
             INNER JOIN Illuminati\OrderBundle\Entity\User_order uo WITH (ho.id = uo.hostOrderId)
-            INNER JOIN Illuminati\UserBundle\Entity\User u WITH (uo.usersId = u.id)
+            INNER JOIN Illuminati\UserBundle\Entity\USER u WITH (uo.usersId = u.id)
             WHERE ho.id = :host_order_id AND uo.payed = 0 AND uo.deleted = 0 AND u.deleted = 0 AND ho.deleted = 0'
-        )->setParameter('host_order_id',$id)->getResult();
+        )->setParameter('host_order_id', $id)->getResult();
 
         return $debtors;
     }
 
+    /**
+     * Deletes participant from the hosted order
+     *
+     * @param integer $hostOrderId Host order id
+     * @param integer $userId      User Id
+     *
+     * @return int
+     * @throws \Doctrine\DBAL\ConnectionException
+     */
+    public function deleteParticipant($hostOrderId, $userId)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $conn->beginTransaction();
+
+        try {
+            $conn->executeQuery(
+                'UPDATE user_order
+                SET deleted = 1
+                WHERE host_order_id = ? AND users_id = ?  AND deleted = 0;',
+                [$hostOrderId,$userId]
+            );
+
+            $conn->executeQuery(
+                'DELETE FROM user_order_details
+                WHERE host_order_id = ? AND user_id = ?;',
+                [$hostOrderId,$userId]
+            );
+            $conn->commit();
+        } catch (\Exception $e) {
+            $conn->rollBack();
+            return false;
+        }
+
+        return true;
+    }
 }
