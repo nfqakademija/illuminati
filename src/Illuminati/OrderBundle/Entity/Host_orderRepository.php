@@ -99,10 +99,10 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
                 FROM Illuminati\OrderBundle\Entity\Host_order HO
                 WHERE HO.usersId = :id AND HO.deleted = 0"
             )
-            ->setParameter('id',$id)
+            ->setParameter('id', $id)
             ->getResult();
-        for($i = 0; $i < sizeof($orders); $i++)
-        {
+        $size = sizeof($orders);
+        for ($i = 0; $i < $size; $i++) {
             $date = $orders[$i]['closeDate'];
             $orders[$i]['closeDate']=$date->format('Y-m-d H:i:s');
 
@@ -112,16 +112,13 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
                     FROM Illuminati\OrderBundle\Entity\User_order UO
                     WHERE UO.hostOrderId = :id AND UO.deleted = 0"
                 )
-                ->setParameter('id',$orders[$i]['id'])
+                ->setParameter('id', $orders[$i]['id'])
                 ->getResult();
             $orders[$i]['pCnt'] = $orders[$i]['pCnt'][0]['pCnt'];
 
-            if($orders[$i]['state']=1)
-            {
+            if ($orders[$i]['state']=1) {
                 $orders[$i]['state']='Open';
-            }
-            else
-            {
+            } else {
                 $orders[$i]['state']='Closed';
             }
         }
@@ -144,10 +141,10 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
                 INNER JOIN Illuminati\OrderBundle\Entity\User_order UO WITH (HO.id = UO.hostOrderId)
                 WHERE UO.usersId = :id AND HO.usersId <> :id AND HO.deleted = 0 AND UO.deleted = 0"
             )
-            ->setParameter('id',$id)
+            ->setParameter('id', $id)
             ->getResult();
-        for($i = 0; $i < sizeof($orders); $i++)
-        {
+        $size = sizeof($orders);
+        for ($i = 0; $i < $size; $i++) {
             $date = $orders[$i]['closeDate'];
             $orders[$i]['closeDate']=$date->format('Y-m-d H:i:s');
 
@@ -157,15 +154,12 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
                     FROM Illuminati\OrderBundle\Entity\User_order UO
                     WHERE UO.hostOrderId = :id AND UO.deleted = 0"
                 )
-                ->setParameter('id',$orders[$i]['id'])
+                ->setParameter('id', $orders[$i]['id'])
                 ->getResult();
             $orders[$i]['pCnt'] = $orders[$i]['pCnt'][0]['pCnt'];
-            if($orders[$i]['state']=1)
-            {
+            if ($orders[$i]['state']=1) {
                 $orders[$i]['state']='Open';
-            }
-            else
-            {
+            } else {
                 $orders[$i]['state']='Closed';
             }
         }
@@ -175,8 +169,8 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
     /**
      * Deletes participant from the hosted order
      *
-     * @param integer $hostOrderId Host order Object
-     * @param integer $userId      User Id
+     * @param integer $hostOrder Host order Object
+     * @param integer $userId    User Id
      *
      * @return int
      * @throws \Doctrine\DBAL\ConnectionException
