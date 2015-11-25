@@ -169,13 +169,13 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
     /**
      * Deletes participant from the hosted order
      *
-     * @param integer $hostOrder Host order Object
+     * @param Host_order $hostOrder Host order Object
      * @param integer $userId    User Id
      *
      * @return int
      * @throws \Doctrine\DBAL\ConnectionException
      */
-    public function deleteParticipant($hostOrder, $userId)
+    public function deleteParticipant(Host_order $hostOrder, $userId)
     {
         $conn = $this->getEntityManager()->getConnection();
         $conn->beginTransaction();
