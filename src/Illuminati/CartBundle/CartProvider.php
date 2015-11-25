@@ -3,8 +3,13 @@
 namespace Illuminati\CartBundle;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Illuminati\ProductBundle\Entity\Product;
 use Symfony\Component\HttpFoundation\Session\Session;
 
+/**
+ * Class CartProvider
+ * @package Illuminati\CartBundle
+ */
 class CartProvider implements CartProviderInterface
 {
     /**
@@ -33,7 +38,7 @@ class CartProvider implements CartProviderInterface
      * @param EntityManagerInterface $em
      * @param $parameters
      */
-    function __construct(Session $session, EntityManagerInterface $em, $parameters)
+    public function __construct(Session $session, EntityManagerInterface $em, $parameters)
     {
         $this->parameters = $parameters;
 
@@ -44,15 +49,15 @@ class CartProvider implements CartProviderInterface
     }
 
     /**
-     * @param $product_id
-     * @return bool|object
+     * @param $productId
+     * @return bool|Product
      */
-    public function getItem($product_id)
+    public function getItem($productId)
     {
-        if(isset($this->cart[$product_id])) {
+        if (isset($this->cart[$productId])) {
             return $this->em
                 ->getRepository('ProductBundle:Product')
-                ->find($product_id);
+                ->find($productId);
         }
         return false;
     }
@@ -63,16 +68,20 @@ class CartProvider implements CartProviderInterface
      */
     public function getQuantity($product_id)
     {
-        if(isset($this->cart[$product_id])) {
+        if (isset($this->cart[$product_id])) {
             return $this->cart[$product_id];
         }
         return 0;
     }
 
+    /**
+     * @param $product_id
+     * @return null
+     */
     public function addItem($product_id)
     {
-        if($this->cart) {
-            if(isset($this->cart[$product_id])) {
+        if ($this->cart) {
+            if (isset($this->cart[$product_id])) {
                 // append to existing item
                 $this->cart[$product_id] += 1;
             } else {
@@ -95,20 +104,24 @@ class CartProvider implements CartProviderInterface
      */
     public function removeItem($product_id)
     {
-        if(isset($this->cart[$product_id])) {
+        if (isset($this->cart[$product_id])) {
             unset($this->cart[$product_id]);
             $this->session->set('cart', $this->cart);
             return true;
         }
+
         return false;
     }
 
+    /**
+     * @return Product[]
+     */
     public function getItems()
     {
         // Items added to cart
         $items = [];
 
-        if($this->cart) {
+        if ($this->cart) {
             foreach ($this->cart as $product_id => $quantity) {
                 $items[$product_id] = $this->getItem($product_id);
             }
@@ -117,29 +130,40 @@ class CartProvider implements CartProviderInterface
         return $items;
     }
 
+    /**
+     * @return int|string
+     */
     public function getAmount()
     {
         $amount = 0;
 
-        if($items = $this->getItems()) {
-            foreach($items as $item) {
-                $amount += $item->getPrice() * $this->getQuantity(
-                        $item->getId()
-                    );
+        if ($items = $this->getItems()) {
+            foreach ($items as $item) {
+                $amount += $item->getPrice() * $this->getQuantity($item->getId());
             }
         }
         return $amount;
     }
 
+    /**
+     * @param $id
+     * @param $price
+     * @return float
+     */
     public function geItemTotalAmount($id, $price)
     {
         $quantity = $this->getQuantity($id);
         return ($quantity * $price);
     }
 
+    /**
+     * @param $id
+     * @param $quantity
+     * @return null
+     */
     public function updateQuantity($id, $quantity)
     {
-        if(isset($this->cart[$id])) {
+        if (isset($this->cart[$id])) {
             $this->cart[$id] = $quantity;
         }
     }
