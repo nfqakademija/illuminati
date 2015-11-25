@@ -95,18 +95,35 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
     {
         $orders = $this->getEntityManager()
             ->createQuery(
-                "SELECT HO.id ,HO.title, HO.closeDate, HO.stateId as state, COUNT(UO.hostOrderId) AS pCnt
+                "SELECT HO.id ,HO.title, HO.closeDate, HO.stateId AS state
                 FROM Illuminati\OrderBundle\Entity\Host_order HO
-                INNER JOIN Illuminati\OrderBundle\Entity\User_order UO WITH (HO.id = UO.hostOrderId)
-                WHERE HO.id = :HO_id AND HO.deleted = 0
-                GROUP BY HO.title, HO.closeDate, HO.stateId"
+                WHERE HO.usersId = :id AND HO.deleted = 0"
             )
-            ->setParameter('HO_id',$id)
+            ->setParameter('id',$id)
             ->getResult();
         for($i = 0; $i < sizeof($orders); $i++)
         {
             $date = $orders[$i]['closeDate'];
             $orders[$i]['closeDate']=$date->format('Y-m-d H:i:s');
+
+            $orders[$i]['pCnt']=$this->getEntityManager()
+                ->createQuery(
+                    "SELECT COUNT(UO.hostOrderId) AS pCnt
+                    FROM Illuminati\OrderBundle\Entity\User_order UO
+                    WHERE UO.hostOrderId = :id AND UO.deleted = 0"
+                )
+                ->setParameter('id',$orders[$i]['id'])
+                ->getResult();
+            $orders[$i]['pCnt'] = $orders[$i]['pCnt'][0]['pCnt'];
+
+            if($orders[$i]['state']=1)
+            {
+                $orders[$i]['state']='Open';
+            }
+            else
+            {
+                $orders[$i]['state']='Closed';
+            }
         }
         return $orders;
     }
@@ -122,18 +139,35 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
     {
         $orders = $this->getEntityManager()
             ->createQuery(
-                "SELECT HO.id, HO.title, HO.closeDate, HO.stateId as state, COUNT(UO.hostOrderId) AS pCnt
+                "SELECT HO.id, HO.title, HO.closeDate, HO.stateId AS state
                 FROM Illuminati\OrderBundle\Entity\Host_order HO
                 INNER JOIN Illuminati\OrderBundle\Entity\User_order UO WITH (HO.id = UO.hostOrderId)
-                WHERE UO.usersId = :HO_id AND HO.usersId <> :HO_id AND HO.deleted = 0
-                GROUP BY HO.title, HO.closeDate, HO.stateId"
+                WHERE UO.usersId = :id AND HO.usersId <> :id AND HO.deleted = 0 AND UO.deleted = 0"
             )
-            ->setParameter('HO_id',$id)
+            ->setParameter('id',$id)
             ->getResult();
         for($i = 0; $i < sizeof($orders); $i++)
         {
             $date = $orders[$i]['closeDate'];
             $orders[$i]['closeDate']=$date->format('Y-m-d H:i:s');
+
+            $orders[$i]['pCnt']=$this->getEntityManager()
+                ->createQuery(
+                    "SELECT COUNT(UO.hostOrderId) AS pCnt
+                    FROM Illuminati\OrderBundle\Entity\User_order UO
+                    WHERE UO.hostOrderId = :id AND UO.deleted = 0"
+                )
+                ->setParameter('id',$orders[$i]['id'])
+                ->getResult();
+            $orders[$i]['pCnt'] = $orders[$i]['pCnt'][0]['pCnt'];
+            if($orders[$i]['state']=1)
+            {
+                $orders[$i]['state']='Open';
+            }
+            else
+            {
+                $orders[$i]['state']='Closed';
+            }
         }
         return $orders;
     }
