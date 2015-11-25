@@ -280,7 +280,7 @@ class DefaultController extends Controller
                 ->getDoctrine()
                 ->getManager()
                 ->getRepository('IlluminatiOrderBundle:Host_order')
-                ->deleteParticipant($hostOrder->getId(), $userId);
+                ->deleteParticipant($hostOrder, $userId);
 
             if ($deletedParticipant) {
                 $notificationMessage = $this

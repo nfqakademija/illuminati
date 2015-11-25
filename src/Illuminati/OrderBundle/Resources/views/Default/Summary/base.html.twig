@@ -36,7 +36,12 @@
                 <a class="btn btn-default" href="#"><span class="glyphicon glyphicon-lock"></span> {% trans %}order.summary.confirmOrderButton{% endtrans %}</a>
             </div>
         {% endif %}
-        <a href="#" class="pull-right btn btn-danger"><span class="glyphicon glyphicon-log-out"></span> {% trans %}order.summary.leaveOrder{% endtrans %}</a>
+        <div class="pull-right">
+            {% if hostOrder.usersId.id == app.user.id %}
+                <p class="alert-danger help-block"><strong>{% trans %}notify.error{% endtrans %}</strong> {% trans %}notify.messages.warning.hostLeavesGroupOrder{% endtrans %}</p>
+            {% endif %}
+            <a href="{{ path('host_order_leave',{'id':hostOrder.id}) }}" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-log-out"></span> {% trans %}order.summary.leaveOrder{% endtrans %}</a>
+        </div>
         <br>
 
     </div>

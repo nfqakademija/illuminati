@@ -87,13 +87,13 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
     /**
      * Deletes participant from the hosted order
      *
-     * @param integer $hostOrderId Host order id
+     * @param integer $hostOrderId Host order Object
      * @param integer $userId      User Id
      *
      * @return int
      * @throws \Doctrine\DBAL\ConnectionException
      */
-    public function deleteParticipant($hostOrderId, $userId)
+    public function deleteParticipant($hostOrder, $userId)
     {
         $conn = $this->getEntityManager()->getConnection();
         $conn->beginTransaction();
@@ -103,13 +103,25 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
                 'UPDATE user_order
                 SET deleted = 1
                 WHERE host_order_id = ? AND users_id = ?  AND deleted = 0;',
-                [$hostOrderId,$userId]
+                [$hostOrder->getId(),$userId]
             );
+
+            // checking if the user is the host of the group order
+            // if yes, we close the group order
+
+            if ($hostOrder->getUsersId()->getId() == $userId) {
+                $conn->executeQuery(
+                    'UPDATE host_order
+                    SET deleted = 1
+                    WHERE id = ?',
+                    [$hostOrder->getId()]
+                );
+            }
 
             $conn->executeQuery(
                 'DELETE FROM user_order_details
                 WHERE host_order_id = ? AND user_id = ?;',
-                [$hostOrderId,$userId]
+                [$hostOrder->getId(),$userId]
             );
             $conn->commit();
         } catch (\Exception $e) {
