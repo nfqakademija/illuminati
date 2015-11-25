@@ -39,3 +39,6 @@ notify:
   success: Success!
   info: Notice :
   error: Warning :
+  messages:
+    success:
+      orderLeft: You have successfully left the order.
