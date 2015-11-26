@@ -29,3 +29,7 @@ host_order_leave:
 host_order_confirm:
     path: /confirm/{id}
     defaults: { _controller: "IlluminatiOrderBundle:Default:hostOrderConfirmation"}
+
+host_order_confirmed:
+    path: /confirmed/{id}
+    defaults: { _controller: "IlluminatiOrderBundle:Default:hostOrderConfirmed"}

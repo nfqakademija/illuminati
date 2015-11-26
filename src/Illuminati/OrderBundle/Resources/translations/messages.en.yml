@@ -45,6 +45,7 @@ order:
       qty: Qty
       price: Price
       sum: SUM
+      confirmedSuccess: Host order has been confirmed and marked as done!
 
 
 notify:

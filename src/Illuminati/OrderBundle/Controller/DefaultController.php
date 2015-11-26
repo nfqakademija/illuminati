@@ -327,6 +327,7 @@ class DefaultController extends Controller
      * Order confirmation page
      *
      * @param string $id Host order id
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|
      *         \Symfony\Component\HttpFoundation\Response
      */
@@ -346,7 +347,28 @@ class DefaultController extends Controller
         } else {
             return $this->redirectToRoute('host_order_summary', ['id'=>$id]);
         }
+    }
 
-
+    /**
+     * Confirms Host order and marks as closed.
+     *
+     * @param string $id Host order id
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|
+     *         \Symfony\Component\HttpFoundation\Response
+     */
+    public function hostOrderConfirmedAction($id)
+    {
+        if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
+            $em = $this->getDoctrine()->getManager();
+            $hostOrder->setStateId(2);
+            $em->flush();
+            return $this->render(
+                'IlluminatiOrderBundle:Default/OrderConfirmation:orderConfirmed.html.twig',
+                ['hostOrderId'=>$hostOrder->getId()]
+            );
+        } else {
+            return $this->redirectToRoute('homepage');
+        }
     }
 }
