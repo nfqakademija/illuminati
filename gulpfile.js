@@ -1,11 +1,16 @@
 var gulp = require('gulp');
-var sass = sass = require('gulp-sass');
-var copy = copy = require('gulp-copy');
+var sass = require('gulp-sass');
+var copy = require('gulp-copy');
 var concat = require('gulp-concat');
+var uglify = require('gulp-uglify');
+var uglifycss = require('gulp-uglifycss');
 
 gulp.task('sass', function () {
     gulp.src('./app/Resources/public/sass/master.scss')
         .pipe(sass({sourceComments: 'map'}))
+        .pipe(uglifycss({
+            "max-line-len": 80
+        }))
         .pipe(gulp.dest('./web/assets/'));
 });
 
@@ -21,6 +26,7 @@ gulp.task('js', function() {
         './app/Resources/public/js/common.js'
     ])
         .pipe(concat('all.js'))
+        .pipe(uglify())
         .pipe(gulp.dest('./web/assets/'));
 });
 
