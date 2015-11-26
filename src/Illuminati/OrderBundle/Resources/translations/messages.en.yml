@@ -35,6 +35,18 @@ order:
       participantPaid: Participant paid fo his orders
       participantNotPaid: Participant hasn't paid for his orders
 
+    confirmation:
+      title: Hosted Order Confirmation
+      returnToSummary: Return to summary
+      genPDF: Generate PDF
+      confirm: Confirm hosted order
+      noOrders: There are no orders for now
+      product: Product
+      qty: Qty
+      price: Price
+      sum: SUM
+
+
 notify:
   success: Success!
   info: Notice :
