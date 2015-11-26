@@ -208,9 +208,39 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
             $conn->commit();
         } catch (\Exception $e) {
             $conn->rollBack();
+            $conn->close();
             return false;
         }
 
+        $conn->close();
         return true;
+    }
+
+    /**
+     * Returns array of ordered products in a host order
+     *
+     * @param integer $id Host order id
+     *
+     * @return array Products
+     */
+    public function findOrderedProducts($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $products = $conn->fetchAll(
+            'SELECT
+                  p.title,
+                  p.id,
+                  p.currency,
+                  sum(uod.quantity) as quantity,
+                  p.price*(sum(uod.quantity)) as sum
+                FROM host_order ho
+                INNER JOIN user_order_details uod ON (ho.id = uod.host_order_id)
+                INNER JOIN product p ON (uod.product_id = p.id)
+                WHERE ho.deleted = 0 AND ho.state_id = 1 AND ho.id = ?
+                GROUP BY p.title',
+            [$id]
+        );
+
+        return $products;
     }
 }
