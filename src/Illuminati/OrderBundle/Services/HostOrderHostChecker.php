@@ -35,7 +35,13 @@ class HostOrderHostChecker
         $hostOrder = $this
             ->em
             ->getRepository('IlluminatiOrderBundle:Host_order')
-            ->find($hostOrderId);
+            ->findOneBy(
+                [
+                    'id' => $hostOrderId,
+                    'stateId' => 1,
+                    'deleted' => 0
+                ]
+            );
 
         // No order found with provided ID
         if (empty($hostOrder)) {

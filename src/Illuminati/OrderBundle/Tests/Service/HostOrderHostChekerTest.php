@@ -29,12 +29,12 @@ class HostOrderHostChekerTest extends \PHPUnit_Framework_TestCase
         $repositoryMock = $this
             ->getMockBuilder('Doctrine\ORM\EntityRepository')
             ->disableOriginalConstructor()
-            ->setMethods(['find'])
+            ->setMethods(['findOneBy'])
             ->getMock();
 
         $repositoryMock
             ->expects($this->once())
-            ->method('find')
+            ->method('findOneBy')
             ->willReturn(null);
 
         $entityManagerMock = $this
@@ -99,12 +99,12 @@ class HostOrderHostChekerTest extends \PHPUnit_Framework_TestCase
         $repositoryMock = $this
             ->getMockBuilder('Doctrine\ORM\EntityRepository')
             ->disableOriginalConstructor()
-            ->setMethods(['find'])
+            ->setMethods(['findOneBy'])
             ->getMock();
 
         $repositoryMock
             ->expects($this->once())
-            ->method('find')
+            ->method('findOneBy')
             ->willReturn($hostOrderMock);
 
         // Entity manager mock
