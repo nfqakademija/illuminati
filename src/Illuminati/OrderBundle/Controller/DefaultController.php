@@ -303,6 +303,23 @@ class DefaultController extends Controller
         $hostOrder = $this->get('host_order_participation_checker')->check((int)$id);
 
         if (is_object($hostOrder)) {
+            /*
+                Checking if the host order is closed.
+                If it is, don't allow to leave it.
+             */
+            if ($hostOrder->getStateId() != 1) {
+                $notificationMessage = $this
+                    ->get('translator')
+                    ->trans('notify.messages.warning.cantLeaveCloserOrder');
+
+                $this->get('session')->getFlashBag()->add('error', $notificationMessage);
+
+                return $this->redirectToRoute(
+                    'host_order_summary',
+                    ['id'=>$hostOrder->getId()]
+                );
+            }
+
             $userId = $this->get('security.token_storage')->getToken()->getUser()->getId();
 
             $deletedParticipant = $this

@@ -57,3 +57,4 @@ notify:
       orderLeft: You have successfully left the order.
     warning:
       hostLeavesGroupOrder: You're the <strong>host</strong> of the group order, if you leave the order, group order will be closed.
+      cantLeaveCloserOrder: You cannot leave a closed order.
