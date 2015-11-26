@@ -35,7 +35,7 @@
 {% block notifications %}
     <div class="container">
         {% for errorMessage in app.session.flashbag.get('error') %}
-            <div class="alert alert-success fade in col-sm-6 col-sm-offset-6">
+            <div class="alert alert-danger fade in col-sm-6 col-sm-offset-6">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <strong>{% trans %}notify.error{% endtrans %}</strong>  {{ errorMessage }}
             </div>
