@@ -240,6 +240,7 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
                 GROUP BY p.title',
             [$id]
         );
+        $conn->close();
 
         return $products;
     }
