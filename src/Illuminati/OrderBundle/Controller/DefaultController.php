@@ -322,4 +322,31 @@ class DefaultController extends Controller
 
         return $this->redirectToRoute('homepage');
     }
+
+    /**
+     * Order confirmation page
+     *
+     * @param string $id Host order id
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|
+     *         \Symfony\Component\HttpFoundation\Response
+     */
+    public function hostOrderConfirmationAction($id)
+    {
+        if ($this->get('host_order_host_checker')->check((int)$id)) {
+            $products = $this
+                ->getDoctrine()
+                ->getManager()
+                ->getRepository('IlluminatiOrderBundle:Host_order')
+                ->findOrderedProducts($id);
+
+            return $this->render(
+                "IlluminatiOrderBundle:Default/OrderConfirmation:base.html.twig",
+                ['products' => $products, 'orderId' => (int)$id]
+            );
+        } else {
+            return $this->redirectToRoute('host_order_summary', ['id'=>$id]);
+        }
+
+
+    }
 }
