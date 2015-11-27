@@ -15,7 +15,7 @@
             <hr>
 
             <div class="btn-group pull-right" role="group">
-                <button class="btn btn-default"><span class="glyphicon glyphicon-save-file"></span>  {{ "order.summary.confirmation.genPDF"|trans }}</button>
+                <a href="{{ path('host_order_generate_pdf', {'id': orderId}) }}" target="_blank" class="btn btn-default"><span class="glyphicon glyphicon-save-file"></span>  {{ "order.summary.confirmation.genPDF"|trans }}</a>
                 <a href="{{ path('host_order_confirmed', {'id': orderId}) }}" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> {{ "order.summary.confirmation.confirm"|trans }}</a>
             </div>
         {% else %}
