@@ -1,7 +1,6 @@
 {% extends ":default:index.html.twig" %}
 
 {% block body %}
-    {% set sum = 0 %}
     <div class="container">
         <h1>{{ "order.summary.confirmation.title"|trans }}</h1>
         <a href="{{ path('host_order_summary',{'id':orderId}) }}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>{{ "order.summary.confirmation.returnToSummary"|trans }}</a>
