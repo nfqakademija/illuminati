@@ -380,10 +380,11 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
             $hostOrder->setStateId(2);
             $em->flush();
-            return $this->render(
-                'IlluminatiOrderBundle:Default/OrderConfirmation:orderConfirmed.html.twig',
-                ['hostOrderId'=>$hostOrder->getId()]
-            );
+
+            $notificationMessage = $this->get('translator')->trans('order.summary.confirmation.confirmedSuccess');
+            $this->get('session')->getFlashBag()->add('success', $notificationMessage);
+
+            return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
         } else {
             return $this->redirectToRoute('homepage');
         }
