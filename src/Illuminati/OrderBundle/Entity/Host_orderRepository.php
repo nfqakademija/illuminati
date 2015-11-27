@@ -236,7 +236,7 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
                 FROM host_order ho
                 INNER JOIN user_order_details uod ON (ho.id = uod.host_order_id)
                 INNER JOIN product p ON (uod.product_id = p.id)
-                WHERE ho.deleted = 0 AND ho.state_id = 1 AND ho.id = ?
+                WHERE ho.deleted = 0 AND ho.id = ?
                 GROUP BY p.title',
             [$id]
         );
