@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Illuminati\OrderBundle\Form\Host_orderType;
 use Illuminati\OrderBundle\Entity\Host_order;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller
 {
@@ -423,6 +424,26 @@ class DefaultController extends Controller
             $this->get('session')->getFlashBag()->add('success', $notificationMessage);
 
             return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
+        } else {
+            return $this->redirectToRoute('homepage');
+        }
+    }
+
+    /**
+     * Generates pdf with hosted order's products and participants
+     *
+     * @param string $id Host Order id;
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
+    public function genPdfAction($id)
+    {
+        if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
+            $pdf = $this->get('host_order_products_pdf_generator');
+            $pdf->generate($hostOrder);
+
+            return new Response($pdf->Output(), 200, array(
+                'Content-Type' => 'application/pdf'));
         } else {
             return $this->redirectToRoute('homepage');
         }
