@@ -38,7 +38,6 @@ class HostOrderHostChecker
             ->findOneBy(
                 [
                     'id' => $hostOrderId,
-                    'stateId' => 1,
                     'deleted' => 0
                 ]
             );

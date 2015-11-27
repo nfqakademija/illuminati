@@ -113,6 +113,15 @@ class DefaultController extends Controller
     public function editHostOrderAction(Request $request, $id)
     {
         if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
+            if ($hostOrder->getStateId() != 1) {
+                $notificationMessage = $this
+                    ->get('translator')
+                    ->trans("notify.messages.warning.cantEditClosedOrder");
+                $this->get('session')->getFlashBag()->add('info', $notificationMessage);
+
+                return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
+            }
+
             $em = $this
                 ->getDoctrine()
                 ->getManager();
@@ -170,7 +179,6 @@ class DefaultController extends Controller
             foreach ($debtors as $debtor) {
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Group order product payment reminder')
-                    ->setFrom("Team5@gmail.com")
                     ->setTo($debtor->getEmail())
                     ->setBody(
                         $this->renderView(
@@ -310,9 +318,9 @@ class DefaultController extends Controller
             if ($hostOrder->getStateId() != 1) {
                 $notificationMessage = $this
                     ->get('translator')
-                    ->trans('notify.messages.warning.cantLeaveCloserOrder');
+                    ->trans('notify.messages.warning.cantLeaveClosedOrder');
 
-                $this->get('session')->getFlashBag()->add('error', $notificationMessage);
+                $this->get('session')->getFlashBag()->add('info', $notificationMessage);
 
                 return $this->redirectToRoute(
                     'host_order_summary',
@@ -350,19 +358,23 @@ class DefaultController extends Controller
      */
     public function hostOrderConfirmationAction($id)
     {
-        if ($this->get('host_order_host_checker')->check((int)$id)) {
+        if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
+            if ($hostOrder->getStateId() != 1) {
+                return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
+            }
+
             $products = $this
                 ->getDoctrine()
                 ->getManager()
                 ->getRepository('IlluminatiOrderBundle:Host_order')
-                ->findOrderedProducts($id);
+                ->findOrderedProducts($hostOrder->getId());
 
             return $this->render(
                 "IlluminatiOrderBundle:Default/OrderConfirmation:base.html.twig",
-                ['products' => $products, 'orderId' => (int)$id]
+                ['products' => $products, 'orderId' => $hostOrder->getId()]
             );
         } else {
-            return $this->redirectToRoute('host_order_summary', ['id'=>$id]);
+            return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
         }
     }
 
@@ -377,9 +389,35 @@ class DefaultController extends Controller
     public function hostOrderConfirmedAction($id)
     {
         if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
+            if ($hostOrder->getStateId() != 1) {
+                return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
+            }
+
             $em = $this->getDoctrine()->getManager();
+
+            // Confirming the order
             $hostOrder->setStateId(2);
             $em->flush();
+
+            $orderParticipants = $em
+                ->getRepository('IlluminatiOrderBundle:Host_order')
+                ->findUserOrders($hostOrder->getId());
+
+            // Sending emails about confirmed order to participants
+            foreach ($orderParticipants as $participant) {
+                $message = \Swift_Message::newInstance()
+                    ->setSubject("Group order - {$hostOrder->getTitle()} - has been confirmed!")
+                    ->setTo($participant->getUsersId()->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'IlluminatiOrderBundle:Emails:orderConfirmedEmail.html.twig',
+                            ['hostOrder'=>$hostOrder,'usersName'=>$participant->getUsersId()]
+                        ),
+                        'text/html'
+                    );
+
+                $this->get('mailer')->send($message);
+            }
 
             $notificationMessage = $this->get('translator')->trans('order.summary.confirmation.confirmedSuccess');
             $this->get('session')->getFlashBag()->add('success', $notificationMessage);
