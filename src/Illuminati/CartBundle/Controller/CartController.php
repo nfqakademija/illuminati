@@ -13,11 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 class CartController extends Controller
 {
     /**
-     * @param $order_id
+     * @param $orderId
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function checkoutAction($order_id, Request $request)
+    public function checkoutAction($orderId, Request $request)
     {
         $cart = $this->get('cart.provider');
         $products = $cart->getItems();
@@ -31,14 +31,13 @@ class CartController extends Controller
         }
 
         $form = $this->createForm(new CheckoutType(), $data);
-
         $form->handleRequest($request);
         if ($form->isValid()) {
             $data = $form->get('items')->getData();
-            foreach ($data as $cart_item) {
+            foreach ($data as $cartItem) {
                 $cart->updateQuantity(
-                    $cart_item['product_id'],
-                    $cart_item['quantity']
+                    $cartItem['product_id'],
+                    $cartItem['quantity']
                 );
             }
         }
@@ -46,8 +45,8 @@ class CartController extends Controller
         return $this->render('CartBundle:Cart:checkout.html.twig', [
             'cart' => $cart,
             'products' => $products,
-            'order_id' => $order_id,
-            'checkout_form' => $form->createView(),
+            'orderId' => $orderId,
+            'checkoutForm' => $form->createView(),
         ]);
     }
 
@@ -62,7 +61,7 @@ class CartController extends Controller
         $cart->addItem($productId);
 
         return $this->redirectToRoute('product', [
-            'order_id' => $orderId
+            'orderId' => $orderId
         ]);
     }
 
@@ -76,7 +75,7 @@ class CartController extends Controller
         $cart = $this->get('cart.provider');
         $cart->removeItem($productId);
         return $this->redirectToRoute('product', [
-            'order_id' => $orderId
+            'orderId' => $orderId
         ]);
     }
 
@@ -88,7 +87,7 @@ class CartController extends Controller
     {
         return $this->render('CartBundle:Cart:widget.html.twig', [
                 'cart' => $this->get('cart.provider'),
-                'order_id' => $orderId,
+                'orderId' => $orderId,
         ]);
     }
 }

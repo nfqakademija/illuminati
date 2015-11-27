@@ -1,10 +1,12 @@
 
+$thumbWidth: 180px;
+
 #checkout {
   table {
     thead {
       tr {
         th.photo {
-          width:180px;
+          width: $thumbWidth;
         }
       }
     }
@@ -12,10 +14,10 @@
       tr {
         td {
           a.thumbnail {
-            width: 180px;
+            width: $thumbWidth;
           }
           input.quantity {
-            width: 120px;
+            width: 60px;
           }
         }
       }

@@ -12,7 +12,7 @@
     <ol class="breadcrumb">
         {% block breadcrumbs %}
             {{ parent() }}
-            <li><a href="{{ path('product', {'order_id':order_id}) }}">Products</a></li>
+            <li><a href="{{ path('product', {'orderId':orderId}) }}">Products</a></li>
             <li>Checkout</li>
         {% endblock %}
     </ol>
@@ -22,11 +22,11 @@
             {% block content %}
                 <div class="panel panel-default checkout">
                     <div class="panel-body">
-                        {{ form_start(checkout_form) }}
+                        {{ form_start(checkoutForm) }}
                         <table class="table table-responsive">
                             <thead>
                             <tr>
-                                <th>&nbsp;</th>
+                                <th class="photo">&nbsp;</th>
                                 <th>Product</th>
                                 <th>Quantity</th>
                                 <th>Price for item</th>
@@ -35,7 +35,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            {% for item in checkout_form.items %}
+                            {% for item in checkoutForm.items %}
                                 {% set product = products[item.vars.value.product_id] %}
                                 <tr>
                                     <td>
@@ -54,7 +54,7 @@
                                     <td>{{ product.price }} {{ cart.getProviderCurrency }}</td>
                                     <td>{{ cart.geItemTotalAmount(product.id, product.price) }} {{ cart.getProviderCurrency }}</td>
                                     <td>
-                                        <a class="pull-right" href="{{ path('cart_remove', {product_id:product.id, order_id:order_id}) }}">
+                                        <a class="pull-right" href="{{ path('cart_remove', {productId:product.id, orderId : orderId}) }}">
                                             <span class="glyphicon glyphicon-remove"></span>
                                         </a>
                                     </td>
@@ -69,7 +69,7 @@
                                 </tr>
                             </tfoot>
                         </table>
-                        {{ form_end(checkout_form) }}
+                        {{ form_end(checkoutForm) }}
                     </div>
                 </div>
             {% endblock %}

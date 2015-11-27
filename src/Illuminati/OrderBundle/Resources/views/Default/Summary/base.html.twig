@@ -20,7 +20,7 @@
         </div>
 
 
-        <a href="{{ path('product') }}"><button class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> {% trans %}order.summary.goToShopButton{% endtrans %} </button></a>
+        <a href="{{ path('product', { orderId : hostOrder.id } ) }}"><button class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> {% trans %}order.summary.goToShopButton{% endtrans %} </button></a>
         <a href="#"><button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> {% trans %}order.summary.editOrderButton{% endtrans %} </button></a>
         <hr>
 

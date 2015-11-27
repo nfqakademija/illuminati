@@ -12,7 +12,7 @@
                         </a>
                     </div>
                     <div class="col-md-8">
-                        <a class="pull-right" href="{{ path('cart_remove', { 'product_id': product.id, 'order_id': order_id }) }}">
+                        <a class="pull-right" href="{{ path('cart_remove', { 'productId': product.id, 'orderId': orderId }) }}">
                             <span class="glyphicon glyphicon-remove"></span>
                         </a>
                         <a href="{{ path('product_show', { 'id': product.id }) }}">
@@ -31,7 +31,7 @@
             </p>
 
             <div class="text-center">
-                <a class="btn btn-success" href="{{ path('cart_checkout', {'order_id': order_id}) }}">
+                <a class="btn btn-success" href="{{ path('cart_checkout', {'orderId': orderId}) }}">
                     Checkout
                 </a>
             </div>
