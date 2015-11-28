@@ -38,7 +38,7 @@ class Builder extends ContainerAware
             ));
 
             $menu->addChild('UserProfile', array(
-                'route' => 'fos_user_profile_edit',
+                'route' => 'fos_user_profile_show',
                 'label' => 'Profile'
             ));
 
