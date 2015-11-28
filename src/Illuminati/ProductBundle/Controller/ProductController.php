@@ -33,10 +33,15 @@ class ProductController extends Controller
      */
     public function indexAction($orderId)
     {
-
         $entityManager = $this->getDoctrine()->getManager();
 
         $order = $this->getRelatedOrder($orderId);
+
+        $cart = $this->get('cart.provider');
+        if ($cart->getStorage() === null) {
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $cart->load($user->getId(), $order->getId());
+        }
 
         $productEntities = $entityManager->getRepository('ProductBundle:Product')->findBy([
             'supplier' => $order->getSupplierId()
@@ -51,9 +56,10 @@ class ProductController extends Controller
     /**
      * Finds and displays a Product entity.
      * @param $id
+     * @param $orderId
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showAction($id)
+    public function showAction($id, $orderId)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $entity = $entityManager->getRepository('ProductBundle:Product')->find($id);
@@ -64,6 +70,7 @@ class ProductController extends Controller
 
         return $this->render('ProductBundle:Product:show.html.twig', [
             'entity' => $entity,
+            'orderId' => $orderId,
         ]);
     }
 }

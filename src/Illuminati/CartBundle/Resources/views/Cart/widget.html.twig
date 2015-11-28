@@ -7,7 +7,7 @@
             {% for product in cart.getItems %}
                 <div class="row">
                     <div class="col-md-4">
-                        <a href="{{ path('product_show', { 'id': product.id }) }}" class="thumbnail">
+                        <a href="{{ path('product_show', { 'id': product.id, 'orderId': orderId }) }}" class="thumbnail">
                             <img src="{{ product.image }}" />
                         </a>
                     </div>
@@ -15,7 +15,7 @@
                         <a class="pull-right" href="{{ path('cart_remove', { 'productId': product.id, 'orderId': orderId }) }}">
                             <span class="glyphicon glyphicon-remove"></span>
                         </a>
-                        <a href="{{ path('product_show', { 'id': product.id }) }}">
+                        <a href="{{ path('product_show', { 'id': product.id, 'orderId': orderId }) }}">
                             {{ product.title }}
                         </a>
                         <br />
@@ -27,7 +27,7 @@
             {% endfor %}
 
             <p class="text-center">
-                Your order amount is {{ cart.getAmount }} EUR
+                Your order amount is {{ cart.getAmount }} {{ cart.providerCurrency }}
             </p>
 
             <div class="text-center">

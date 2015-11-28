@@ -3,8 +3,10 @@
 namespace Illuminati\CartBundle\Controller;
 
 use Illuminati\CartBundle\Form\CheckoutType;
+use Illuminati\OrderBundle\Entity\User_order_details;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Class CartController
@@ -12,6 +14,57 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CartController extends Controller
 {
+    /**
+     * @param $orderId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function confirm($orderId)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $translator = $this->get('translator');
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $session = $this->get('session');
+        $cart = $this->get('cart.provider');
+
+        $order = $this->getDoctrine()
+            ->getRepository('IlluminatiOrderBundle:Host_order')
+            ->find($orderId);
+
+        $entityManager
+            ->getRepository('IlluminatiOrderBundle:User_order_details')
+            ->deleteAllUserOrderedDetails(
+                $user->getId(),
+                $order->getId()
+            );
+
+        foreach ($cart->getStorage() as $productId => $quantity) {
+
+            $product = $cart->getItem($productId);
+
+            $userOrderDetails = new User_order_details();
+
+            $userOrderDetails->setHostOrderId($order);
+            $userOrderDetails->setProductId($product);
+            $userOrderDetails->setQuantity($quantity);
+            $userOrderDetails->setUserId($user);
+
+            $entityManager->persist($userOrderDetails);
+        }
+
+        $entityManager->flush();
+
+        $session->remove('cart');
+
+        $session->getFlashBag()->add('success', $translator->trans('cart.confirm_success'));
+
+        return $this->redirectToRoute(
+            'host_order_summary',
+            ['id' => $orderId]
+        );
+    }
+
     /**
      * @param $orderId
      * @param Request $request
@@ -31,6 +84,7 @@ class CartController extends Controller
         }
 
         $form = $this->createForm(new CheckoutType(), $data);
+
         $form->handleRequest($request);
         if ($form->isValid()) {
             $data = $form->get('items')->getData();
@@ -40,6 +94,7 @@ class CartController extends Controller
                     $cartItem['quantity']
                 );
             }
+            return $this->confirm($orderId);
         }
 
         return $this->render('CartBundle:Cart:checkout.html.twig', [
@@ -85,8 +140,10 @@ class CartController extends Controller
      */
     public function sidebarWidgetAction($orderId)
     {
+        $cart = $this->get('cart.provider');
+
         return $this->render('CartBundle:Cart:widget.html.twig', [
-                'cart' => $this->get('cart.provider'),
+                'cart' => $cart,
                 'orderId' => $orderId,
         ]);
     }

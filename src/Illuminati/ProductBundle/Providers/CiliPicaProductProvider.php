@@ -8,6 +8,10 @@ use Illuminati\ProductBundle\Entity\Product;
 use Illuminati\ProductBundle\Entity\Supplier;
 use Illuminati\ProductBundle\ProductProviderInterface;
 
+/**
+ * Class CiliPicaProductProvider
+ * @package Illuminati\ProductBundle\Providers
+ */
 class CiliPicaProductProvider implements ProductProviderInterface
 {
     /**
@@ -50,15 +54,15 @@ class CiliPicaProductProvider implements ProductProviderInterface
 
     /**
      * CiliPicaProductProvider constructor.
-     * @param DataSourceInterface $DataSource
+     * @param DataSourceInterface $dataSource
      * @param $importIoConfig
      * @param $url
      * @param $currency
      */
-    public function __construct(DataSourceInterface $DataSource, $importIoConfig, $url, $currency)
+    public function __construct(DataSourceInterface $dataSource, $importIoConfig, $url, $currency)
     {
         $this->importIoConfig = $importIoConfig;
-        $this->DataSource = $DataSource;
+        $this->DataSource = $dataSource;
         $this->url = $url;
         $this->currency = $currency;
     }

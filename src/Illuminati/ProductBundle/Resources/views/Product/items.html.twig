@@ -2,13 +2,13 @@
     {% for entity in ProductEntities %}
         <div class="row">
             <div class="col-md-4">
-                <a href="{{ path('product_show', { 'id': entity.id }) }}" class="thumbnail" title="{{ entity.title }}">
+                <a href="{{ path('product_show', { 'id': entity.id, 'orderId': orderId }) }}" class="thumbnail" title="{{ entity.title }}">
                     <img src="{{ entity.image }}" alt="{{ entity.title }}">
                 </a>
             </div>
             <div class="col-md-8">
                 <h3 class="product-title">
-                    <a href="{{ path('product_show', { 'id': entity.id }) }}" title="{{ entity.title }}">
+                    <a href="{{ path('product_show', { 'id': entity.id, 'orderId': orderId }) }}" title="{{ entity.title }}">
                         {{ entity.title }}
                     </a>
                     <div class="price pull-right">{{ entity.price }} {{ entity.currency }}</div>

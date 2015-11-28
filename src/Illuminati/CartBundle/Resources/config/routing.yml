@@ -5,5 +5,5 @@ cart_remove:
     path:     /cart/remove/product/{productId}/order/{orderId}
     defaults: { _controller: CartBundle:Cart:remove }
 cart_checkout:
-    path:     /checkout/{orderId}
+    path:     /cart/checkout/{orderId}
     defaults: { _controller: CartBundle:Cart:checkout }

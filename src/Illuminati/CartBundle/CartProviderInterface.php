@@ -8,22 +8,22 @@ namespace Illuminati\CartBundle;
 interface CartProviderInterface
 {
     /**
-     * @param $id
+     * @param $productId
      * @return mixed
      */
-    public function addItem($id);
+    public function addItem($productId);
 
     /**
-     * @param $id
+     * @param $productId
      * @return mixed
      */
-    public function getItem($id);
+    public function getItem($productId);
 
     /**
-     * @param $id
+     * @param $productId
      * @return mixed
      */
-    public function removeItem($id);
+    public function removeItem($productId);
 
     /**
      * @return mixed
@@ -36,27 +36,35 @@ interface CartProviderInterface
     public function getAmount();
 
     /**
-     * @param $id
+     * @param $productId
      * @return integer
      */
-    public function getQuantity($id);
+    public function getQuantity($productId);
 
     /**
-     * @param $id
+     * @param $productId
      * @param $price
      * @return mixed
      */
-    public function geItemTotalAmount($id, $price);
+    public function geItemTotalAmount($productId, $price);
 
     /**
-     * @param $id
+     * @param $productId
      * @param $quantity
      * @return mixed
      */
-    public function updateQuantity($id, $quantity);
+    public function updateQuantity($productId, $quantity);
 
     /**
      * @return string
      */
     public function getProviderCurrency();
+
+    /**
+     * Loads cart data from database
+     * @param $userId
+     * @param $orderId
+     * @return mixed
+     */
+    public function load($userId, $orderId);
 }

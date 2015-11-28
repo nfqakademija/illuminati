@@ -25,7 +25,7 @@ class CartProvider implements CartProviderInterface
     /**
      * @var EntityManagerInterface
      */
-    public $em;
+    public $entityManager;
 
     /**
      * @var array
@@ -35,17 +35,46 @@ class CartProvider implements CartProviderInterface
     /**
      * CartProvider constructor.
      * @param Session $session
-     * @param EntityManagerInterface $em
+     * @param EntityManagerInterface $entityManager
      * @param $parameters
      */
-    public function __construct(Session $session, EntityManagerInterface $em, $parameters)
+    public function __construct(Session $session, EntityManagerInterface $entityManager, $parameters)
     {
         $this->parameters = $parameters;
 
         $this->session = $session;
         $this->cart = $this->session->get('cart');
 
-        $this->em = $em;
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * @return array|mixed
+     */
+    public function getStorage()
+    {
+        return $this->cart;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $orderId
+     * @return null
+     */
+    public function load($userId, $orderId)
+    {
+        $userOrderDetails = $this->entityManager
+            ->getRepository('IlluminatiOrderBundle:User_order_details')
+            ->getAllUserOrderedDetails($userId, $orderId);
+
+        if ($userOrderDetails) {
+            foreach ($userOrderDetails as $orderDetailsItem) {
+                $this->addItem(
+                    $orderDetailsItem->getProductId()->getId(),
+                    $orderDetailsItem->getQuantity()
+                );
+            }
+        }
     }
 
     /**
@@ -55,7 +84,7 @@ class CartProvider implements CartProviderInterface
     public function getItem($productId)
     {
         if (isset($this->cart[$productId])) {
-            return $this->em
+            return $this->entityManager
                 ->getRepository('ProductBundle:Product')
                 ->find($productId);
         }
@@ -63,35 +92,35 @@ class CartProvider implements CartProviderInterface
     }
 
     /**
-     * @param $product_id
+     * @param $productId
      * @return integer
      */
-    public function getQuantity($product_id)
+    public function getQuantity($productId)
     {
-        if (isset($this->cart[$product_id])) {
-            return $this->cart[$product_id];
+        if (isset($this->cart[$productId])) {
+            return $this->cart[$productId];
         }
         return 0;
     }
 
     /**
-     * @param $product_id
+     * @param $productId
      * @return null
      */
-    public function addItem($product_id)
+    public function addItem($productId)
     {
         if ($this->cart) {
-            if (isset($this->cart[$product_id])) {
+            if (isset($this->cart[$productId])) {
                 // append to existing item
-                $this->cart[$product_id] += 1;
+                $this->cart[$productId] += 1;
             } else {
                 // add item first time
-                $this->cart[$product_id] = 1;
+                $this->cart[$productId] = 1;
             }
         } else {
             // add first time if cart doesn't exists
             $this->cart = [
-                $product_id => 1
+                $productId => 1
             ];
         }
 

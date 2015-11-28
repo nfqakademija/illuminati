@@ -29,7 +29,7 @@
                            {% for y in 0..participantsOrders|length-1 %}
                                {% if participantsOrders[y].userId.id == participants[i].usersId.id %}
                                    <tr>
-                                       <td><a href="{{ path('product_show',{'id':participantsOrders[y].productId.id}) }}">{{ participantsOrders[y].productId.title }}</a></td>
+                                       <td><a href="{{ path('product_show',{'id':participantsOrders[y].productId.id, 'orderId': participantsOrders[y].id}) }}">{{ participantsOrders[y].productId.title }}</a></td>
                                        <td>{{ participantsOrders[y].quantity }}</td>
                                        <td>{{ participantsOrders[y].productId.price }}</td>
                                    </tr>

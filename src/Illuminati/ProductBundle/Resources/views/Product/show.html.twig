@@ -6,7 +6,7 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    <li><a href="{{ path('supplier_show', {id:entity.supplier.id}) }}">{{ entity.supplier.name }}</a></li>
+    <li><a href="{{ path('product', { 'orderId': orderId }) }}">{{ entity.supplier.name }}</a></li>
     <li>{{ entity.title }}</li>
 {% endblock %}
 
@@ -20,7 +20,7 @@
         </div>
         <div class="col-md-6">
             <h2 class="product-title">
-                <a href="{{ path('product_show', { 'id': entity.id }) }}" title="{{ entity.title }}">
+                <a href="{{ path('product_show', { 'id': entity.id, 'orderId': orderId }) }}" title="{{ entity.title }}">
                     {{ entity.title }}
                 </a>
             </h2>
