@@ -1,10 +1,42 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 <h2 class="page-header">{{ 'profile.edit.title'|trans }}</h2>
+  {{ form_start(form,{'attr':{'class':'form-horizontal'}}) }}
 
-<form action="{{ path('fos_user_profile_edit') }}" {{ form_enctype(form) }} method="POST" class="col-md-6 col-md-offset-3">
-    {{ form_widget(form) }}
-    <div>
-        <input class="btn btn-primary" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="{{ form.email.vars.id }}">{{ form.email.vars.label|trans }}</label>
+        <div class="col-sm-10">
+            {{ form_widget(form.email,{'attr':{'class':'form-control'}}) }}
+            {% if form_errors(form.email) is not empty %}
+                <div class="has-error">
+                    <span class="help-block">{{ form_errors(form.name) }}</span>
+                </div>
+            {% endif %}
+        </div>
     </div>
-</form>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="{{ form.current_password.vars.id }}">{{ form.current_password.vars.label|trans }}</label>
+        <div class="col-sm-10">
+            {{ form_widget(form.current_password,{'attr':{'class':'form-control'}}) }}
+            {% if form_errors(form.current_password) is not empty %}
+                <div class="has-error">
+                    <span class="help-block">{{ form_errors(form.current_password) }}</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {{ form_widget(form._token) }}
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input class="btn btn-primary" type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+        </div>
+    </div>
+
+  {{ form_end(form) }}
+
+    <div class="text-center">
+        <a href="{{ path('fos_user_change_password') }}">Change password</a>
+    </div>
