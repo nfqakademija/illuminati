@@ -5,6 +5,9 @@ order:
   participants: Participants
   supplier: Supplier
   submit: Create
+  update: Update
+  create: New order creation
+  edit: Host order edit
 
   helpBlock:
     participants: Insert participants emails which you want to invite (Separate emails by comma.).
@@ -14,15 +17,45 @@ order:
     dueDate: Due Date
     inviteLink: Invitation Link
     goToShopButton: Go to Shop
-    editOrderButton: Edit your order
-    remindAboutPaymentsButton: Remind about paymentss
+    editOrderButton: Edit host order info
+    leaveOrder: Leave group order
+    remindAboutPaymentsButton: Remind about payments
     confirmOrderButton: Confirm and Lock orders
-    success: Success!
+    successCreate: Order has been successfully created!
+    successUpdate: Order has been successfully updated!
+    successJoined: You have successfully joined the order!
+    infoAlreadyParticipates: You already participate in this order.
+    successEmailSent_%count%: %count% reminder emails successfully sent!
 
     widget:
       product: Products
       quantity: Qty
       price: Price (per unit)
-      prepaid: Prepaid
+      prepaid: Prepaid :
       participantPaid: Participant paid fo his orders
       participantNotPaid: Participant hasn't paid for his orders
+
+    confirmation:
+      title: Hosted Order Confirmation
+      returnToSummary: Return to summary
+      genPDF: Generate PDF
+      confirm: Confirm hosted order
+      noOrders: There are no orders for now
+      product: Product
+      qty: Qty
+      price: Price
+      sum: SUM
+      confirmedSuccess: Host order has been confirmed and marked as done!
+
+
+notify:
+  success: Success!
+  info: Notice :
+  error: Warning :
+  messages:
+    success:
+      orderLeft: You have successfully left the order.
+    warning:
+      hostLeavesGroupOrder: You're the <strong>host</strong> of the group order, if you leave the order, group order will be closed.
+      cantLeaveClosedOrder: You cannot leave a closed order.
+      cantEditClosedOrder: You cannot edit a closed order.

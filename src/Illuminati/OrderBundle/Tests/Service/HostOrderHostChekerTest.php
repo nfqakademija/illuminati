@@ -2,33 +2,26 @@
 
 namespace Illuminati\OrderBundle\Tests\Service;
 
-use Illuminati\OrderBundle\Services\HostOrderParticipationChecker;
+use Illuminati\OrderBundle\Services\HostOrderHostChecker;
 
-
-class HostOrderParticipationCheckerTest extends \PHPUnit_Framework_TestCase
+class HostOrderHostChekerTest extends \PHPUnit_Framework_TestCase
 {
-
-    public function testExistingParticipant()
+    public function testUserIsHostOfGroupOrder()
     {
-        $mocks = $this->mockPreperations();
+        $mocks = $this->mockPreparations();
 
-        $em = new HostOrderParticipationChecker(
-            $mocks['em'], $mocks['ts']
-        );
+        $hostOrderHostChecker = new HostOrderHostChecker($mocks['em'], $mocks['ts']);
 
-        $this->assertEquals($mocks['hostOrderMock'], $em->check(69));
+        $this->assertEquals($mocks['hostOrder'], $hostOrderHostChecker->check(69));
     }
 
-
-    public function testNonExistingParticipant()
+    public function testUserIsNotHostOfGroupOrder()
     {
-        $mocks = $this->mockPreperations(true);
+        $mocks = $this->mockPreparations(true);
 
-        $em = new HostOrderParticipationChecker(
-            $mocks['em'], $mocks['ts']
-        );
+        $hostOrderHostChecker = new HostOrderHostChecker($mocks['em'], $mocks['ts']);
 
-        $this->assertFalse($em->check(69));
+        $this->assertFalse($hostOrderHostChecker->check(69));
     }
 
     public function testNoHostOrderFound()
@@ -59,78 +52,52 @@ class HostOrderParticipationCheckerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $em = new HostOrderParticipationChecker(
+        $hostOrderHostChecker = new HostOrderHostChecker(
             $entityManagerMock, $tokenStorageMock
         );
 
-        $this->assertFalse($em->check(69));
+        $this->assertFalse($hostOrderHostChecker->check(69));
     }
 
     public function testInvalidArgumentException()
     {
-
         $em = $this
             ->getMockBuilder('\Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
-
         $ts = $this
-            ->getMockBuilder('\Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage')
+            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $em = new HostOrderParticipationChecker(
-            $em, $ts
-        );
         $this->setExpectedException('InvalidArgumentException');
 
-        $em->check("69");
+        $hostOrderHostChecker = new HostOrderHostChecker($em, $ts);
+
+        $hostOrderHostChecker->check("69");
     }
 
 
-    public function mockPreperations($differentUserMocks = false)
+    public function mockPreparations($differentUserMocks = false)
     {
         $userEntityMock = $this->getMock('Illuminati\UserBundle\Entity\User');
 
-        $userOrderMock = $this
-            ->getMockBuilder('Illuminati\OrderBundle\Entity\User_order')
+        // Host Order Mock
+
+        $hostOrderMock = $this
+            ->getMockBuilder('Illuminati\OrderBundle\Entity\Host_order')
             ->disableOriginalConstructor()
             ->setMethods(['getUsersId'])
             ->getMock();
 
-        $userOrderMock
-            ->expects($this->once())
-            ->method('getUsersId')
-            ->will($this->returnValue($userEntityMock));
-
-        $userOrderArrayMock = $this
-            ->getMockBuilder('Illuminati\OrderBundle\Entity\User_order')
-            ->disableOriginalConstructor()
-            ->setMethods(['getValues'])
-            ->getMock();
-
-        $userOrderArrayMock
-            ->expects($this->once())
-            ->method('getValues')
-            ->will($this->returnValue([0 => $userOrderMock]));
-
-        // Host order mock
-
-        $hostOrderMock = $this
-            ->getMockBuilder('Illuminati\OrderBundle\Entity\Host_order')
-            ->setMethods(['getUserOrders'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $hostOrderMock
             ->expects($this->once())
-            ->method('getUserOrders')
-            ->will($this->returnValue($userOrderArrayMock));
+            ->method('getUsersId')
+            ->willReturn($userEntityMock);
 
-        // Entity manager mocks
-
+        // Repository mock
         $repositoryMock = $this
-            ->getMockBuilder('\Doctrine\ORM\EntityRepository')
+            ->getMockBuilder('Doctrine\ORM\EntityRepository')
             ->disableOriginalConstructor()
             ->setMethods(['findOneBy'])
             ->getMock();
@@ -140,17 +107,18 @@ class HostOrderParticipationCheckerTest extends \PHPUnit_Framework_TestCase
             ->method('findOneBy')
             ->willReturn($hostOrderMock);
 
+        // Entity manager mock
         $entityManagerMock = $this
             ->getMockBuilder('\Doctrine\ORM\EntityManager')
-            ->setMethods(['getRepository'])
             ->disableOriginalConstructor()
+            ->setMethods(['getRepository'])
             ->getMock();
 
         $entityManagerMock
             ->expects($this->once())
             ->method('getRepository')
             ->with('IlluminatiOrderBundle:Host_order')
-            ->will($this->returnValue($repositoryMock));
+            ->willReturn($repositoryMock);
 
         // Token storage mock
 
@@ -160,15 +128,15 @@ class HostOrderParticipationCheckerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getUser'])
             ->getMock();
 
-        if ($differentUserMocks == true) {
-
-            // creating different user entity mock for the token storage
+        if ($differentUserMocks === true) {
+            // creating a different user mock
             $userEntityMock = $this->getMock('Illuminati\UserBundle\Entity\User');
         }
 
-        $token->expects($this->once())
+        $token
+            ->expects($this->once())
             ->method('getUser')
-            ->will($this->returnValue($userEntityMock));
+            ->willReturn($userEntityMock);
 
         $tokenStorageMock = $this
             ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage')
@@ -179,14 +147,12 @@ class HostOrderParticipationCheckerTest extends \PHPUnit_Framework_TestCase
         $tokenStorageMock
             ->expects($this->once())
             ->method('getToken')
-            ->will($this->returnValue($token));
+            ->willReturn($token);
 
         return [
-            'em'=>$entityManagerMock,
-            'ts'=>$tokenStorageMock,
-            'hostOrderMock'=> $hostOrderMock
+            'em'        => $entityManagerMock,
+            'ts'        => $tokenStorageMock,
+            'hostOrder' => $hostOrderMock
         ];
     }
-
-
 }

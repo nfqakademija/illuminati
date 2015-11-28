@@ -1,7 +1,7 @@
 {% extends ":default:index.html.twig" %}
 {% block body %}
 <div class="container">
-    <h1>New order creation</h1>
+    <h1>{{ pageTitle|trans }}</h1>
     <hr>
     {{ form_start(form,{'attr':{'class':'form-horizontal'}}) }}
     <div class="form-group">
@@ -19,7 +19,7 @@
     <div class="form-group">
         <label class="control-label col-sm-2" for="{{ form.description.vars.id }}">{{ form.description.vars.label|trans({},'messages') }}</label>
         <div class="col-sm-10">
-            {{ form_widget(form.description,{'attr':{'class':'form-control'}}) }}
+            {{ form_widget(form.description,{'attr':{'class':'form-control','rows':10}}) }}
             {% if form_errors(form.description) is not empty %}
                 <div class="has-error">
                     <span class="help-block">{{ form_errors(form.description) }}</span>

@@ -21,10 +21,10 @@ gulp.task('fonts', function () {
 
 gulp.task('js', function() {
     return gulp.src([
-        './web/assets/vendor/jquery/dist/jquery.min.js',
-        './web/assets/vendor/bootstrap-sass/assets/javascripts/bootstrap.min.js',
-        './app/Resources/public/js/common.js'
-    ])
+            './web/assets/vendor/jquery/dist/jquery.min.js',
+            './web/assets/vendor/bootstrap-sass/assets/javascripts/bootstrap.min.js',
+            './app/Resources/public/js/common.js'
+        ])
         .pipe(concat('all.js'))
         .pipe(uglify())
         .pipe(gulp.dest('./web/assets/'));
@@ -39,17 +39,17 @@ gulp.task('watch', function () {
 
     // sass
     gulp.watch([
-        './app/Resources/public/sass/master.scss',
-        './app/Resources/public/sass/common.scss',
-        './src/Illuminati/ProductBundle/Resources/public/sass/product.scss',
-        './src/Illuminati/CartBundle/Resources/public/sass/cart.scss',
-    ], ['sass'])
+            './app/Resources/public/sass/master.scss',
+            './app/Resources/public/sass/common.scss',
+            './src/Illuminati/ProductBundle/Resources/public/sass/product.scss',
+            './src/Illuminati/CartBundle/Resources/public/sass/cart.scss',
+        ], ['sass'])
         .on('change', onChange);
 
     // JavaScripts
     gulp.watch([
-        './app/Resources/public/js/common.js'
-    ], ['js'])
+            './app/Resources/public/js/common.js'
+        ], ['js'])
         .on('change', onChange);
 });
 
