@@ -1,5 +1,6 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
+<a href="{{ path('fos_user_profile_show') }}"><span class="glyphicon glyphicon-chevron-left"></span> {{ "profile.return"|trans({},"messages") }}</a>
 <h2 class="page-header">{{ 'profile.edit.title'|trans }}</h2>
   {{ form_start(form,{'attr':{'class':'form-horizontal'}}) }}
 

@@ -7,6 +7,7 @@ profile:
   hostedOrders: "Hosted Orders: "
   joinedOrders: "Joined Orders: "
   fullList: Full List
+  return: Return to profile page
   change:
     email: Change Email
     pass: Change password
