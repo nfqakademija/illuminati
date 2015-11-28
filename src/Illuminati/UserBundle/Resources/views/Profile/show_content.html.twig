@@ -14,20 +14,20 @@
                 </div>
                 <table class="table table-condensed">
                     <tr>
-                        <td>Hosted Orders:</td>
+                        <td>{{ "profile.hostedOrders"|trans({},"messages") }}</td>
                         <td>{{ hostedOrdersCount }}</td>
-                        <td><a href="{{ path('order_history',{type:'hosted'}) }}">Full list</a></td>
+                        <td><a href="{{ path('order_history',{type:'hosted'}) }}">{{ "profile.fullList"|trans({},"messages") }}</a></td>
                     </tr>
                     <tr>
-                        <td>Joined Orders:</td>
+                        <td>{{ "profile.joinedOrders"|trans({},"messages") }}</td>
                         <td>{{ joinedOrdersCount }}</td>
-                        <td><a href="{{ path('order_history',{type:'joined'}) }}">Full list</a></td>
+                        <td><a href="{{ path('order_history',{type:'joined'}) }}">{{ "profile.fullList"|trans({},"messages") }}</a></td>
                     </tr>
                 </table>
 
                 <div class="text-center">
-                    <a href="{{ path('fos_user_profile_edit') }}">Change Email</a> <br>
-                    <a href="{{ path('fos_user_change_password') }}">Change Password</a>
+                    <a href="{{ path('fos_user_profile_edit') }}">{{ "profile.change.email"|trans({},"messages") }}</a> <br>
+                    <a href="{{ path('fos_user_change_password') }}">{{ "profile.change.pass"|trans({},"messages") }}</a>
                 </div>
 
 
