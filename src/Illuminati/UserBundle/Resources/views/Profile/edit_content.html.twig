@@ -10,7 +10,7 @@
             {{ form_widget(form.email,{'attr':{'class':'form-control'}}) }}
             {% if form_errors(form.email) is not empty %}
                 <div class="has-error">
-                    <span class="help-block">{{ form_errors(form.name) }}</span>
+                    <span class="help-block">{{ form_errors(form.email) }}</span>
                 </div>
             {% endif %}
         </div>

@@ -11,3 +11,4 @@ profile:
   change:
     email: Change Email
     pass: Change password
+  show: Show
