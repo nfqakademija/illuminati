@@ -23,7 +23,8 @@ gulp.task('js', function() {
     return gulp.src([
             './web/assets/vendor/jquery/dist/jquery.min.js',
             './web/assets/vendor/bootstrap-sass/assets/javascripts/bootstrap.min.js',
-            './app/Resources/public/js/common.js'
+            './app/Resources/public/js/common.js',
+            './src/Illuminati/UserBundle/Resources/public/js/userBundle.js'
         ])
         .pipe(concat('all.js'))
         .pipe(uglify())

@@ -91,6 +91,10 @@ fos_user:
     profile:
            form:
                type: app_user_profile
+    change_password:
+            form:
+               type: app_password_change
+
 
 doctrine_migrations:
     dir_name: "%kernel.root_dir%/DoctrineMigrations"
