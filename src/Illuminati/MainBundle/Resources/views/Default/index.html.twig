@@ -4,18 +4,20 @@
 <div id="wrapper">
 
     <header class="main-header">
-        <div class="row text-center">
-            <div class="col-md-5 hidden-sm hidden-xs">
-                {% image '@IlluminatiMainBundle/Resources/public/images/logo-min.png' %}
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-5 hidden-sm hidden-xs">
+                    {% image '@IlluminatiMainBundle/Resources/public/images/logo-min.png' %}
                     <img class="img img-responsive center-block" src="{{ asset_url }}" alt="">
-                {% endimage %}
-            </div>
-            <div class="col-md-7 parent">
-               <div class="child">
-                   <h1>{{ "headerTitle"|trans }}</h1>
-                   <p>{{ "headerSubTitle"|trans }}</p>
-                   <a class="btn btn-primary" href="/order/new">{{ "headerButton"|trans }}</a>
-               </div>
+                    {% endimage %}
+                </div>
+                <div class="col-md-7 parent">
+                    <div class="child">
+                        <h1>{{ "headerTitle"|trans }}</h1>
+                        <p>{{ "headerSubTitle"|trans }}</p>
+                        <a class="btn btn-primary" href="/order/new">{{ "headerButton"|trans }}</a>
+                    </div>
+                </div>
             </div>
         </div>
     </header>
