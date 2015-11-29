@@ -15,12 +15,13 @@ order:
   summary:
     title: Order Summary
     dueDate: Due Date
+    hostedBy: "Hosted By:"
     inviteLink: Invitation Link
     goToShopButton: Go to Shop
     editOrderButton: Edit host order info
     leaveOrder: Leave group order
     remindAboutPaymentsButton: Remind about payments
-    confirmOrderButton: Confirm and Lock orders
+    confirmOrderButton: Confirm hosted order
     successCreate: Order has been successfully created!
     successUpdate: Order has been successfully updated!
     successJoined: You have successfully joined the order!
@@ -46,6 +47,19 @@ order:
       price: Price
       sum: SUM
       confirmedSuccess: Host order has been confirmed and marked as done!
+
+  history:
+    hosted: Orders you have hosted
+    joined: Orders you have joined
+    closes: Closes
+    participants: Participants
+    state: State
+    stateClosed: Closed
+    stateOpen: Open
+    view: View Order
+    noHosted: You haven't hosted any orders
+    noJoined: You haven't joined any orders
+    create: create an order
 
 
 notify:

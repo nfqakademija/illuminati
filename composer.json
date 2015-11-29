@@ -20,7 +20,8 @@
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "knplabs/knp-menu-bundle": "~2",
         "doctrine/doctrine-migrations-bundle": "^1.0",
-        "itbz/fpdf": "^1.7"
+        "itbz/fpdf": "^1.7",
+        "ornicar/gravatar-bundle": "^1.1"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3",

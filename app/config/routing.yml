@@ -1,6 +1,10 @@
 illuminati_cart:
     resource: "@CartBundle/Resources/config/routing.yml"
 
+illuminati_main:
+    resource: "@IlluminatiMainBundle/Resources/config/routing.yml"
+    prefix:   /
+
 illuminati_product:
     resource: "@ProductBundle/Resources/config/routing.yml"
 
@@ -14,7 +18,3 @@ illuminati_user:
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
-
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation

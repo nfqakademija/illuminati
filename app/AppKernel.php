@@ -16,7 +16,6 @@ class AppKernel extends Kernel
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new AppBundle\AppBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Illuminati\UserBundle\IlluminatiUserBundle(),
             new Illuminati\OrderBundle\IlluminatiOrderBundle(),
@@ -24,6 +23,8 @@ class AppKernel extends Kernel
             new Illuminati\ProductBundle\ProductBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Illuminati\CartBundle\CartBundle(),
+            new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
+            new Illuminati\MainBundle\IlluminatiMainBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

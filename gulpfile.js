@@ -24,7 +24,8 @@ gulp.task('js', function() {
             './web/assets/vendor/jquery/dist/jquery.min.js',
             './web/assets/vendor/bootstrap-sass/assets/javascripts/bootstrap.min.js',
             './app/Resources/public/js/common.js',
-            './src/Illuminati/CartBundle/Resources/public/js/checkout.js'
+            './src/Illuminati/CartBundle/Resources/public/js/checkout.js',
+            './src/Illuminati/UserBundle/Resources/public/js/userBundle.js'
         ])
         .pipe(concat('all.js'))
         .pipe(uglify())
@@ -44,6 +45,7 @@ gulp.task('watch', function () {
             './app/Resources/public/sass/common.scss',
             './src/Illuminati/ProductBundle/Resources/public/sass/product.scss',
             './src/Illuminati/CartBundle/Resources/public/sass/cart.scss',
+            './src/Illuminati/MainBundle/Resources/public/sass/mainBundle.scss'
         ], ['sass'])
         .on('change', onChange);
 

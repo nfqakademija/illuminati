@@ -1,0 +1,31 @@
+$flatBlue : #3498db;
+$blackLyMySoul: #000;
+
+.main-header {
+  background-color: $flatBlue;
+
+  img {
+    padding: 0 50px; margin-bottom: 20px;
+  }
+  
+  h1 {
+    color: $blackLyMySoul;
+    font-size: 5em;
+  }
+
+  p {
+    color: $blackLyMySoul;
+    font-size: 2.5vw;
+  }
+}
+
+.parent {
+  padding: 2.5% 2%;
+
+  .child {
+    padding: 5% 0;
+  }
+}
+
+
+

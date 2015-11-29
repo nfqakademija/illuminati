@@ -243,6 +243,9 @@ class DefaultController extends Controller
                 'type'=>$type,
             ));
         }
+        else{
+            return $this->redirectToRoute('homepage');
+        }
     }
 
     /**
@@ -375,7 +378,7 @@ class DefaultController extends Controller
                 ['products' => $products, 'orderId' => $hostOrder->getId()]
             );
         } else {
-            return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
+            return $this->redirectToRoute('homepage');
         }
     }
 

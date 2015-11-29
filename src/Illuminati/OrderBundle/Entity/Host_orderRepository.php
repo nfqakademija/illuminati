@@ -157,11 +157,6 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
                 ->setParameter('id', $orders[$i]['id'])
                 ->getResult();
             $orders[$i]['pCnt'] = $orders[$i]['pCnt'][0]['pCnt'];
-            if ($orders[$i]['state']=1) {
-                $orders[$i]['state']='Open';
-            } else {
-                $orders[$i]['state']='Closed';
-            }
         }
         return $orders;
     }

@@ -16,3 +16,6 @@ $icon-font-path: 'fonts/';
 
 // History styles
 @import '../../../../src/Illuminati/OrderBundle/Resources/public/sass/history';
+
+// Main Bundle styles
+@import "../../../../src/Illuminati/MainBundle/Resources/public/sass/mainBundle";
