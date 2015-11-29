@@ -18,7 +18,7 @@ class CartProvider implements CartProviderInterface
     public $session;
 
     /**
-     * @var array
+     * @var array|mixed
      */
     public $cart;
 
@@ -43,7 +43,7 @@ class CartProvider implements CartProviderInterface
         $this->parameters = $parameters;
 
         $this->session = $session;
-        $this->cart = (array)$this->session->get('cart');
+        $this->cart = $this->session->get('cart');
 
         $this->entityManager = $entityManager;
     }
