@@ -43,6 +43,7 @@ gulp.task('watch', function () {
             './app/Resources/public/sass/common.scss',
             './src/Illuminati/ProductBundle/Resources/public/sass/product.scss',
             './src/Illuminati/CartBundle/Resources/public/sass/cart.scss',
+            './src/Illuminati/MainBundle/Resources/public/sass/mainBundle.scss'
         ], ['sass'])
         .on('change', onChange);
 
