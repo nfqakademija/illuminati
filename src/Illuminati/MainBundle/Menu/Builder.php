@@ -4,14 +4,19 @@ namespace Illuminati\MainBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Class Builder
+ * @package Illuminati\MainBundle\Menu
+ */
 class Builder extends ContainerAware
 {
-    public function mainMenu(FactoryInterface $factory, array $options)
+    /**
+     * @param FactoryInterface $factory
+     * @return \Knp\Menu\ItemInterface
+     */
+    public function mainMenu(FactoryInterface $factory)
     {
-        $request = $this->container->get('request');
-
         $menu = $factory->createItem('root', array(
             'childrenAttributes' => array(
                 'class' => 'nav navbar-nav navbar-right',

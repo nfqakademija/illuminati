@@ -47,6 +47,11 @@
                 {{ form_widget(form.plainPassword,{'attr':{'class':'form-control togglable-pass'}}) }}
                 <div class="input-group-addon btn toggle-pass"><span class="glyphicon glyphicon-eye-open"></span> {{ "profile.show"|trans({},"messages") }}</div>
             </div>
+            {% if form_errors(form.plainPassword) is not empty %}
+                <div class="has-error">
+                    <span class="help-block">{{ form_errors(form.plainPassword) }}</span>
+                </div>
+            {% endif %}
         </div>
     </div>
 
