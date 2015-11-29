@@ -11,7 +11,7 @@
     {% for product in products %}
         {% set sum = sum+product.sum %}
         <tr>
-            <td><a href="{{ path('product_show',{'id':product.id}) }}">{{ product.title }}</a></td>
+            <td><a href="{{ path('product_show',{'id':product.id,'orderId':orderId}) }}">{{ product.title }}</a></td>
             <td>{{ product.quantity }}</td>
             <td>{{ product.sum ~ " " ~ product.currency}}</td>
         </tr>
