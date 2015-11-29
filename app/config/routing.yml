@@ -1,3 +1,7 @@
+illuminati_main:
+    resource: "@IlluminatiMainBundle/Resources/config/routing.yml"
+    prefix:   /
+
 illuminati_product:
     resource: "@ProductBundle/Resources/config/routing.yml"
 
