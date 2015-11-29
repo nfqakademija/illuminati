@@ -5,15 +5,15 @@
 
     <h2 class="page-header">
         {% block content_header %}
-            Checkout
+            {{ 'cart.checkout.title'|trans }}
         {% endblock %}
     </h2>
 
     <ol class="breadcrumb">
         {% block breadcrumbs %}
             {{ parent() }}
-            <li><a href="{{ path('product', {'orderId':orderId}) }}">Products</a></li>
-            <li>Checkout</li>
+            <li><a href="{{ path('product', {'orderId':orderId}) }}">{{ 'product.list'|trans }}</a></li>
+            <li>{{ 'cart.checkout.title'|trans }}</li>
         {% endblock %}
     </ol>
 

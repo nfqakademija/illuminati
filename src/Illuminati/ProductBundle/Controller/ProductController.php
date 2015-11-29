@@ -49,7 +49,7 @@ class ProductController extends Controller
 
         return $this->render('ProductBundle:Product:index.html.twig', [
             'ProductEntities' => $productEntities,
-            'orderId' => $order->getId(),
+            'order' => $order,
         ]);
     }
 
@@ -70,7 +70,7 @@ class ProductController extends Controller
 
         return $this->render('ProductBundle:Product:show.html.twig', [
             'entity' => $entity,
-            'orderId' => $orderId,
+            'order' => $this->getRelatedOrder($orderId),
         ]);
     }
 }

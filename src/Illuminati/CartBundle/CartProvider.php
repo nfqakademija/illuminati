@@ -105,22 +105,23 @@ class CartProvider implements CartProviderInterface
 
     /**
      * @param $productId
+     * @param $quantity
      * @return null
      */
-    public function addItem($productId)
+    public function addItem($productId, $quantity = 1)
     {
         if ($this->cart) {
             if (isset($this->cart[$productId])) {
                 // append to existing item
-                $this->cart[$productId] += 1;
+                $this->cart[$productId] += $quantity;
             } else {
                 // add item first time
-                $this->cart[$productId] = 1;
+                $this->cart[$productId] = $quantity;
             }
         } else {
             // add first time if cart doesn't exists
             $this->cart = [
-                $productId => 1
+                $productId => $quantity
             ];
         }
 
@@ -128,13 +129,13 @@ class CartProvider implements CartProviderInterface
     }
 
     /**
-     * @param $product_id
+     * @param $productId
      * @return bool
      */
-    public function removeItem($product_id)
+    public function removeItem($productId)
     {
-        if (isset($this->cart[$product_id])) {
-            unset($this->cart[$product_id]);
+        if (isset($this->cart[$productId])) {
+            unset($this->cart[$productId]);
             $this->session->set('cart', $this->cart);
             return true;
         }
@@ -151,8 +152,8 @@ class CartProvider implements CartProviderInterface
         $items = [];
 
         if ($this->cart) {
-            foreach ($this->cart as $product_id => $quantity) {
-                $items[$product_id] = $this->getItem($product_id);
+            foreach ($this->cart as $productId => $quantity) {
+                $items[$productId] = $this->getItem($productId);
             }
         }
 
@@ -175,25 +176,26 @@ class CartProvider implements CartProviderInterface
     }
 
     /**
-     * @param $id
+     * @param $productId
      * @param $price
      * @return float
      */
-    public function geItemTotalAmount($id, $price)
+    public function geItemTotalAmount($productId, $price)
     {
-        $quantity = $this->getQuantity($id);
+        $quantity = $this->getQuantity($productId);
         return ($quantity * $price);
     }
 
     /**
-     * @param $id
+     * @param $productId
      * @param $quantity
      * @return null
      */
-    public function updateQuantity($id, $quantity)
+    public function updateQuantity($productId, $quantity)
     {
-        if (isset($this->cart[$id])) {
-            $this->cart[$id] = $quantity;
+        if (isset($this->cart[$productId])) {
+            $this->cart[$productId] = $quantity;
+            $this->session->set('cart', $this->cart);
         }
     }
 
