@@ -4,7 +4,6 @@ namespace Illuminati\ProductBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Illuminati\ProductBundle\Entity\Product;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
