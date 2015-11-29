@@ -110,7 +110,7 @@ class CartProvider implements CartProviderInterface
      */
     public function addItem($productId, $quantity = 1)
     {
-        if ($this->cart) {
+        if (!empty($this->cart)) {
             if (isset($this->cart[$productId])) {
                 // append to existing item
                 $this->cart[$productId] += $quantity;
@@ -151,7 +151,7 @@ class CartProvider implements CartProviderInterface
         // Items added to cart
         $items = [];
 
-        if ($this->cart) {
+        if (!empty($this->cart)) {
             foreach ($this->cart as $productId => $quantity) {
                 $items[$productId] = $this->getItem($productId);
             }
