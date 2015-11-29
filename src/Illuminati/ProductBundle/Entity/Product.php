@@ -29,6 +29,29 @@ class Product
     /**
      * @var string
      *
+     * @ORM\Column(name="currency", type="string", length=45, nullable=true)
+     */
+    private $currency;
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+    }
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
@@ -48,6 +71,11 @@ class Product
     private $deleted = '0';
 
     /**
+     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order_details", mappedBy="productId")
+     */
+    private $orderDetails;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer")
@@ -65,8 +93,6 @@ class Product
      * })
      */
     private $supplier;
-
-
 
     /**
      * Set title
@@ -109,7 +135,7 @@ class Product
     /**
      * Get price
      *
-     * @return string
+     * @return float
      */
     public function getPrice()
     {
@@ -185,7 +211,7 @@ class Product
      */
     public function getDeleted()
     {
-        return $this->deleted;
+        return (boolean)$this->deleted;
     }
 
     /**
@@ -205,7 +231,7 @@ class Product
      *
      * @return Product
      */
-    public function setSupplier(\Illuminati\ProductBundle\Entity\Supplier $supplier = null)
+    public function setSupplier(Supplier $supplier = null)
     {
         $this->supplier = $supplier;
 

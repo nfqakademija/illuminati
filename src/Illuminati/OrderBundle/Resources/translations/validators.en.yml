@@ -4,3 +4,5 @@ min:
 
 max:
   Title: Title is too long
+
+pastDate: You cannot set a passed date.

@@ -1,4 +1,12 @@
+parameters:
+    product.import_io:
+        api_key: eecc19ee586145a7ac4238db7fd09aadc3d2d5cf6448bf15a3ba56b1cc1ba6ad4405b31957982d8c2b6584c2fd670fcf6ea2259e79e8fba44621f074a28e2458afbc0cbb6aaef1de86159a029ac0f71f
+        user_id: eecc19ee-5861-45a7-ac42-38db7fd09aad
+        connectorGuid: 72cc65ae-75ad-4f74-aaaa-4eda23b45244
+
 services:
-#    product.example:
-#        class: Illuminati\ProductBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    product.DataSourceInterface:
+        class: Illuminati\ProductBundle\ImportIoDataSource
+    product.CiliPicaProductProvider:
+        class: Illuminati\ProductBundle\Providers\CiliPicaProductProvider
+        arguments: [@product.DataSourceInterface, %product.import_io%, 'http://www.cili.lt/', 'EUR']

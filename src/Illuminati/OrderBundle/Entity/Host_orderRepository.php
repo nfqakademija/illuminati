@@ -2,6 +2,8 @@
 
 namespace Illuminati\OrderBundle\Entity;
 
+use Doctrine\Orm\Repository;
+
 /**
  * Host_orderRepository
  *
@@ -10,4 +12,226 @@ namespace Illuminati\OrderBundle\Entity;
  */
 class Host_orderRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Fetches Host order participants orders details
+     *
+     * @param integer $id Host order id
+     *
+     * @return array participants orders details
+     */
+    public function findUsersOrderDetails($id)
+    {
+        $participantsOrders = $this->getEntityManager()->createQuery(
+            'SELECT uod,p FROM Illuminati\OrderBundle\Entity\Host_order ho
+            INNER JOIN Illuminati\OrderBundle\Entity\User_order_details uod WITH (ho.id = uod.hostOrderId)
+            INNER JOIN Illuminati\ProductBundle\Entity\Product p WITH (uod.productId = p.id)
+            WHERE  ho.id = :host_order_id AND ho.deleted = 0 AND p.deleted = 0'
+        )->setParameter('host_order_id', $id)->getResult();
+
+        // removing product entities from array for better iteration
+        foreach ($participantsOrders as $key => $value) {
+            if ($value instanceof \Illuminati\ProductBundle\Entity\Product) {
+                unset($participantsOrders[$key]);
+            }
+        }
+
+        // returning a reindexed array;
+        return array_values($participantsOrders);
+    }
+
+    /**
+     * Fetches host order participants orders
+     *
+     * @param integer $id Host Order id
+     *
+     * @return array Array of participants orders
+     */
+    public function findUserOrders($id)
+    {
+        $participants = $this->getEntityManager()->createQuery(
+            'SELECT uo,u FROM Illuminati\UserBundle\Entity\USER u
+            INNER JOIN Illuminati\OrderBundle\Entity\User_order uo WITH (u.id = uo.usersId)
+            INNER JOIN Illuminati\OrderBundle\Entity\Host_order ho WITH (uo.hostOrderId = ho.id)
+            WHERE ho.id = :host_order_id AND uo.deleted = 0 AND u.deleted = 0 AND ho.deleted = 0'
+        )->setParameter('host_order_id', $id)->getResult();
+
+        // removing User entities from array for better iteration
+        foreach ($participants as $key => $value) {
+            if ($value instanceof \Illuminati\UserBundle\Entity\User) {
+                unset($participants[$key]);
+            }
+        }
+
+        // returning reindexed array;
+        return array_values($participants);
+
+    }
+
+    /**
+     * Fetches host order debtors
+     *
+     * @param $id Host order id
+     */
+    public function findOrderDebtors($id)
+    {
+        $debtors = $this->getEntityManager()->createQuery(
+            'SELECT u FROM Illuminati\OrderBundle\Entity\Host_order ho
+            INNER JOIN Illuminati\OrderBundle\Entity\User_order uo WITH (ho.id = uo.hostOrderId)
+            INNER JOIN Illuminati\UserBundle\Entity\USER u WITH (uo.usersId = u.id)
+            WHERE ho.id = :host_order_id AND uo.payed = 0 AND uo.deleted = 0 AND u.deleted = 0 AND ho.deleted = 0'
+        )->setParameter('host_order_id', $id)->getResult();
+
+        return $debtors;
+    }
+
+    /**
+     * Finds Hosted User orders
+     *
+     * @param $id
+     *
+     * @return array
+     */
+    public function findHostedOrders($id)
+    {
+        $orders = $this->getEntityManager()
+            ->createQuery(
+                "SELECT HO.id ,HO.title, HO.closeDate, HO.stateId AS state
+                FROM Illuminati\OrderBundle\Entity\Host_order HO
+                WHERE HO.usersId = :id AND HO.deleted = 0
+                ORDER BY HO.stateId DESC"
+            )
+            ->setParameter('id', $id)
+            ->getResult();
+        $size = sizeof($orders);
+        for ($i = 0; $i < $size; $i++) {
+            $date = $orders[$i]['closeDate'];
+            $orders[$i]['closeDate']=$date->format('Y-m-d H:i:s');
+
+            $orders[$i]['pCnt']=$this->getEntityManager()
+                ->createQuery(
+                    "SELECT COUNT(UO.hostOrderId) AS pCnt
+                    FROM Illuminati\OrderBundle\Entity\User_order UO
+                    WHERE UO.hostOrderId = :id AND UO.deleted = 0"
+                )
+                ->setParameter('id', $orders[$i]['id'])
+                ->getResult();
+            $orders[$i]['pCnt'] = $orders[$i]['pCnt'][0]['pCnt'];
+        }
+        return $orders;
+    }
+
+    /**
+     * Finds group orders in which user participates
+     *
+     * @param $id
+     *
+     * @return array
+     */
+    public function findJoinedOrders($id)
+    {
+        $orders = $this->getEntityManager()
+            ->createQuery(
+                "SELECT HO.id, HO.title, HO.closeDate, HO.stateId AS state
+                FROM Illuminati\OrderBundle\Entity\Host_order HO
+                INNER JOIN Illuminati\OrderBundle\Entity\User_order UO WITH (HO.id = UO.hostOrderId)
+                WHERE UO.usersId = :id AND HO.usersId <> :id AND HO.deleted = 0 AND UO.deleted = 0
+                ORDER BY HO.stateId DESC"
+            )
+            ->setParameter('id', $id)
+            ->getResult();
+        $size = sizeof($orders);
+        for ($i = 0; $i < $size; $i++) {
+            $date = $orders[$i]['closeDate'];
+            $orders[$i]['closeDate']=$date->format('Y-m-d H:i:s');
+            $orders[$i]['pCnt']=$this->getEntityManager()
+                ->createQuery(
+                    "SELECT COUNT(UO.hostOrderId) AS pCnt
+                    FROM Illuminati\OrderBundle\Entity\User_order UO
+                    WHERE UO.hostOrderId = :id AND UO.deleted = 0"
+                )
+                ->setParameter('id', $orders[$i]['id'])
+                ->getResult();
+            $orders[$i]['pCnt'] = $orders[$i]['pCnt'][0]['pCnt'];
+        }
+        return $orders;
+    }
+
+    /**
+     * Deletes participant from the hosted order
+     *
+     * @param Host_order $hostOrder Host order Object
+     * @param integer $userId    User Id
+     *
+     * @return int
+     * @throws \Doctrine\DBAL\ConnectionException
+     */
+    public function deleteParticipant(Host_order $hostOrder, $userId)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $conn->beginTransaction();
+
+        try {
+            $conn->executeQuery(
+                'UPDATE user_order
+                SET deleted = 1
+                WHERE host_order_id = ? AND users_id = ?  AND deleted = 0;',
+                [$hostOrder->getId(),$userId]
+            );
+
+            // checking if the user is the host of the group order
+            // if yes, we close the group order
+
+            if ($hostOrder->getUsersId()->getId() == $userId) {
+                $conn->executeQuery(
+                    'UPDATE host_order
+                    SET deleted = 1
+                    WHERE id = ?',
+                    [$hostOrder->getId()]
+                );
+            }
+
+            $conn->executeQuery(
+                'DELETE FROM user_order_details
+                WHERE host_order_id = ? AND user_id = ?;',
+                [$hostOrder->getId(),$userId]
+            );
+            $conn->commit();
+        } catch (\Exception $e) {
+            $conn->rollBack();
+            $conn->close();
+            return false;
+        }
+
+        $conn->close();
+        return true;
+    }
+
+    /**
+     * Returns array of ordered products in a host order
+     *
+     * @param integer $id Host order id
+     *
+     * @return array Products
+     */
+    public function findOrderedProducts($id)
+    {
+        $conn = $this->getEntityManager()->getConnection();
+        $products = $conn->fetchAll(
+            'SELECT
+                  p.title,
+                  p.id,
+                  p.currency,
+                  sum(uod.quantity) as quantity,
+                  p.price*(sum(uod.quantity)) as sum
+                FROM host_order ho
+                INNER JOIN user_order_details uod ON (ho.id = uod.host_order_id)
+                INNER JOIN product p ON (uod.product_id = p.id)
+                WHERE ho.deleted = 0 AND ho.id = ?
+                GROUP BY p.title',
+            [$id]
+        );
+        $conn->close();
+
+        return $products;
+    }
 }

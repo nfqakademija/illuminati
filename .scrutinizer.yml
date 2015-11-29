@@ -1,0 +1,35 @@
+filter:
+  paths:
+    - 'src/*'
+  excluded_paths:
+    - 'src/**/Tests'
+    - 'src/**/Resources'
+
+checks:
+  php: true
+
+coding_style:
+  php:
+    spaces:
+      around_operators:
+        concatenation: false
+
+build:
+  environment:
+    php:
+      version: 5.6.9
+
+  dependencies:
+    override:
+      - composer install --no-interaction --prefer-source
+    after:
+      - php app/console doctrine:database:create
+      - php app/console doctrine:schema:create
+
+  tests:
+    override:
+      -
+        command: bin/phpunit -c app --coverage-clover=coverage.xml
+        coverage:
+          file: coverage.xml
+          format: php-clover

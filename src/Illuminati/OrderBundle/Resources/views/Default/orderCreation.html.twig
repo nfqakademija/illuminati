@@ -1,8 +1,7 @@
 {% extends ":default:index.html.twig" %}
 {% block body %}
-
 <div class="container">
-    <h1>New order creation</h1>
+    <h1>{{ pageTitle|trans }}</h1>
     <hr>
     {{ form_start(form,{'attr':{'class':'form-horizontal'}}) }}
     <div class="form-group">
@@ -20,10 +19,22 @@
     <div class="form-group">
         <label class="control-label col-sm-2" for="{{ form.description.vars.id }}">{{ form.description.vars.label|trans({},'messages') }}</label>
         <div class="col-sm-10">
-            {{ form_widget(form.description,{'attr':{'class':'form-control'}}) }}
+            {{ form_widget(form.description,{'attr':{'class':'form-control','rows':10}}) }}
             {% if form_errors(form.description) is not empty %}
                 <div class="has-error">
                     <span class="help-block">{{ form_errors(form.description) }}</span>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+     <div class="form-group">
+        <label class="control-label col-sm-2" for="{{ form.supplier_id.vars.id }}">{{ form.supplier_id.vars.label|trans({},'messages') }}</label>
+        <div class="col-sm-10">
+            {{ form_widget(form.supplier_id,{'attr':{'class':'form-control'}}) }}
+            {% if form_errors(form.supplier_id) is not empty %}
+                <div class="has-error">
+                    <span class="help-block">{{ form_errors(form.supplier_id) }}</span>
                 </div>
             {% endif %}
         </div>
@@ -54,19 +65,6 @@
                     <span class="help-block">{{ form_errors(form.closeDate) }}</span>
                 </div>
             {% endif %}
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="control-label col-sm-2" for="{{ form.orderPatricipants.vars.id }}">{{ form.orderPatricipants.vars.label|trans({},'messages') }}</label>
-        <div class="col-sm-10">
-            {{ form_widget(form.orderPatricipants,{'attr':{'class':'form-control','placeholder':'email1@example.com, email2@example.com, ...'}}) }}
-            {% if form_errors(form.orderPatricipants) is not empty %}
-                <div class="has-error">
-                    <span class="help-block">{{ form_errors(form.orderPatricipants) }}</span>
-                </div>
-            {% endif %}
-            <span class="help-block">{{ "order.helpBlock.participants"|trans({},"messages") }}</span>
         </div>
     </div>
 

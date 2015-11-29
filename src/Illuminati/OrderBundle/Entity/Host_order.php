@@ -60,14 +60,15 @@ class Host_order
      * @var \DateTime
      *
      * @ORM\Column(name="close_date", type="datetime")
+     * @Assert\GreaterThan("+1 minutes",message="pastDate")
      */
     private $closeDate;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Illuminati\OrderBundle\Entity\Host_order_state", inversedBy="host_orders")
-     * @ORM\JoinColumn(name="State_ID", referencedColumnName="id")
-     */
-    private $stateId;
+        /**
+         * @var integer
+         * @ORM\Column(name="state_id", type="smallint")
+         */
+        private $stateId;
 
     /**
      * @var integer
@@ -76,21 +77,42 @@ class Host_order
      */
     private $deleted;
 
+    //    /**
+    //     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\Order_participants", mappedBy="hostOrderId")
+    //     */
+    //    private $order_participants;
+
     /**
-     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\Order_participants", mappedBy="hostOrderId")
+     * @var string
+     *
+     * @ORM\Column(name="order_token", type="string", length=32, unique=true)
      */
-    private $order_participants;
+    private $orderToken;
 
     /**
      * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order", mappedBy="hostOrderId")
      */
     private $user_orders;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="Illuminati\ProductBundle\Entity\Supplier", inversedBy="host_order_id")
+     * @ORM\JoinColumn(name="supplier_id", referencedColumnName="id")
+     */
+    private $supplier_id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Illuminati\OrderBundle\Entity\User_order_details", mappedBy="hostOrderId")
+     */
+    private $orderDetails;
+
     public function __construct()
     {
+        $this->stateId = 1;
+        $this->orderToken = bin2hex(openssl_random_pseudo_bytes(32));
         $this->deleted = 0;
-        $this->order_participants = new ArrayCollection();
+        //$this->order_participants = new ArrayCollection();
         $this->user_orders = new ArrayCollection();
+        $this->orderDetails = new ArrayCollection();
     }
 
     /**
@@ -247,15 +269,15 @@ class Host_order
         return $this->deleted;
     }
 
-    /**
-     * Get Order Participants
-     *
-     * @return mixed
-     */
-    public function getOrderParticipants()
-    {
-        return $this->order_participants;
-    }
+    //    /**
+    //     * Get Order Participants
+    //     *
+    //     * @return mixed
+    //     */
+    //    public function getOrderParticipants()
+    //    {
+    //        return $this->order_participants;
+    //    }
 
     /**
      * @return mixed
@@ -264,6 +286,39 @@ class Host_order
     {
         return $this->user_orders;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSupplierId()
+    {
+        return $this->supplier_id;
+    }
+
+    /**
+     * @param mixed $supplier_id
+     */
+    public function setSupplierId($supplier_id)
+    {
+        $this->supplier_id = $supplier_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrderToken()
+    {
+        return $this->orderToken;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderDetails()
+    {
+        return $this->orderDetails;
+    }
+
 
 
 }

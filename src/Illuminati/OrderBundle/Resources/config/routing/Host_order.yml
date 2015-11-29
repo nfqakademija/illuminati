@@ -5,3 +5,35 @@ host_order_index:
 host_order_new:
   path: /new
   defaults: { _controller: "IlluminatiOrderBundle:Default:create" }
+
+host_order_summary:
+  path: /summary/{id}
+  defaults: { _controller: "IlluminatiOrderBundle:Default:summary"}
+
+host_order_edit:
+  path: /{id}/edit
+  defaults: { _controller: "IlluminatiOrderBundle:Default:editHostOrder"}
+
+host_order_email_reminders:
+  path: /{id}/payments_reminder
+  defaults: { _controller: "IlluminatiOrderBundle:Default:debtReminder"}
+
+host_order_join:
+    path: /join/{hostOrderToken}
+    defaults: { _controller: "IlluminatiOrderBundle:Default:joinOrder"}
+
+host_order_leave:
+    path: /leave/{id}
+    defaults: { _controller: "IlluminatiOrderBundle:Default:leaveOrder"}
+
+host_order_confirm:
+    path: /confirm/{id}
+    defaults: { _controller: "IlluminatiOrderBundle:Default:hostOrderConfirmation"}
+
+host_order_confirmed:
+    path: /confirmed/{id}
+    defaults: { _controller: "IlluminatiOrderBundle:Default:hostOrderConfirmed"}
+
+host_order_generate_pdf:
+    path: /genpdf/{id}
+    defaults: { _controller: "IlluminatiOrderBundle:Default:genPdf"}

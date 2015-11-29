@@ -24,12 +24,37 @@
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            {{ knp_menu_render('AppBundle:Builder:mainMenu', {'currentClass':'active', 'compressed': true}) }}
+            {{ knp_menu_render('IlluminatiMainBundle:Builder:mainMenu', {'currentClass':'active', 'compressed': true}) }}
         </div>
         <!-- /.navbar-collapse -->
     </div>
     <!-- /.container-fluid -->
 </nav>
+{% endblock %}
+
+{% block notifications %}
+    <div class="container">
+        {% for errorMessage in app.session.flashbag.get('error') %}
+            <div class="alert alert-danger fade in col-sm-6 col-sm-offset-6">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>{% trans %}notify.error{% endtrans %}</strong>  {{ errorMessage }}
+            </div>
+        {% endfor %}
+
+        {% for successMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success fade in col-sm-6 col-sm-offset-6">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>{% trans %}notify.success{% endtrans %}</strong>  {{ successMessage }}
+            </div>
+        {% endfor %}
+
+        {% for infoMessage in app.session.flashbag.get('info') %}
+            <div class="alert alert-info fade in col-sm-6 col-sm-offset-6">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>{% trans %}notify.info{% endtrans %}</strong>  {{ infoMessage }}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
 
 {% block body %}

@@ -1,0 +1,8 @@
+parameters:
+    cart.provider:
+        currency: 'EUR'
+
+services:
+    cart.provider:
+        class: Illuminati\CartBundle\CartProvider
+        arguments: [@session, @doctrine.orm.entity_manager, %cart.provider%]

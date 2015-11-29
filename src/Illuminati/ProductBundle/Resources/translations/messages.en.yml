@@ -1,2 +1,5 @@
 product:
-  price: Title
+  price: Price
+  size: Size
+  add_to_cart: Add to cart
+  list: Product list

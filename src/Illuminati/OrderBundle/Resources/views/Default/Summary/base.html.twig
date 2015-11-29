@@ -2,11 +2,75 @@
 
 {% block body %}
     <div class="container">
-        <h1>Order Summary</h1>
+        <h1>{% trans %}order.summary.title{% endtrans %}</h1>
+
+        <div class="jumbotron">
+            <div class="row">
+                <div class="col-sm-9">
+                    <h2>{{ hostOrder.title }}</h2>
+                    <p>{{ hostOrder.description }}</p>
+                    <p><em><strong>{% trans %}order.supplier{% endtrans %}: {{ hostOrder.supplierId.name }}</strong></em></p>
+                    <p><em><strong>{% trans %}order.summary.dueDate{% endtrans %} : {{ hostOrder.closeDate|date('Y-m-d H:i') }}</strong></em></p>
+                </div>
+                <div class="col-sm-3 text-center">
+                    <h3>{{ "order.summary.hostedBy"|trans }}</h3>
+                    <img class="img img-circle" src="{{ gravatar(hostOrder.usersId.email,100) }}" alt="host avatar">
+                    <p>{{ hostOrder.usersId.name }} {{ hostOrder.usersId.surname }}</p>
+                    <a href="mailto:{{ hostOrder.usersId.email }}">{{ hostOrder.usersId.email }}</a>
+                </div>
+            </div>
+
+           <div class="row">
+               <div class="has-success">
+                   <label for="inv_link">{% trans %}order.summary.inviteLink{% endtrans %} :</label>
+                   <input class="form-control" id="inv_link" type="text" value="{{ app.request.getSchemeAndHttpHost() ~ path('host_order_join',{'hostOrderToken':hostOrder.orderToken}) }}" readonly>
+               </div>
+           </div>
+        </div>
+
+        {# Checking if host order's state is open #}
+        {% if hostOrder.stateId == 1 %}
+            <a href="{{ path('product', { orderId : hostOrder.id } ) }}"><button class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> {% trans %}order.summary.goToShopButton{% endtrans %} </button></a>
+            {% if app.user.id == hostOrder.usersId.id %}
+                <a href="{{ path('host_order_edit',{'id':hostOrder.id}) }}"><button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> {% trans %}order.summary.editOrderButton{% endtrans %} </button></a>
+            {% endif %}
+        {% endif %}
+
+        <hr>
 
         {# summary widget #}
-        {% if (orderParticipants is defined) and (orderParticipants is not empty) %}
-            {% include "IlluminatiOrderBundle:Default/Summary:summaryWidget.html.twig" with orderParticipants %}
+        {% if (participants is defined) and (participants is not empty) %}
+            {% set vars = { 'participants': participants , 'participantsOrders' : participantsOrders  } %}
+            {% include "IlluminatiOrderBundle:Default/Summary:summaryWidget.html.twig" with vars %}
         {% endif %}
+
+
+        {# Checking if the logged in user is the host of the main order #}
+        {% if hostOrder.usersId.id == app.user.id %}
+            <hr>
+            <div class="btn-group" role="group">
+                <a id="send-reminder-emails" class="btn btn-default" href="{{ path('host_order_email_reminders',{'id':hostOrder.id}) }}"><span class="glyphicon glyphicon-envelope"></span> {% trans %}order.summary.remindAboutPaymentsButton{% endtrans %}</a>
+
+                {# Checking if the logged in user is the host of the main order #}
+                {% if hostOrder.stateId == 1 %}
+                    <a class="btn btn-default" href="{{ path('host_order_confirm',{'id':hostOrder.id}) }}"><span class="glyphicon glyphicon-lock"></span> {% trans %}order.summary.confirmOrderButton{% endtrans %}</a>
+                {% else %}
+                    <a href="{{ path('host_order_generate_pdf', {'id': hostOrder.id}) }}" target="_blank" class="btn btn-default"><span class="glyphicon glyphicon-save-file"></span>  {{ "order.summary.confirmation.genPDF"|trans }}</a>
+                {% endif %}
+
+            </div>
+        {% endif %}
+
+        {# Checking if the logged in user is the host of the main order #}
+        {% if hostOrder.stateId == 1 %}
+        <div class="pull-right">
+            {% if hostOrder.usersId.id == app.user.id %}
+                <p class="alert-danger help-block"><strong>{% trans %}notify.error{% endtrans %}</strong> {% trans %}notify.messages.warning.hostLeavesGroupOrder{% endtrans %}</p>
+            {% endif %}
+            <a href="{{ path('host_order_leave',{'id':hostOrder.id}) }}" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-log-out"></span> {% trans %}order.summary.leaveOrder{% endtrans %}</a>
+        </div>
+        {% endif %}
+        <br>
+
     </div>
 {% endblock %}

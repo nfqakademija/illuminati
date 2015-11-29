@@ -3,37 +3,17 @@
 {% block body %}
 <div class="container">
 
-    <h2 class="page-header">{% block content_header %}{% endblock %}</h2>
+    <h2 class="page-header">
+        {% block content_header %}{% endblock %}
+    </h2>
 
     <ol class="breadcrumb">
-    {% block breadcrumbs %}
-        <li><a href="{{ path('homepage') }}">Home</a></li>
-    {% endblock %}
+        {% block breadcrumbs %}
+            <li><a href="{{ path('homepage') }}">Home</a></li>
+        {% endblock %}
     </ol>
 
-    <div class="row">
-        <div class="col-md-3">
-            {% block sidebar_left %}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        {{ knp_menu_render('ProductBundle:Builder:suppliersMenu', {'currentClass':'active', 'compressed': true}) }}
-                    </div>
-                </div>
-            {% endblock %}
-        </div>
-        <div class="col-md-6">
-            {% block content %}
-            {% endblock %}
-        </div>
-        <div class="col-md-3">
-            {% block sidebar_right %}
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        Cart
-                    </div>
-                </div>
-            {% endblock %}
-        </div>
-    </div>
+    {% block content %}{% endblock %}
+
 </div>
 {% endblock %}

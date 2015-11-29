@@ -6,14 +6,38 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    <li><a href="{{ path('supplier_show', {id:entity.supplier.id}) }}">{{ entity.supplier.name }}</a></li>
+    <li>
+        <a href="{{ path('host_order_summary', { 'id': order.id }) }}">{{ order.title }}</a>
+    </li>
+    <li>
+        <a href="{{ path('product', { 'orderId': order.id }) }}">{{ 'product.list'|trans }}</a>
+    </li>
     <li>{{ entity.title }}</li>
 {% endblock %}
 
-{% block content -%}
+{% block content %}
 <div class="products">
-    <img src="{{ entity.image }}" title="{{ entity.title }}" alt="{{ entity.title }}" /><br />
-    {{ entity.price }}<br />
-    {{ entity.description }}
+    <div class="row">
+        <div class="col-md-6">
+            <a href="{{ entity.image }}" target="_blank" class="thumbnail" title="{{ entity.title }}">
+                <img src="{{ entity.image }}" title="{{ entity.title }}" alt="{{ entity.title }}" />
+            </a>
+        </div>
+        <div class="col-md-6">
+            <h2 class="product-title">
+                <a href="{{ path('product_show', { 'id': entity.id, 'orderId': order.id }) }}" title="{{ entity.title }}">
+                    {{ entity.title }}
+                </a>
+            </h2>
+            <p class="price"><strong>Price:</strong> {{ entity.price }} {{ entity.currency }}</p>
+            <p>{{ entity.description | raw }}</p>
+            <p>
+                <a href="{{ path('cart_add', { 'productId': entity.id, 'orderId': order.id }) }}" class="btn btn-sm btn-default">
+                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                    {{ 'product.add_to_cart'|trans }}
+                </a>
+            </p>
+        </div>
+    </div>
 </div>
 {% endblock %}
