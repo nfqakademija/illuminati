@@ -223,28 +223,29 @@ class DefaultController extends Controller
      */
     public function showHistoryAction($type)
     {
-            $userId = $this->container->get('security.token_storage')->getToken()->getUser()->getId();
-            $em = $this->getDoctrine()->getManager();
+        $userId = $this->container->get('security.token_storage')->getToken()->getUser()->getId();
+        $em = $this->getDoctrine()->getManager();
 
-            if ($type === 'hosted') {
-                $orders = $em->getRepository('IlluminatiOrderBundle:Host_order')
-                    ->findHostedOrders($userId);
+        if ($type === 'hosted') {
+            $orders = $em->getRepository('IlluminatiOrderBundle:Host_order')
+                ->findHostedOrders($userId);
 
-                return $this->render('IlluminatiOrderBundle:Default/History:history.html.twig', array(
-                    'orders' => $orders,
-                    'type' => $type,
-                ));
-            } elseif ($type === 'joined') {
-                $orders = $em->getRepository('IlluminatiOrderBundle:Host_order')
-                    ->findJoinedOrders($userId);
+            return $this->render('IlluminatiOrderBundle:Default/History:history.html.twig', array(
+                'orders'=>$orders,
+                'type'=>$type,
+            ));
+        } elseif ($type === 'joined') {
+            $orders = $em->getRepository('IlluminatiOrderBundle:Host_order')
+                ->findJoinedOrders($userId);
 
-                return $this->render('IlluminatiOrderBundle:Default/History:history.html.twig', array(
-                    'orders' => $orders,
-                    'type' => $type,
-                ));
-            } else {
-                return $this->redirect('http://nfqakademija.dev');
-            }
+            return $this->render('IlluminatiOrderBundle:Default/History:history.html.twig', array(
+                'orders'=>$orders,
+                'type'=>$type,
+            ));
+        }
+        else{
+            return $this->redirectToRoute('homepage');
+        }
     }
 
     /**
