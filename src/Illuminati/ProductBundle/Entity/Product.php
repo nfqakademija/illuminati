@@ -94,8 +94,6 @@ class Product
      */
     private $supplier;
 
-
-
     /**
      * Set title
      *
@@ -137,7 +135,7 @@ class Product
     /**
      * Get price
      *
-     * @return string
+     * @return float
      */
     public function getPrice()
     {
@@ -213,7 +211,7 @@ class Product
      */
     public function getDeleted()
     {
-        return $this->deleted;
+        return (boolean)$this->deleted;
     }
 
     /**
@@ -233,7 +231,7 @@ class Product
      *
      * @return Product
      */
-    public function setSupplier(\Illuminati\ProductBundle\Entity\Supplier $supplier = null)
+    public function setSupplier(Supplier $supplier = null)
     {
         $this->supplier = $supplier;
 

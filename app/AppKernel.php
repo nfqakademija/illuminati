@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new Illuminati\ProductBundle\ProductBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new Illuminati\CartBundle\CartBundle(),
             new Ornicar\GravatarBundle\OrnicarGravatarBundle(),
             new Illuminati\MainBundle\IlluminatiMainBundle(),
         );

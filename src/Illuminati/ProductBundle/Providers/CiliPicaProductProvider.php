@@ -8,21 +8,69 @@ use Illuminati\ProductBundle\Entity\Product;
 use Illuminati\ProductBundle\Entity\Supplier;
 use Illuminati\ProductBundle\ProductProviderInterface;
 
+/**
+ * Class CiliPicaProductProvider
+ * @package Illuminati\ProductBundle\Providers
+ */
 class CiliPicaProductProvider implements ProductProviderInterface
 {
+    /**
+     * @var DataSourceInterface
+     */
     public $DataSource;
 
+    /**
+     * @var array
+     */
     public $importIoConfig;
 
+    /**
+     * @var string
+     */
     public $url;
 
-    public function __construct(DataSourceInterface $DataSource, $importIoConfig, $url)
+    /**
+     * @var string
+     */
+    public $currency;
+
+    /**
+     * @return string
+     */
+    public function getCurrency()
     {
-        $this->importIoConfig = $importIoConfig;
-        $this->DataSource = $DataSource;
-        $this->url = $url;
+        return $this->currency;
     }
 
+    /**
+     * @param $currency
+     * @return $this
+     */
+    public function setCurrency($currency)
+    {
+        $this->currency = $currency;
+        return $this;
+    }
+
+    /**
+     * CiliPicaProductProvider constructor.
+     * @param DataSourceInterface $dataSource
+     * @param $importIoConfig
+     * @param $url
+     * @param $currency
+     */
+    public function __construct(DataSourceInterface $dataSource, $importIoConfig, $url, $currency)
+    {
+        $this->importIoConfig = $importIoConfig;
+        $this->DataSource = $dataSource;
+        $this->url = $url;
+        $this->currency = $currency;
+    }
+
+    /**
+     * @param Supplier $supplier
+     * @param EntityManagerInterface $em
+     */
     public function import(Supplier $supplier, EntityManagerInterface $em)
     {
         $params = array(
@@ -34,14 +82,20 @@ class CiliPicaProductProvider implements ProductProviderInterface
         $result = $this->DataSource->query($this->importIoConfig['connectorGuid'], $params);
         if($result = json_decode($result)) {
 
-            $query = $em->createQuery('DELETE FROM Illuminati\ProductBundle\Entity\Product');
-            //$query->setParameter('supplier_id', $supplier->getId());
-            $query->execute();
+            // delete all supplier products
+            $em->createQuery('DELETE ProductBundle:Product p WHERE p.supplier = :supplier')
+                ->setParameter('supplier', $supplier)
+                ->execute();
 
             $this->createProducts($em, $supplier, $result);
         }
     }
 
+    /**
+     * @param EntityManagerInterface $em
+     * @param Supplier $supplier
+     * @param $result
+     */
     private function createProducts(EntityManagerInterface $em, Supplier $supplier, $result)
     {
         foreach ($result->results as $item) {

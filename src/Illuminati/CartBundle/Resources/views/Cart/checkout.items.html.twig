@@ -1,0 +1,54 @@
+<div class="panel panel-default checkout">
+    <div class="panel-body">
+        {{ form_start(checkoutForm) }}
+        <table class="table table-responsive" data-order-id="{{ orderId }}">
+            <thead>
+            <tr>
+                <th class="photo">&nbsp;</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price for item</th>
+                <th>Total</th>
+                <th>&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in checkoutForm.items %}
+                {% set product = products[item.vars.value.product_id] %}
+                <tr data-row="{{ product.id }}">
+                    <td>
+                        <a href="{{ path('product_show', { id:product.id, 'orderId': orderId }) }}" class="thumbnail">
+                            <img src="{{ product.image }}" />
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ path('product_show', {id:product.id, 'orderId': orderId}) }}">
+                            {{ product.title }}
+                        </a>
+                    </td>
+                    <td>
+                        {{ form_widget(item.quantity) }}
+                        {{ form_errors(item.quantity) }}
+                        {{ form_widget(item.product_id) }}
+                    </td>
+                    <td>{{ product.price }} {{ cart.getProviderCurrency }}</td>
+                    <td>{{ cart.geItemTotalAmount(product.id, product.price) }} {{ cart.getProviderCurrency }}</td>
+                    <td>
+                        <a class="pull-right" data-remove="{{ product.id }}" href="{{ path('cart_remove', {productId:product.id, orderId : orderId}) }}">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td colspan="6">
+                    {{ 'cart.total_amount'|trans }}: <strong>{{ cart.getAmount }}</strong> {{ cart.getProviderCurrency }}
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+        {{ form_end(checkoutForm) }}
+    </div>
+</div>

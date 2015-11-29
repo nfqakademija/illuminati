@@ -1,0 +1,27 @@
+
+$thumbWidth: 180px;
+
+#checkout {
+  table {
+    thead {
+      tr {
+        th.photo {
+          width: $thumbWidth;
+        }
+      }
+    }
+    tbody {
+      tr {
+        td {
+          a.thumbnail {
+            width: $thumbWidth;
+          }
+          input.quantity {
+            width: 60px;
+          }
+        }
+      }
+    }
+  }
+}
+

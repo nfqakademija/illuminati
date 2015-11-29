@@ -2,13 +2,13 @@
     {% for entity in ProductEntities %}
         <div class="row">
             <div class="col-md-4">
-                <a href="{{ path('product_show', { 'id': entity.id }) }}" class="thumbnail" title="{{ entity.title }}">
+                <a href="{{ path('product_show', { 'id': entity.id, 'orderId': order.id }) }}" class="thumbnail" title="{{ entity.title }}">
                     <img src="{{ entity.image }}" alt="{{ entity.title }}">
                 </a>
             </div>
             <div class="col-md-8">
                 <h3 class="product-title">
-                    <a href="{{ path('product_show', { 'id': entity.id }) }}" title="{{ entity.title }}">
+                    <a href="{{ path('product_show', { 'id': entity.id, 'orderId': order.id }) }}" title="{{ entity.title }}">
                         {{ entity.title }}
                     </a>
                     <div class="price pull-right">{{ entity.price }} {{ entity.currency }}</div>
@@ -16,7 +16,10 @@
                 <p>
                     {{ entity.description | raw }}
                 </p>
-                <a href="#" class="pull-right btn btn-xs btn-primary">{{ 'product.add_to_cart'|trans }}</a>
+                <a href="{{ path('cart_add', { 'productId': entity.id, 'orderId': order.id }) }}" class="pull-right btn btn-sm btn-default">
+                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                    {{ 'product.add_to_cart'|trans }}
+                </a>
             </div>
         </div>
     {% endfor %}

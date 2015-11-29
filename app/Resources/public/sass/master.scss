@@ -11,6 +11,9 @@ $icon-font-path: 'fonts/';
 // Product bundle styles
 @import '../../../../src/Illuminati/ProductBundle/Resources/public/sass/product';
 
+// Cart bundle styles
+@import '../../../../src/Illuminati/CartBundle/Resources/public/sass/cart';
+
 // History styles
 @import '../../../../src/Illuminati/OrderBundle/Resources/public/sass/history';
 

@@ -30,11 +30,12 @@
 
         {# Checking if host order's state is open #}
         {% if hostOrder.stateId == 1 %}
-            <a href="{{ path('product') }}"><button class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> {% trans %}order.summary.goToShopButton{% endtrans %} </button></a>
+            <a href="{{ path('product', { orderId : hostOrder.id } ) }}"><button class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> {% trans %}order.summary.goToShopButton{% endtrans %} </button></a>
             {% if app.user.id == hostOrder.usersId.id %}
                 <a href="{{ path('host_order_edit',{'id':hostOrder.id}) }}"><button class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span> {% trans %}order.summary.editOrderButton{% endtrans %} </button></a>
             {% endif %}
         {% endif %}
+
         <hr>
 
         {# summary widget #}

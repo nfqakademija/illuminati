@@ -1,0 +1,44 @@
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {{ 'cart.title'|trans }}
+    </div>
+    <div class="panel-body">
+        {% if cart.storage|length > 0 %}
+            {% for product in cart.getItems %}
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="{{ path('product_show', { 'id': product.id, 'orderId': orderId }) }}" class="thumbnail">
+                            <img src="{{ product.image }}" />
+                        </a>
+                    </div>
+                    <div class="col-md-8">
+                        <a class="pull-right" href="{{ path('cart_remove', { 'productId': product.id, 'orderId': orderId }) }}">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </a>
+                        <a href="{{ path('product_show', { 'id': product.id, 'orderId': orderId }) }}">
+                            {{ product.title }}
+                        </a>
+                        <br />
+                        {{ product.price }} EUR
+                        <span class="pull-right">{{ cart.getQuantity(product.id) }} Qty.</span>
+                    </div>
+                </div>
+                <hr />
+            {% endfor %}
+
+            <p class="text-center">
+                Your order amount is {{ cart.getAmount }} {{ cart.providerCurrency }}
+            </p>
+
+            <div class="text-center">
+                <a class="btn btn-success" href="{{ path('cart_checkout', {'orderId': orderId}) }}">
+                    {{ 'cart.checkout'|trans }}
+                </a>
+            </div>
+        {% else %}
+            <div class="text-center">
+                {{ 'cart.empty'|trans }}
+            </div>
+        {% endif %}
+    </div>
+</div>

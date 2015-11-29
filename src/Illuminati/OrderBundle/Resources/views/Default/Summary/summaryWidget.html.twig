@@ -33,7 +33,7 @@
                                    <tr>
                                        <td>
                                            <img class="img img-thumbnail" src="{{ participantsOrders[y].productId.image }}" width="50px" alt="product image">
-                                           <a href="{{ path('product_show',{'id':participantsOrders[y].productId.id}) }}"> {{ participantsOrders[y].productId.title }}</a>
+                                           <a href="{{ path('product_show',{'id':participantsOrders[y].productId.id, 'orderId': participantsOrders[y].hostOrderId.id}) }}"> {{ participantsOrders[y].productId.title }}</a>
                                        </td>
                                        <td>{{ participantsOrders[y].quantity }}</td>
                                        <td>{{ participantsOrders[y].productId.price ~ " " ~ participantsOrders[y].productId.currency }}</td>

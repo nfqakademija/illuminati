@@ -37,26 +37,31 @@ class SupplierCommand extends ContainerAwareCommand
                 'provider',
                 InputArgument::REQUIRED,
                 'Please enter provider full class name?'
-            );;
+            );
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return null
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $em = $this->getContainer()->get('doctrine')->getEntityManager();
+        $entityManager = $this->getContainer()->get('doctrine')->getManager();
 
-        $provider_name = $input->getArgument('provider');
-        if ($provider_name) {
+        $providerName = $input->getArgument('provider');
+        if ($providerName) {
 
-            $supplier = $em->getRepository('ProductBundle:Supplier')->findOneBy([
-                'provider' => $provider_name
+            $supplier = $entityManager->getRepository('ProductBundle:Supplier')->findOneBy([
+                'provider' => $providerName
             ]);
 
-            $provider = $this->getContainer()->get($provider_name);
-            if($provider instanceof ProductProviderInterface) {
-                $provider->import($supplier, $em);
+            $provider = $this->getContainer()->get($providerName);
+            if ($provider instanceof ProductProviderInterface) {
+                $provider->import($supplier, $entityManager);
             }
         }
 
-        //$output->writeln($text);
+        $output->writeln('Your products was imported successfully!');
     }
 }

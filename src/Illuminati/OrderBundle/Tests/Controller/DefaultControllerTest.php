@@ -24,7 +24,7 @@ class DefaultControllerTest extends WebTestCase
 
         $crawler = $this->client->request('GET', '/order');
 
-        $this->assertEquals(200,$this->client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertTrue($crawler->filter('html:contains("New order creation")')->count() > 0);
         $this->assertTrue($crawler->filter('form')->count() > 0);
     }
@@ -35,7 +35,7 @@ class DefaultControllerTest extends WebTestCase
 
         $crawler = $this->client->request('GET', '/order/new');
 
-        $this->assertEquals(200,$this->client->getResponse()->getStatusCode());
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertTrue($crawler->filter('html:contains("New order creation")')->count() > 0);
         $this->assertTrue($crawler->filter('form')->count() > 0);
     }
@@ -46,7 +46,10 @@ class DefaultControllerTest extends WebTestCase
 
         $firewall = 'main';
         $token = new UsernamePasswordToken(
-            'admin', null, $firewall, array('ROLE_ADMIN')
+            'admin',
+            null,
+            $firewall,
+            array('ROLE_ADMIN')
         );
 
         $session->set('_security_'.$firewall, serialize($token));

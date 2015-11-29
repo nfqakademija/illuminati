@@ -18,6 +18,7 @@ class LoadProductData extends AbstractFixture implements OrderedFixtureInterface
             $product->setTitle('Demo pica ' . ($i+1));
             $product->setImage('http://www.cili.lt/wp-content/uploads/2015/09/STUDENTU.jpg');
             $product->setDeleted(0);
+            $product->setPrice(5 + $i);
             $product->setCurrency('EUR');
             $product->setDescription('Virtas kiaulienos kumpis, dešrelės, mocarela, sūris, pomidorų padažas, aliejaus ir česnako padažas, raudonėliai.');
             $product->setSupplier($this->getReference('supplier'));

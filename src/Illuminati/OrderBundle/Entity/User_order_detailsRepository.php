@@ -2,6 +2,8 @@
 
 namespace Illuminati\OrderBundle\Entity;
 
+use Symfony\Component\Security\Core\User\UserInterface;
+
 /**
  * User_order_detailsRepository
  *
@@ -10,4 +12,68 @@ namespace Illuminati\OrderBundle\Entity;
  */
 class User_order_detailsRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @param $userId
+     * @param $orderId
+     * @return mixed
+     */
+    public function deleteAllUserOrderedDetails($userId, $orderId)
+    {
+        $dql = '
+        DELETE
+            IlluminatiOrderBundle:User_order_details od
+        WHERE
+        (od.userId = :userId) AND
+        (od.hostOrderId = :hostOrderId)';
+
+        return $this->getEntityManager()
+            ->createQuery($dql)
+            ->setParameter('userId', $userId)
+            ->setParameter('hostOrderId', $orderId)
+            ->execute();
+    }
+
+    /**
+     * @param $userId
+     * @param $orderId
+     * @return mixed
+     */
+    public function getAllUserOrderedDetails($userId, $orderId)
+    {
+        $dql = '
+        SELECT od
+        FROM
+            IlluminatiOrderBundle:User_order_details od
+        WHERE
+        (od.userId = :userId) AND
+        (od.hostOrderId = :hostOrderId)';
+
+        return $this->getEntityManager()
+            ->createQuery($dql)
+            ->setParameter('userId', $userId)
+            ->setParameter('hostOrderId', $orderId)
+            ->execute();
+    }
+
+    /**
+     * @param $order
+     * @param $product
+     * @param $quantity
+     * @param $user
+     * @return User_order_details
+     */
+    public function createUserOrderDetailsItem($order, $product, $quantity, $user)
+    {
+        $userOrderDetails = new User_order_details();
+
+        $userOrderDetails->setHostOrderId($order);
+        $userOrderDetails->setProductId($product);
+        $userOrderDetails->setQuantity($quantity);
+        $userOrderDetails->setUserId($user);
+
+        $this->getEntityManager()->persist($userOrderDetails);
+        $this->getEntityManager()->flush();
+
+        return $userOrderDetails;
+    }
 }

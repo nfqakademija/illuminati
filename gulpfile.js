@@ -24,6 +24,7 @@ gulp.task('js', function() {
             './web/assets/vendor/jquery/dist/jquery.min.js',
             './web/assets/vendor/bootstrap-sass/assets/javascripts/bootstrap.min.js',
             './app/Resources/public/js/common.js',
+            './src/Illuminati/CartBundle/Resources/public/js/checkout.js',
             './src/Illuminati/UserBundle/Resources/public/js/userBundle.js'
         ])
         .pipe(concat('all.js'))
@@ -50,7 +51,8 @@ gulp.task('watch', function () {
 
     // JavaScripts
     gulp.watch([
-            './app/Resources/public/js/common.js'
+            './app/Resources/public/js/common.js',
+            './src/Illuminati/CartBundle/Resources/public/js/checkout.js'
         ], ['js'])
         .on('change', onChange);
 });

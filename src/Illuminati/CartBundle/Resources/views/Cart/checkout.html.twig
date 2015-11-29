@@ -1,0 +1,28 @@
+{% extends 'ProductBundle::layout.html.twig' %}
+
+{% block body %}
+<div class="container">
+
+    <h2 class="page-header">
+        {% block content_header %}
+            {{ 'cart.checkout'|trans }}
+        {% endblock %}
+    </h2>
+
+    <ol class="breadcrumb">
+        {% block breadcrumbs %}
+            {{ parent() }}
+            <li><a href="{{ path('product', {'orderId':orderId}) }}">{{ 'product.list'|trans }}</a></li>
+            <li>{{ 'cart.checkout'|trans }}</li>
+        {% endblock %}
+    </ol>
+
+    <div class="row">
+        <div class="col-md-12" id="checkout">
+            {% block content %}
+                {% include 'CartBundle:Cart:checkout.items.html.twig' %}
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
