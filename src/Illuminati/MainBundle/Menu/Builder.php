@@ -10,8 +10,6 @@ class Builder extends ContainerAware
 {
     public function mainMenu(FactoryInterface $factory, array $options)
     {
-        $request = $this->container->get('request');
-
         $menu = $factory->createItem('root', array(
             'childrenAttributes' => array(
                 'class' => 'nav navbar-nav navbar-right',

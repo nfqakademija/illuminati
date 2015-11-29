@@ -43,7 +43,7 @@ class CartProvider implements CartProviderInterface
         $this->parameters = $parameters;
 
         $this->session = $session;
-        $this->cart = $this->session->get('cart');
+        $this->cart = (array)$this->session->get('cart');
 
         $this->entityManager = $entityManager;
     }
