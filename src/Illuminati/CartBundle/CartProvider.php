@@ -18,7 +18,7 @@ class CartProvider implements CartProviderInterface
     public $session;
 
     /**
-     * @var array
+     * @var array|mixed
      */
     public $cart;
 

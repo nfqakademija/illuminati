@@ -38,6 +38,7 @@ class ProductController extends Controller
         $order = $this->getRelatedOrder($orderId);
 
         $cart = $this->get('cart.provider');
+
         if ($cart->getStorage() === null) {
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $cart->load($user->getId(), $order->getId());

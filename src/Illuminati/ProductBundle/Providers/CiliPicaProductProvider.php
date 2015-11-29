@@ -69,9 +69,10 @@ class CiliPicaProductProvider implements ProductProviderInterface
 
     /**
      * @param Supplier $supplier
-     * @param EntityManagerInterface $em
+     * @param EntityManagerInterface $entityManager
+     * @return null
      */
-    public function import(Supplier $supplier, EntityManagerInterface $em)
+    public function import(Supplier $supplier, EntityManagerInterface $entityManager)
     {
         $params = array(
             'input/webpage/url' => $this->url,
@@ -80,23 +81,23 @@ class CiliPicaProductProvider implements ProductProviderInterface
         );
 
         $result = $this->DataSource->query($this->importIoConfig['connectorGuid'], $params);
-        if($result = json_decode($result)) {
+        if ($result = json_decode($result)) {
 
             // delete all supplier products
-            $em->createQuery('DELETE ProductBundle:Product p WHERE p.supplier = :supplier')
+            $entityManager->createQuery('DELETE ProductBundle:Product p WHERE p.supplier = :supplier')
                 ->setParameter('supplier', $supplier)
                 ->execute();
 
-            $this->createProducts($em, $supplier, $result);
+            $this->createProducts($entityManager, $supplier, $result);
         }
     }
 
     /**
-     * @param EntityManagerInterface $em
+     * @param EntityManagerInterface $entityManager
      * @param Supplier $supplier
      * @param $result
      */
-    private function createProducts(EntityManagerInterface $em, Supplier $supplier, $result)
+    private function createProducts(EntityManagerInterface $entityManager, Supplier $supplier, $result)
     {
         foreach ($result->results as $item) {
 
@@ -124,23 +125,46 @@ class CiliPicaProductProvider implements ProductProviderInterface
 
             if (isset($item['ciligreita_description'])) {
 
-                $product = new Product();
+                $this->create($entityManager, [
+                    'title' => $item['ciligreita_value'] . ' ' . $item['pizzasize_value_1'],
+                    'supplier' => $supplier,
+                    'price' => $item['largemedium_price_1'],
+                    'currency' => $item['largemedium_price_1/_currency'],
+                    'imageUrl' => $item['ciligreita_image'],
+                    'description' => $item['ciligreita_description']
+                ]);
 
-                $product->setSupplier($supplier);
-                $product->setTitle($item['ciligreita_value']);
-                $product->setPrice($item['largemedium_price_1']);
-                $product->setCurrency($item['largemedium_price_1/_currency']);
-                $product->setImage($item['ciligreita_image']);
-
-                $description = array();
-                $description[] = $item['ciligreita_description'];
-                $description[] = $item['pizzasize_value_1'];
-
-                $product->setDescription(implode('<br />', $description));
-
-                $em->persist($product);
-                $em->flush();
+                if (isset($item['pizzasize_value_2'])) {
+                    $this->create($entityManager, [
+                        'title' => $item['ciligreita_value'] . ' ' . $item['pizzasize_value_2'],
+                        'supplier' => $supplier,
+                        'price' => $item['largemedium_price_2'],
+                        'currency' => $item['largemedium_price_2/_currency'],
+                        'imageUrl' => $item['ciligreita_image'],
+                        'description' => $item['ciligreita_description']
+                    ]);
+                }
             }
         }
+
+        $entityManager->flush();
+    }
+
+    /**
+     * @param EntityManagerInterface $entityManager
+     * @param $data
+     */
+    private function create(EntityManagerInterface $entityManager, $data)
+    {
+        $product = new Product();
+
+        $product->setSupplier($data['supplier']);
+        $product->setTitle($data['title']);
+        $product->setPrice($data['price']);
+        $product->setCurrency($data['currency']);
+        $product->setImage($data['imageUrl']);
+        $product->setDescription($data['description']);
+
+        $entityManager->persist($product);
     }
 }
