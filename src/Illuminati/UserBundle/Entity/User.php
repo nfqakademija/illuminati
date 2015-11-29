@@ -147,4 +147,17 @@ class User extends BaseUser
         return $this->orderDetails;
     }
 
+    /**
+     * @param string $email
+     * @return $this
+     */
+    public function setEmail($email)
+    {
+        $this->setUsername($email);
+        $this->email = $email;
+
+        return $this;
+    }
+
+
 }
