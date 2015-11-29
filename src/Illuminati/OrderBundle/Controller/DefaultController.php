@@ -400,7 +400,7 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             // Confirming the order
-            $hostOrder->setStateId(2);
+            $hostOrder->setStateId(0);
             $em->flush();
 
             $orderParticipants = $em
