@@ -3,6 +3,7 @@ security:
     login:
         title: "Login"
         forgot_password: "Forgot password"
+        email: Email
 profile:
     edit:
         title: "Edit profile"

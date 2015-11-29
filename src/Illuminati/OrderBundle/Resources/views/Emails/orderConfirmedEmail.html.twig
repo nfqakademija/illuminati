@@ -1,0 +1,4 @@
+<h2>Hey there, {{ usersName.name }}</h2>
+<p>Order in which you're participating ( <a href="{{ app.request.getSchemeAndHttpHost() ~ path('host_order_summary',{'id':hostOrder.id}) }}">{{ hostOrder.title }}</a> ) has just been confirmed by the host.</p>
+<p>Get ready to party, because food is on the way!</p>
+

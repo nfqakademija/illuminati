@@ -1,6 +1,6 @@
 <?php
 // src/AppBundle/Menu/Builder.php
-namespace AppBundle\Menu;
+namespace Illuminati\MainBundle\Menu;
 
 use Knp\Menu\FactoryInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
@@ -38,7 +38,7 @@ class Builder extends ContainerAware
             ));
 
             $menu->addChild('UserProfile', array(
-                'route' => 'fos_user_profile_edit',
+                'route' => 'fos_user_profile_show',
                 'label' => 'Profile'
             ));
 

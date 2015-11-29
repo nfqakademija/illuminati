@@ -8,7 +8,7 @@ security:
 
     providers:
         fos_userbundle:
-            id: fos_user.user_provider.username
+            id: fos_user.user_provider.username_email
 
     firewalls:
         main:
@@ -27,3 +27,4 @@ security:
         - { path: ^/admin/, role: ROLE_ADMIN }
         - { path: ^/order, role: ROLE_USER}
         - { path: ^/history, role: ROLE_USER}
+

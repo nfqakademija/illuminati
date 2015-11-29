@@ -25,3 +25,15 @@ host_order_join:
 host_order_leave:
     path: /leave/{id}
     defaults: { _controller: "IlluminatiOrderBundle:Default:leaveOrder"}
+
+host_order_confirm:
+    path: /confirm/{id}
+    defaults: { _controller: "IlluminatiOrderBundle:Default:hostOrderConfirmation"}
+
+host_order_confirmed:
+    path: /confirmed/{id}
+    defaults: { _controller: "IlluminatiOrderBundle:Default:hostOrderConfirmed"}
+
+host_order_generate_pdf:
+    path: /genpdf/{id}
+    defaults: { _controller: "IlluminatiOrderBundle:Default:genPdf"}

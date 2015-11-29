@@ -3,6 +3,7 @@
         <div class="panel panel-default success">
             <div class="panel-heading" role="tab" id="heading{{ i }}">
                 <div class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ i }}" aria-expanded="false" aria-controls="collapse{{ i }}">
+                    <img class="img img-circle" src="{{ gravatar(participants[i].usersId.email,25) }}" alt="user avatar">
                     {{ participants[i].usersId.name }}
                     {{ participants[i].usersId.surname }}
                     ( {{ participants[i].usersId.email }} )
@@ -25,17 +26,31 @@
                             <th class="col-sm-2">{% trans %}order.summary.widget.quantity{% endtrans %}</th>
                             <th class="col-sm-2">{% trans %}order.summary.widget.price{% endtrans %}</th>
                         </tr>
-                       {% if participantsOrders is not empty %}
+                        {% set sum = 0 %}
+                        {% if participantsOrders is not empty %}
                            {% for y in 0..participantsOrders|length-1 %}
                                {% if participantsOrders[y].userId.id == participants[i].usersId.id %}
                                    <tr>
-                                       <td><a href="{{ path('product_show',{'id':participantsOrders[y].productId.id}) }}">{{ participantsOrders[y].productId.title }}</a></td>
+                                       <td>
+                                           <img class="img img-thumbnail" src="{{ participantsOrders[y].productId.image }}" width="50px" alt="product image">
+                                           <a href="{{ path('product_show',{'id':participantsOrders[y].productId.id}) }}"> {{ participantsOrders[y].productId.title }}</a>
+                                       </td>
                                        <td>{{ participantsOrders[y].quantity }}</td>
-                                       <td>{{ participantsOrders[y].productId.price }}</td>
+                                       <td>{{ participantsOrders[y].productId.price ~ " " ~ participantsOrders[y].productId.currency }}</td>
                                    </tr>
+                                   {% set sum = sum + participantsOrders[y].productId.price %}
                                {% endif %}
                            {% endfor %}
-                       {% endif %}
+                        {% endif %}
+                        {% if sum > 0 %}
+                            <tfoot>
+                            <tr>
+                                <th></th>
+                                <th>Sum</th>
+                                <th>{{ sum ~ " " ~ participantsOrders[0].productId.currency}}</th>
+                            </tr>
+                            </tfoot>
+                        {% endif %}
                     </table>
                 </div>
             </div>
