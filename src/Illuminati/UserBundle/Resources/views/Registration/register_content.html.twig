@@ -42,9 +42,11 @@
 
     <div class="form-group">
         <label class="control-label col-sm-2" for="{{ form.plainPassword.vars.id }}">{{ form.plainPassword.vars.label|trans }}</label>
-        <div class="input-group">
-            {{ form_widget(form.plainPassword,{'attr':{'class':'form-control togglable-pass'}}) }}
-            <div class="input-group-addon btn toggle-pass"><span class="glyphicon glyphicon-eye-open"></span> {{ "profile.show"|trans({},"messages") }}</div>
+        <div class="col-sm-10">
+            <div class="input-group">
+                {{ form_widget(form.plainPassword,{'attr':{'class':'form-control togglable-pass'}}) }}
+                <div class="input-group-addon btn toggle-pass"><span class="glyphicon glyphicon-eye-open"></span> {{ "profile.show"|trans({},"messages") }}</div>
+            </div>
         </div>
     </div>
 
