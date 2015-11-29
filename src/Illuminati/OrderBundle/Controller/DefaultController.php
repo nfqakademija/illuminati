@@ -243,6 +243,9 @@ class DefaultController extends Controller
                 'type'=>$type,
             ));
         }
+        else{
+            return $this->redirectToRoute('homepage');
+        }
     }
 
     /**

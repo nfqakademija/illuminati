@@ -48,6 +48,19 @@ order:
       sum: SUM
       confirmedSuccess: Host order has been confirmed and marked as done!
 
+  history:
+    hosted: Orders you have hosted
+    joined: Orders you have joined
+    closes: Closes
+    participants: Participants
+    state: State
+    stateClosed: Closed
+    stateOpen: Open
+    view: View Order
+    noHosted: You haven't hosted any orders
+    noJoined: You haven't joined any orders
+    create: create an order
+
 
 notify:
   success: Success!
