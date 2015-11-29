@@ -1,0 +1,52 @@
+{% extends ":default:index.html.twig" %}
+{% trans_default_domain 'messages' %}
+{% block body %}
+<div id="wrapper">
+
+    <header class="main-header">
+        <div class="row text-center">
+            <div class="col-md-5 hidden-sm hidden-xs">
+                {% image '@IlluminatiMainBundle/Resources/public/images/logo-min.png' %}
+                    <img class="img img-responsive center-block" src="{{ asset_url }}" alt="">
+                {% endimage %}
+            </div>
+            <div class="col-md-7 parent">
+               <div class="child">
+                   <h1>{{ "headerTitle"|trans }}</h1>
+                   <p>{{ "headerSubTitle"|trans }}</p>
+                   <a class="btn btn-primary" href="/order/new">{{ "headerButton"|trans }}</a>
+               </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <div id="welcome">
+            <h2 class="page-header text-center">
+                {{ "whyUseTheSystem"|trans }}
+            </h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Lorem ipsum dolor.</h3>
+                    <ul>
+                        <li>Lorem ipsum dolor sit.</li>
+                        <li>Lorem ipsum dolor sit amet.</li>
+                        <li>Lorem ipsum dolor sit amet, consectetur.</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h3>Lorem ipsum dolor.</h3>
+                    <ul>
+                        <li>Lorem ipsum dolor sit.</li>
+                        <li>Lorem ipsum dolor sit amet.</li>
+                        <li>Lorem ipsum dolor sit amet, consectetur.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+    <br>
+{% endblock %}
