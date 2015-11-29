@@ -9,8 +9,8 @@
 
 
         {% if products %}
-
-           {% include 'IlluminatiOrderBundle:Default/OrderConfirmation:productsTable.html.twig' with products %}
+            {% set vars = {'products':products, 'orderId':orderId} %}
+           {% include 'IlluminatiOrderBundle:Default/OrderConfirmation:productsTable.html.twig' with vars %}
 
             <hr>
 
