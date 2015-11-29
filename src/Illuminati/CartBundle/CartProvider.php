@@ -193,10 +193,8 @@ class CartProvider implements CartProviderInterface
      */
     public function updateQuantity($productId, $quantity)
     {
-        if (isset($this->cart[$productId])) {
-            $this->cart[$productId] = $quantity;
-            $this->session->set('cart', $this->cart);
-        }
+        $this->cart[$productId] = $quantity;
+        $this->session->set('cart', $this->cart);
     }
 
     /**

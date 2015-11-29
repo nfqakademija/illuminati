@@ -1,9 +1,9 @@
 <div class="panel panel-default">
     <div class="panel-heading">
-        Cart
+        {{ 'cart.title'|trans }}
     </div>
     <div class="panel-body">
-        {% if cart %}
+        {% if cart.storage|length > 0 %}
             {% for product in cart.getItems %}
                 <div class="row">
                     <div class="col-md-4">
@@ -32,11 +32,13 @@
 
             <div class="text-center">
                 <a class="btn btn-success" href="{{ path('cart_checkout', {'orderId': orderId}) }}">
-                    Checkout
+                    {{ 'cart.checkout'|trans }}
                 </a>
             </div>
         {% else %}
-            Your cart is empty
+            <div class="text-center">
+                {{ 'cart.empty'|trans }}
+            </div>
         {% endif %}
     </div>
 </div>

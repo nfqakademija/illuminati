@@ -18,7 +18,7 @@ class CheckoutType extends AbstractType
                 'type' => new CartItemType()
             ])
             ->add('save', 'submit', [
-                'label' => 'Confirm',
+                'label' => 'cart.confirm',
                 'attr' => ['class'=>'btn btn-primary']
             ]);
     }

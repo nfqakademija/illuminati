@@ -18,8 +18,18 @@ class CartItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('quantity', 'integer', array('label' => false))
-            ->add('product_id', 'hidden')
+            ->add('quantity', 'integer', [
+                'label' => false,
+                'attr' => [
+                    'class' => 'form-control quantity',
+                    'data-quantity' => 'true'
+                ]
+            ])
+            ->add('product_id', 'hidden', [
+                'attr' => [
+                    'data-product-id' => 'true'
+                ]
+            ])
         ;
     }
 

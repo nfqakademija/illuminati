@@ -23,7 +23,8 @@ gulp.task('js', function() {
     return gulp.src([
             './web/assets/vendor/jquery/dist/jquery.min.js',
             './web/assets/vendor/bootstrap-sass/assets/javascripts/bootstrap.min.js',
-            './app/Resources/public/js/common.js'
+            './app/Resources/public/js/common.js',
+            './src/Illuminati/CartBundle/Resources/public/js/checkout.js'
         ])
         .pipe(concat('all.js'))
         .pipe(uglify())
@@ -48,7 +49,8 @@ gulp.task('watch', function () {
 
     // JavaScripts
     gulp.watch([
-            './app/Resources/public/js/common.js'
+            './app/Resources/public/js/common.js',
+            './src/Illuminati/CartBundle/Resources/public/js/checkout.js'
         ], ['js'])
         .on('change', onChange);
 });
