@@ -180,6 +180,7 @@ class DefaultController extends Controller
             foreach ($debtors as $debtor) {
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Group order product payment reminder')
+                    ->setFrom('info@illuminati.org')
                     ->setTo($debtor->getEmail())
                     ->setBody(
                         $this->renderView(
@@ -411,6 +412,7 @@ class DefaultController extends Controller
             foreach ($orderParticipants as $participant) {
                 $message = \Swift_Message::newInstance()
                     ->setSubject("Group order - {$hostOrder->getTitle()} - has been confirmed!")
+                    ->setFrom('info@illuminati.org')
                     ->setTo($participant->getUsersId()->getEmail())
                     ->setBody(
                         $this->renderView(
