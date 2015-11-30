@@ -1,6 +1,6 @@
-product_supplier:
-    resource: "@ProductBundle/Resources/config/routing/supplier.yml"
-    prefix:   /suppliers
+#product_supplier:
+#    resource: "@ProductBundle/Resources/config/routing/supplier.yml"
+#    prefix:   /suppliers
 
 product_product:
     resource: "@ProductBundle/Resources/config/routing/product.yml"

@@ -10,3 +10,8 @@ services:
     product.CiliPicaProductProvider:
         class: Illuminati\ProductBundle\Providers\CiliPicaProductProvider
         arguments: [@product.DataSourceInterface, %product.import_io%, 'http://www.cili.lt/', 'EUR']
+
+    product.action_listener:
+        class: Illuminati\ProductBundle\EventListener\ProductListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }

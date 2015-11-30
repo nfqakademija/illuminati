@@ -4,14 +4,13 @@ namespace Illuminati\ProductBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Illuminati\ProductBundle\Entity\Product;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Product controller.
  *
  */
-class ProductController extends Controller
+class ProductController extends Controller implements ProductControllerInterface
 {
     /**
      * @param $orderId
@@ -36,13 +35,6 @@ class ProductController extends Controller
         $entityManager = $this->getDoctrine()->getManager();
 
         $order = $this->getRelatedOrder($orderId);
-
-        $cart = $this->get('cart.provider');
-
-        if ($cart->getStorage() === null) {
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-            $cart->load($user->getId(), $order->getId());
-        }
 
         $productEntities = $entityManager->getRepository('ProductBundle:Product')->findBy([
             'supplier' => $order->getSupplierId()
