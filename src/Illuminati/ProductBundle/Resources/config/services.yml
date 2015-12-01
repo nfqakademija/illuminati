@@ -5,12 +5,11 @@ parameters:
         connectorGuid: 72cc65ae-75ad-4f74-aaaa-4eda23b45244
 
 services:
-    product.DataSourceInterface:
+    product.data_source_interface:
         class: Illuminati\ProductBundle\ImportIoDataSource
-    product.CiliPicaProductProvider:
+    product.cilipica_product_provider:
         class: Illuminati\ProductBundle\Providers\CiliPicaProductProvider
-        arguments: [@product.DataSourceInterface, %product.import_io%, 'http://www.cili.lt/', 'EUR']
-
+        arguments: [@product.data_source_interface, %product.import_io%, 'http://www.cili.lt/', 'EUR']
     product.action_listener:
         class: Illuminati\ProductBundle\EventListener\ProductListener
         arguments: [@doctrine.orm.entity_manager]

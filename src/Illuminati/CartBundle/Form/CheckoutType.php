@@ -5,6 +5,10 @@ namespace Illuminati\CartBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
+/**
+ * Class CheckoutType
+ * @package Illuminati\CartBundle\Form
+ */
 class CheckoutType extends AbstractType
 {
     /**

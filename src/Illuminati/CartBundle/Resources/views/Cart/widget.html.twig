@@ -19,8 +19,8 @@
                             {{ product.title }}
                         </a>
                         <br />
-                        {{ product.price }} EUR
-                        <span class="pull-right">{{ cart.getQuantity(product.id) }} Qty.</span>
+                        {{ product.price }} {{ cart.providerCurrency }}
+                        <span class="pull-right">{{ cart.getQuantity(product.id) }} {{ 'cart.qty'|trans }}</span>
                     </div>
                 </div>
                 <hr />
