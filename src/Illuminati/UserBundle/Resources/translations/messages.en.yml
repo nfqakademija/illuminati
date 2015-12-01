@@ -12,3 +12,6 @@ profile:
     email: Change Email
     pass: Change password
   show: Show
+
+resseting:
+  pageheader : Password recovery
