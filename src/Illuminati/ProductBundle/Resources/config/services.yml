@@ -13,5 +13,6 @@ services:
 
     product.action_listener:
         class: Illuminati\ProductBundle\EventListener\ProductListener
+        arguments: [@doctrine.orm.entity_manager]
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }

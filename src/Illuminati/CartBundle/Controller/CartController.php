@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
  * Class CartController
  * @package Illuminati\CartBundle\Controller
  */
-class CartController extends Controller
+class CartController extends Controller implements CartControllerInterface
 {
     /**
      * @param $orderId

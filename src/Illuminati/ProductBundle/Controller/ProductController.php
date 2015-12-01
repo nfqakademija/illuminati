@@ -3,12 +3,11 @@
 namespace Illuminati\ProductBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * Product controller.
- *
+ * Class ProductController
+ * @package Illuminati\ProductBundle\Controller
  */
 class ProductController extends Controller implements ProductControllerInterface
 {
