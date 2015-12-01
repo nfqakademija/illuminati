@@ -10,3 +10,4 @@ profile:
 resetting:
     request:
         title: "Resset password"
+        invalid_username: The email address "%username%" does not exist.
