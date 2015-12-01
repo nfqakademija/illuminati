@@ -1,24 +1,27 @@
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     {% for i in 0..participants|length-1 %}
-        <div class="panel panel-default success">
+        <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="heading{{ i }}">
-                <div class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ i }}" aria-expanded="false" aria-controls="collapse{{ i }}">
+                <div class="panel-title">
                     <img class="img img-circle" src="{{ gravatar(participants[i].usersId.email,25) }}" alt="user avatar">
-                    {{ participants[i].usersId.name }}
-                    {{ participants[i].usersId.surname }}
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ i }}" aria-expanded="false" aria-controls="collapse{{ i }}">
+                        {{ participants[i].usersId.name }}
+                        {{ participants[i].usersId.surname }}
+                    </a>
 
                     <div class="pull-right">
                         {% if participants[i].payed == 1 %}
-                            <span class="hidden-xs">{% trans %}order.summary.widget.prepaid{% endtrans %}</span> <strong><span class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.participantPaid{% endtrans %}"></span></strong>
+                            <a class="label label-danger" href="#" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.markAsPaid{% endtrans %}">
+                                {% trans %}order.summary.widget.notPaid{% endtrans %}
+                            </a>
                         {% else %}
-                            <span class="hidden-xs">{% trans %}order.summary.widget.prepaid{% endtrans %}</span> <strong><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.participantNotPaid{% endtrans %}"></span></strong>
+                            <span class="label label-success">{% trans %}order.summary.widget.paid{% endtrans %}</span>
                         {% endif %}
                     </div>
-
                 </div>
             </div>
             <div id="collapse{{ i }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ i }}">
-                <div class="panel-body success">
+                <div class="panel-body">
                     <table class="table table-responsive">
                         <tr>
                             <th>{% trans %}order.summary.widget.product{% endtrans %}</th>
