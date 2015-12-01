@@ -58,7 +58,10 @@ class CartController extends Controller implements CartControllerInterface
 
         $session->remove('cart');
 
-        $session->getFlashBag()->add('success', $translator->trans('cart.confirm_success'));
+        $session->getFlashBag()->add(
+            'success',
+            $translator->trans('cart.confirm_success')
+        );
 
         return $this->redirectToRoute(
             'host_order_summary',
@@ -141,13 +144,21 @@ class CartController extends Controller implements CartControllerInterface
     public function addAction($productId, $orderId)
     {
         $request = $this->get('request');
+        $session = $this->get('session');
 
         $cart = $this->get('cart.provider');
 
         if ($quantity = $request->request->get('quantity')) {
-            $cart->updateQuantity($productId, $quantity);
+            $itemAdded = $cart->updateQuantity($productId, $quantity);
         } else {
-            $cart->addItem($productId);
+            $itemAdded = $cart->addItem($productId);
+        }
+
+        if ($itemAdded) {
+            $session->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('cart.item_added')
+            );
         }
 
         if ($request->isMethod('POST')) {

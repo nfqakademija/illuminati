@@ -10,3 +10,4 @@ cart:
   price_for_item: Price for item
   total: Total
   qty: Qty.
+  item_added: Item added succesfully

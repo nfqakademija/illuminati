@@ -106,7 +106,7 @@ class CartProvider implements CartProviderInterface
     /**
      * @param $productId
      * @param $quantity
-     * @return null
+     * @return true
      */
     public function addItem($productId, $quantity = 1)
     {
@@ -126,6 +126,8 @@ class CartProvider implements CartProviderInterface
         }
 
         $this->session->set('cart', $this->cart);
+
+        return true;
     }
 
     /**
@@ -189,12 +191,13 @@ class CartProvider implements CartProviderInterface
     /**
      * @param $productId
      * @param $quantity
-     * @return null
+     * @return true
      */
     public function updateQuantity($productId, $quantity)
     {
         $this->cart[$productId] = $quantity;
         $this->session->set('cart', $this->cart);
+        return true;
     }
 
     /**
