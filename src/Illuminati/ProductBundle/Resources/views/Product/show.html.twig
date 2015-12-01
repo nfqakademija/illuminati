@@ -16,14 +16,14 @@
 {% endblock %}
 
 {% block content %}
-<div class="products">
+<div class="products show">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <a href="{{ entity.image }}" target="_blank" class="thumbnail" title="{{ entity.title }}">
                 <img src="{{ entity.image }}" title="{{ entity.title }}" alt="{{ entity.title }}" />
             </a>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <h2 class="product-title">
                 <a href="{{ path('product_show', { 'id': entity.id, 'orderId': order.id }) }}" title="{{ entity.title }}">
                     {{ entity.title }}
@@ -37,6 +37,9 @@
                     {{ 'product.add_to_cart'|trans }}
                 </a>
             </p>
+        </div>
+        <div class="col-md-3">
+            {% include 'ProductBundle:Product:cart.sidebar.html.twig' %}
         </div>
     </div>
 </div>
