@@ -10,7 +10,7 @@
                     </a>
 
                     <div class="pull-right">
-                        {% if participants[i].payed == 1 %}
+                        {% if participants[i].payed == 0 %}
                             <a class="label label-danger" href="#" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.markAsPaid{% endtrans %}">
                                 {% trans %}order.summary.widget.notPaid{% endtrans %}
                             </a>
