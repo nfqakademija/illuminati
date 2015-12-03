@@ -8,14 +8,34 @@
                         {{ participants[i].usersId.name }}
                         {{ participants[i].usersId.surname }}
                     </a>
-
                     <div class="pull-right">
-                        {% if participants[i].payed == 0 %}
-                            <a class="label label-danger" href="#" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.markAsPaid{% endtrans %}">
-                                {% trans %}order.summary.widget.notPaid{% endtrans %}
-                            </a>
+                        {% if participants[i].usersId != hostOrder.usersId %}
+
+                            {% if participants[i].payed == 0 %}
+                                {# Only show forms for host of the order #}
+                               {% if hostOrder.usersId.id == app.user.id %}
+                                   {# Looking for the correct form #}
+                                   {% for form in forms %}
+                                        {% if form.orderId == participants[i].id %}
+                                            {{ form_start(form.form) }}
+                                                <button class="btn btn-xs btn-danger" type="submit" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.markAsPaid{% endtrans %}">{% trans %}order.summary.widget.notPaid{% endtrans %}</button>
+                                            {{ form_end(form.form) }}
+                                        {% endif %}
+                                   {% endfor %}
+                               {% else %}
+                                   <span class="label label-danger">
+                                       {% trans %}order.summary.widget.notPaid{% endtrans %}
+                                   </span>
+                               {% endif %}
+
+                            {% else %}
+
+                                <span class="label label-success">{% trans %}order.summary.widget.paid{% endtrans %}</span>
+
+                            {% endif %}
+
                         {% else %}
-                            <span class="label label-success">{% trans %}order.summary.widget.paid{% endtrans %}</span>
+                            <span class="label label-warning">Host</span>
                         {% endif %}
                     </div>
                 </div>

@@ -87,6 +87,19 @@ class DefaultController extends Controller
                 ->getRepository("IlluminatiOrderBundle:Host_order");
 
             $participants = $em->findUserOrders($id);
+
+            $markAsPaidForms = [];
+            foreach ($participants as $participant) {
+                if ($participant->getPayed() == 0) {
+                    $form = $this->generateMarkAsPaidForm($hostOrderObj, $participant);
+
+                    $markAsPaidForms[] = [
+                        'orderId' => $participant->getId(),
+                        'form' => $form->createView()
+                    ];
+                }
+            }
+
             $participantsOrders = $em->findUsersOrderDetails($id);
 
             return $this->render(
@@ -94,7 +107,8 @@ class DefaultController extends Controller
                 [
                     'hostOrder'          => $hostOrderObj,
                     'participants'       => $participants,
-                    'participantsOrders' => $participantsOrders
+                    'participantsOrders' => $participantsOrders,
+                    'forms'              => $markAsPaidForms
                 ]
             );
         } else {
@@ -243,8 +257,7 @@ class DefaultController extends Controller
                 'orders'=>$orders,
                 'type'=>$type,
             ));
-        }
-        else{
+        } else {
             return $this->redirectToRoute('homepage');
         }
     }
@@ -435,6 +448,43 @@ class DefaultController extends Controller
     }
 
     /**
+     * Marks user order as paid
+     *
+     * @param Request $request
+     * @param $hostOrderId
+     * @param $userOrderId
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function markAsPaidAction(Request $request, $hostOrderId, $userOrderId)
+    {
+        if (($hostOrder = $this->get('host_order_host_checker')->check((int)$hostOrderId))) {
+            $em = $this->getDoctrine()->getManager();
+
+            $userOrder = $em
+                ->getRepository('IlluminatiOrderBundle:User_order')
+                ->find((int)$userOrderId);
+
+            if (!empty($userOrder)) {
+                $form = $this->generateMarkAsPaidForm($hostOrder, $userOrder);
+
+                $form->handleRequest($request);
+
+                if ($form->isValid()) {
+                    $userOrder->setPayed(1);
+                    $em->flush();
+                    $this->get('session')->getFlashBag()->add('success', 'Marked as paid');
+                }
+            }
+
+            return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
+
+        } else {
+            return $this->redirectToRoute('homepage');
+        }
+    }
+
+    /**
      * Generates pdf with hosted order's products and participants
      *
      * @param string $id Host Order id;
@@ -452,5 +502,29 @@ class DefaultController extends Controller
         } else {
             return $this->redirectToRoute('homepage');
         }
+    }
+
+    /**
+     * Generates Mark as paid form
+     *
+     * @param Host_order $hostOrderObj
+     * @param User_order $participant
+     *
+     * @return \Symfony\Component\Form\Form
+     */
+    public function generateMarkAsPaidForm(Host_order $hostOrderObj, User_order $participant)
+    {
+        return $this->createFormBuilder()
+            ->setAction(
+                $this->generateUrl(
+                    'mark_as_paid',
+                    [
+                        'hostOrderId'=>$hostOrderObj->getId(),
+                        'userOrderId'=>$participant->getId()
+                    ]
+                )
+            )
+            ->setMethod('POST')
+            ->getForm();
     }
 }

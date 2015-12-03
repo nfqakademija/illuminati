@@ -39,7 +39,7 @@
 
         {# summary widget #}
         {% if (participants is defined) and (participants is not empty) %}
-            {% set vars = { 'participants': participants , 'participantsOrders' : participantsOrders  } %}
+            {% set vars = { 'participants': participants , 'participantsOrders' : participantsOrders, 'hostOrder' : hostOrder, 'forms': forms  } %}
             {% include "IlluminatiOrderBundle:Default/Summary:summaryWidget.html.twig" with vars %}
         {% endif %}
 
