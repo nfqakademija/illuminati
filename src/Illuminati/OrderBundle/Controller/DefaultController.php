@@ -409,9 +409,13 @@ class DefaultController extends Controller
                 ->getRepository('IlluminatiOrderBundle:Host_order')
                 ->findOrderedProducts($hostOrder->getId());
 
+            $form = $this->generateCSRFprotectionForm(
+                $this->generateUrl('host_order_confirmed', ['id'=>$hostOrder->getId()])
+            )->createView();
+
             return $this->render(
                 "IlluminatiOrderBundle:Default/OrderConfirmation:base.html.twig",
-                ['products' => $products, 'orderId' => $hostOrder->getId()]
+                ['products' => $products, 'orderId' => $hostOrder->getId(), 'form'=>$form]
             );
         } else {
             return $this->redirectToRoute('homepage');
@@ -426,44 +430,54 @@ class DefaultController extends Controller
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|
      *         \Symfony\Component\HttpFoundation\Response
      */
-    public function hostOrderConfirmedAction($id)
+    public function hostOrderConfirmedAction(Request $request, $id)
     {
         if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
             if ($hostOrder->getStateId() != 1) {
                 return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
             }
 
-            $em = $this->getDoctrine()->getManager();
+            $form = $this->generateCSRFprotectionForm(
+                $this->generateUrl('host_order_confirmed', ['id'=>$hostOrder->getId()])
+            );
 
-            // Confirming the order
-            $hostOrder->setStateId(0);
-            $em->flush();
+            $form->handleRequest($request);
 
-            $orderParticipants = $em
-                ->getRepository('IlluminatiOrderBundle:Host_order')
-                ->findUserOrders($hostOrder->getId());
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
 
-            // Sending emails about confirmed order to participants
-            foreach ($orderParticipants as $participant) {
-                $message = \Swift_Message::newInstance()
-                    ->setSubject("Group order - {$hostOrder->getTitle()} - has been confirmed!")
-                    ->setFrom('info@illuminati.org')
-                    ->setTo($participant->getUsersId()->getEmail())
-                    ->setBody(
-                        $this->renderView(
-                            'IlluminatiOrderBundle:Emails:orderConfirmedEmail.html.twig',
-                            ['hostOrder'=>$hostOrder,'usersName'=>$participant->getUsersId()]
-                        ),
-                        'text/html'
-                    );
+                // Confirming the order
+                $hostOrder->setStateId(0);
+                $em->flush();
 
-                $this->get('mailer')->send($message);
+                $orderParticipants = $em
+                    ->getRepository('IlluminatiOrderBundle:Host_order')
+                    ->findUserOrders($hostOrder->getId());
+
+                // Sending emails about confirmed order to participants
+                foreach ($orderParticipants as $participant) {
+                    $message = \Swift_Message::newInstance()
+                        ->setSubject("Group order - {$hostOrder->getTitle()} - has been confirmed!")
+                        ->setFrom('info@illuminati.org')
+                        ->setTo($participant->getUsersId()->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'IlluminatiOrderBundle:Emails:orderConfirmedEmail.html.twig',
+                                ['hostOrder'=>$hostOrder,'usersName'=>$participant->getUsersId()]
+                            ),
+                            'text/html'
+                        );
+
+                    $this->get('mailer')->send($message);
+                }
+
+                $notificationMessage = $this->get('translator')->trans('order.summary.confirmation.confirmedSuccess');
+                $this->get('session')->getFlashBag()->add('success', $notificationMessage);
+
+                return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
+            } else {
+                return $this->redirectToRoute('homepage');
             }
-
-            $notificationMessage = $this->get('translator')->trans('order.summary.confirmation.confirmedSuccess');
-            $this->get('session')->getFlashBag()->add('success', $notificationMessage);
-
-            return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
         } else {
             return $this->redirectToRoute('homepage');
         }
