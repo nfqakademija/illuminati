@@ -91,7 +91,15 @@ class DefaultController extends Controller
             $markAsPaidForms = [];
             foreach ($participants as $participant) {
                 if ($participant->getPayed() == 0) {
-                    $form = $this->generateMarkAsPaidForm($hostOrderObj, $participant);
+                    $form = $this->generateCSRFprotectionForm(
+                        $this->generateUrl(
+                            'mark_as_paid',
+                            [
+                                'hostOrderId'=>$hostOrderObj->getId(),
+                                'userOrderId'=>$participant->getId()
+                            ]
+                        )
+                    );
 
                     $markAsPaidForms[] = [
                         'orderId' => $participant->getId(),
@@ -102,13 +110,18 @@ class DefaultController extends Controller
 
             $participantsOrders = $em->findUsersOrderDetails($id);
 
+            $leaveOrderForm = $this->generateCSRFprotectionForm(
+                $this->generateUrl('host_order_leave', ['id'=>$hostOrderObj->getId()])
+            )->createView();
+
             return $this->render(
                 "IlluminatiOrderBundle:Default/Summary:base.html.twig",
                 [
                     'hostOrder'          => $hostOrderObj,
                     'participants'       => $participants,
                     'participantsOrders' => $participantsOrders,
-                    'forms'              => $markAsPaidForms
+                    'forms'              => $markAsPaidForms,
+                    'leaveOrderForm'     => $leaveOrderForm
                 ]
             );
         } else {
@@ -324,7 +337,7 @@ class DefaultController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function leaveOrderAction($id)
+    public function leaveOrderAction(Request $request, $id)
     {
         $hostOrder = $this->get('host_order_participation_checker')->check((int)$id);
 
@@ -346,20 +359,29 @@ class DefaultController extends Controller
                 );
             }
 
-            $userId = $this->get('security.token_storage')->getToken()->getUser()->getId();
+            $form = $this->generateCSRFprotectionForm(
+                $this->generateUrl('host_order_leave', ['id'=>$hostOrder->getId()])
+            );
+            $form->handleRequest($request);
 
-            $deletedParticipant = $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('IlluminatiOrderBundle:Host_order')
-                ->deleteParticipant($hostOrder, $userId);
+            if ($form->isValid()) {
+                $userId = $this->get('security.token_storage')->getToken()->getUser()->getId();
 
-            if ($deletedParticipant) {
-                $notificationMessage = $this
-                    ->get('translator')
-                    ->trans('notify.messages.success.orderLeft');
+                $deletedParticipant = $this
+                    ->getDoctrine()
+                    ->getManager()
+                    ->getRepository('IlluminatiOrderBundle:Host_order')
+                    ->deleteParticipant($hostOrder, $userId);
 
-                $this->get('session')->getFlashBag()->add('success', $notificationMessage);
+                if ($deletedParticipant) {
+                    $notificationMessage = $this
+                        ->get('translator')
+                        ->trans('notify.messages.success.orderLeft');
+
+                    $this->get('session')->getFlashBag()->add('success', $notificationMessage);
+                }
+            } else {
+                return $this->redirectToRoute('host_order_summary', ['id'=> $hostOrder->getId()]);
             }
         }
 
@@ -466,7 +488,15 @@ class DefaultController extends Controller
                 ->find((int)$userOrderId);
 
             if (!empty($userOrder)) {
-                $form = $this->generateMarkAsPaidForm($hostOrder, $userOrder);
+                $form = $this->generateCSRFprotectionForm(
+                    $this->generateUrl(
+                        'mark_as_paid',
+                        [
+                            'hostOrderId'=>$hostOrder->getId(),
+                            'userOrderId'=>$userOrder->getId()
+                        ]
+                    )
+                );
 
                 $form->handleRequest($request);
 
@@ -505,25 +535,17 @@ class DefaultController extends Controller
     }
 
     /**
-     * Generates Mark as paid form
+     * Generates empty form for CSRF protection
      *
      * @param Host_order $hostOrderObj
      * @param User_order $participant
      *
      * @return \Symfony\Component\Form\Form
      */
-    public function generateMarkAsPaidForm(Host_order $hostOrderObj, User_order $participant)
+    public function generateCSRFprotectionForm($formActionUrl)
     {
         return $this->createFormBuilder()
-            ->setAction(
-                $this->generateUrl(
-                    'mark_as_paid',
-                    [
-                        'hostOrderId'=>$hostOrderObj->getId(),
-                        'userOrderId'=>$participant->getId()
-                    ]
-                )
-            )
+            ->setAction($formActionUrl)
             ->setMethod('POST')
             ->getForm();
     }
