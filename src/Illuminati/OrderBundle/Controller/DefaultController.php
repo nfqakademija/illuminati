@@ -583,8 +583,7 @@ class DefaultController extends Controller
     /**
      * Generates empty form for CSRF protection
      *
-     * @param Host_order $hostOrderObj
-     * @param User_order $participant
+     * @param string $formActionUrl From action Url
      *
      * @return \Symfony\Component\Form\Form
      */
