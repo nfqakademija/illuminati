@@ -204,7 +204,14 @@ class DefaultController extends Controller
 
             $emailSentCount = 0;
 
+            $hostUserId = $hostOrder->getUsersId()->getId();
+
             foreach ($debtors as $debtor) {
+                // don't send debt reminder email to the host.
+                if ($debtor->getId() === $hostUserId) {
+                    continue;
+                }
+
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Group order product payment reminder')
                     ->setFrom('info@illuminati.org')
@@ -225,13 +232,22 @@ class DefaultController extends Controller
                 $emailSentCount++;
             }
 
-            $notificationMessage = $this->get('translator')->trans(
-                'order.summary.successEmailSent_%count%',
-                ['%count%' => $emailSentCount]
-            );
+            if ($emailSentCount > 1) {
+                $notificationMessage = $this->get('translator')->trans(
+                    'order.summary.successEmailSent_%count%',
+                    ['%count%' => $emailSentCount]
+                );
 
-            $this->get('session')->getFlashBag()
-                ->add('success', $notificationMessage);
+                $this->get('session')->getFlashBag()
+                    ->add('success', $notificationMessage);
+            } elseif ($emailSentCount == 0 && sizeof($debtors) == 1) {
+                $notificationMessage = $this->get('translator')->trans(
+                    'order.summary.noDebtors'
+                );
+
+                $this->get('session')->getFlashBag()
+                    ->add('info', $notificationMessage);
+            }
 
             return $this->redirectToRoute(
                 "host_order_summary",

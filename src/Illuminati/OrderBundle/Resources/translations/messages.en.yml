@@ -27,6 +27,7 @@ order:
     successJoined: You have successfully joined the order!
     infoAlreadyParticipates: You already participate in this order.
     successEmailSent_%count%: %count% reminder emails successfully sent!
+    noDebtors: Everybody paid for their orders, no reminders sent
 
     widget:
       product: Products
