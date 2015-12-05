@@ -9,6 +9,7 @@
                         {{ participants[i].usersId.surname }}
                     </a>
                     <div class="pull-right">
+                        {# showing payment statuses ONLY for order participants #}
                         {% if participants[i].usersId != hostOrder.usersId %}
 
                             {% if participants[i].payed == 0 %}
@@ -18,8 +19,11 @@
                                    {% for form in forms %}
                                         {% if form.orderId == participants[i].id %}
                                             {{ form_start(form.form) }}
-                                                <button class="btn btn-xs btn-danger" type="submit" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.markAsPaid{% endtrans %}">{% trans %}order.summary.widget.notPaid{% endtrans %}</button>
+                                                <button class="btn btn-xs btn-danger submit-mark-as-paid" type="submit" data-toggle="tooltip" data-placement="top" title="{% trans %}order.summary.widget.markAsPaid{% endtrans %}">{% trans %}order.summary.widget.notPaid{% endtrans %}</button>
                                             {{ form_end(form.form) }}
+                                            <span class="label label-success marked-as-paid hidden">
+                                                {% trans %}order.summary.widget.paid{% endtrans %}
+                                            </span>
                                         {% endif %}
                                    {% endfor %}
                                {% else %}

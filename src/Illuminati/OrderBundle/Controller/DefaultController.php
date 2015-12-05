@@ -517,15 +517,31 @@ class DefaultController extends Controller
                 if ($form->isValid()) {
                     $userOrder->setPayed(1);
                     $em->flush();
-                    $this->get('session')->getFlashBag()->add('success', 'Marked as paid');
+
+                    $response  = ['status'=>0];
+                    return new Response(
+                        json_encode($response),
+                        200,
+                        ['Content-Type'=>'application/json']
+                    );
+
                 }
             }
 
-            return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
-
-        } else {
-            return $this->redirectToRoute('homepage');
+            $response  = ['status'=>1, 'message'=>'Order not found'];
+            return new Response(
+                json_encode($response),
+                200,
+                ['Content-Type'=>'application/json']
+            );
         }
+
+        $response  = ['status'=>1, 'message'=>'Permission denied'];
+        return new Response(
+            json_encode($response),
+            200,
+            ['Content-Type'=>'application/json']
+        );
     }
 
     /**
