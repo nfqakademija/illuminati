@@ -27,14 +27,15 @@ order:
     successJoined: You have successfully joined the order!
     infoAlreadyParticipates: You already participate in this order.
     successEmailSent_%count%: %count% reminder emails successfully sent!
+    noDebtors: Everybody paid for their orders, no reminders sent
 
     widget:
       product: Products
       quantity: Qty
       price: Price (per unit)
-      prepaid: Prepaid :
-      participantPaid: Participant paid fo his orders
-      participantNotPaid: Participant hasn't paid for his orders
+      paid: Paid
+      notPaid: Not Paid
+      markAsPaid: Click to mark as paid
 
     confirmation:
       title: Hosted Order Confirmation

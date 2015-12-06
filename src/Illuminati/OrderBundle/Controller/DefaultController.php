@@ -87,14 +87,41 @@ class DefaultController extends Controller
                 ->getRepository("IlluminatiOrderBundle:Host_order");
 
             $participants = $em->findUserOrders($id);
+
+            $markAsPaidForms = [];
+            foreach ($participants as $participant) {
+                if ($participant->getPayed() == 0) {
+                    $form = $this->generateCSRFprotectionForm(
+                        $this->generateUrl(
+                            'mark_as_paid',
+                            [
+                                'hostOrderId'=>$hostOrderObj->getId(),
+                                'userOrderId'=>$participant->getId()
+                            ]
+                        )
+                    );
+
+                    $markAsPaidForms[] = [
+                        'orderId' => $participant->getId(),
+                        'form' => $form->createView()
+                    ];
+                }
+            }
+
             $participantsOrders = $em->findUsersOrderDetails($id);
+
+            $leaveOrderForm = $this->generateCSRFprotectionForm(
+                $this->generateUrl('host_order_leave', ['id'=>$hostOrderObj->getId()])
+            )->createView();
 
             return $this->render(
                 "IlluminatiOrderBundle:Default/Summary:base.html.twig",
                 [
                     'hostOrder'          => $hostOrderObj,
                     'participants'       => $participants,
-                    'participantsOrders' => $participantsOrders
+                    'participantsOrders' => $participantsOrders,
+                    'forms'              => $markAsPaidForms,
+                    'leaveOrderForm'     => $leaveOrderForm
                 ]
             );
         } else {
@@ -177,7 +204,14 @@ class DefaultController extends Controller
 
             $emailSentCount = 0;
 
+            $hostUserId = $hostOrder->getUsersId()->getId();
+
             foreach ($debtors as $debtor) {
+                // don't send debt reminder email to the host.
+                if ($debtor->getId() === $hostUserId) {
+                    continue;
+                }
+
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Group order product payment reminder')
                     ->setFrom('info@illuminati.org')
@@ -198,13 +232,22 @@ class DefaultController extends Controller
                 $emailSentCount++;
             }
 
-            $notificationMessage = $this->get('translator')->trans(
-                'order.summary.successEmailSent_%count%',
-                ['%count%' => $emailSentCount]
-            );
+            if ($emailSentCount > 1) {
+                $notificationMessage = $this->get('translator')->trans(
+                    'order.summary.successEmailSent_%count%',
+                    ['%count%' => $emailSentCount]
+                );
 
-            $this->get('session')->getFlashBag()
-                ->add('success', $notificationMessage);
+                $this->get('session')->getFlashBag()
+                    ->add('success', $notificationMessage);
+            } elseif ($emailSentCount == 0 && sizeof($debtors) == 1) {
+                $notificationMessage = $this->get('translator')->trans(
+                    'order.summary.noDebtors'
+                );
+
+                $this->get('session')->getFlashBag()
+                    ->add('info', $notificationMessage);
+            }
 
             return $this->redirectToRoute(
                 "host_order_summary",
@@ -243,8 +286,7 @@ class DefaultController extends Controller
                 'orders'=>$orders,
                 'type'=>$type,
             ));
-        }
-        else{
+        } else {
             return $this->redirectToRoute('homepage');
         }
     }
@@ -311,7 +353,7 @@ class DefaultController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function leaveOrderAction($id)
+    public function leaveOrderAction(Request $request, $id)
     {
         $hostOrder = $this->get('host_order_participation_checker')->check((int)$id);
 
@@ -333,20 +375,29 @@ class DefaultController extends Controller
                 );
             }
 
-            $userId = $this->get('security.token_storage')->getToken()->getUser()->getId();
+            $form = $this->generateCSRFprotectionForm(
+                $this->generateUrl('host_order_leave', ['id'=>$hostOrder->getId()])
+            );
+            $form->handleRequest($request);
 
-            $deletedParticipant = $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('IlluminatiOrderBundle:Host_order')
-                ->deleteParticipant($hostOrder, $userId);
+            if ($form->isValid()) {
+                $userId = $this->get('security.token_storage')->getToken()->getUser()->getId();
 
-            if ($deletedParticipant) {
-                $notificationMessage = $this
-                    ->get('translator')
-                    ->trans('notify.messages.success.orderLeft');
+                $deletedParticipant = $this
+                    ->getDoctrine()
+                    ->getManager()
+                    ->getRepository('IlluminatiOrderBundle:Host_order')
+                    ->deleteParticipant($hostOrder, $userId);
 
-                $this->get('session')->getFlashBag()->add('success', $notificationMessage);
+                if ($deletedParticipant) {
+                    $notificationMessage = $this
+                        ->get('translator')
+                        ->trans('notify.messages.success.orderLeft');
+
+                    $this->get('session')->getFlashBag()->add('success', $notificationMessage);
+                }
+            } else {
+                return $this->redirectToRoute('host_order_summary', ['id'=> $hostOrder->getId()]);
             }
         }
 
@@ -374,9 +425,13 @@ class DefaultController extends Controller
                 ->getRepository('IlluminatiOrderBundle:Host_order')
                 ->findOrderedProducts($hostOrder->getId());
 
+            $form = $this->generateCSRFprotectionForm(
+                $this->generateUrl('host_order_confirmed', ['id'=>$hostOrder->getId()])
+            )->createView();
+
             return $this->render(
                 "IlluminatiOrderBundle:Default/OrderConfirmation:base.html.twig",
-                ['products' => $products, 'orderId' => $hostOrder->getId()]
+                ['products' => $products, 'orderId' => $hostOrder->getId(), 'form'=>$form]
             );
         } else {
             return $this->redirectToRoute('homepage');
@@ -391,47 +446,118 @@ class DefaultController extends Controller
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|
      *         \Symfony\Component\HttpFoundation\Response
      */
-    public function hostOrderConfirmedAction($id)
+    public function hostOrderConfirmedAction(Request $request, $id)
     {
         if (($hostOrder = $this->get('host_order_host_checker')->check((int)$id))) {
             if ($hostOrder->getStateId() != 1) {
                 return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
             }
 
-            $em = $this->getDoctrine()->getManager();
+            $form = $this->generateCSRFprotectionForm(
+                $this->generateUrl('host_order_confirmed', ['id'=>$hostOrder->getId()])
+            );
 
-            // Confirming the order
-            $hostOrder->setStateId(0);
-            $em->flush();
+            $form->handleRequest($request);
 
-            $orderParticipants = $em
-                ->getRepository('IlluminatiOrderBundle:Host_order')
-                ->findUserOrders($hostOrder->getId());
+            if ($form->isValid()) {
+                $em = $this->getDoctrine()->getManager();
 
-            // Sending emails about confirmed order to participants
-            foreach ($orderParticipants as $participant) {
-                $message = \Swift_Message::newInstance()
-                    ->setSubject("Group order - {$hostOrder->getTitle()} - has been confirmed!")
-                    ->setFrom('info@illuminati.org')
-                    ->setTo($participant->getUsersId()->getEmail())
-                    ->setBody(
-                        $this->renderView(
-                            'IlluminatiOrderBundle:Emails:orderConfirmedEmail.html.twig',
-                            ['hostOrder'=>$hostOrder,'usersName'=>$participant->getUsersId()]
-                        ),
-                        'text/html'
-                    );
+                // Confirming the order
+                $hostOrder->setStateId(0);
+                $em->flush();
 
-                $this->get('mailer')->send($message);
+                $orderParticipants = $em
+                    ->getRepository('IlluminatiOrderBundle:Host_order')
+                    ->findUserOrders($hostOrder->getId());
+
+                // Sending emails about confirmed order to participants
+                foreach ($orderParticipants as $participant) {
+                    $message = \Swift_Message::newInstance()
+                        ->setSubject("Group order - {$hostOrder->getTitle()} - has been confirmed!")
+                        ->setFrom('info@illuminati.org')
+                        ->setTo($participant->getUsersId()->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'IlluminatiOrderBundle:Emails:orderConfirmedEmail.html.twig',
+                                ['hostOrder'=>$hostOrder,'usersName'=>$participant->getUsersId()]
+                            ),
+                            'text/html'
+                        );
+
+                    $this->get('mailer')->send($message);
+                }
+
+                $notificationMessage = $this->get('translator')->trans('order.summary.confirmation.confirmedSuccess');
+                $this->get('session')->getFlashBag()->add('success', $notificationMessage);
+
+                return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
+            } else {
+                return $this->redirectToRoute('homepage');
             }
-
-            $notificationMessage = $this->get('translator')->trans('order.summary.confirmation.confirmedSuccess');
-            $this->get('session')->getFlashBag()->add('success', $notificationMessage);
-
-            return $this->redirectToRoute('host_order_summary', ['id'=>$hostOrder->getId()]);
         } else {
             return $this->redirectToRoute('homepage');
         }
+    }
+
+    /**
+     * Marks user order as paid
+     *
+     * @param Request $request
+     * @param $hostOrderId
+     * @param $userOrderId
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function markAsPaidAction(Request $request, $hostOrderId, $userOrderId)
+    {
+        if (($hostOrder = $this->get('host_order_host_checker')->check((int)$hostOrderId))) {
+            $em = $this->getDoctrine()->getManager();
+
+            $userOrder = $em
+                ->getRepository('IlluminatiOrderBundle:User_order')
+                ->find((int)$userOrderId);
+
+            if (!empty($userOrder)) {
+                $form = $this->generateCSRFprotectionForm(
+                    $this->generateUrl(
+                        'mark_as_paid',
+                        [
+                            'hostOrderId'=>$hostOrder->getId(),
+                            'userOrderId'=>$userOrder->getId()
+                        ]
+                    )
+                );
+
+                $form->handleRequest($request);
+
+                if ($form->isValid()) {
+                    $userOrder->setPayed(1);
+                    $em->flush();
+
+                    $response  = ['status'=>0];
+                    return new Response(
+                        json_encode($response),
+                        200,
+                        ['Content-Type'=>'application/json']
+                    );
+
+                }
+            }
+
+            $response  = ['status'=>1, 'message'=>'Order not found'];
+            return new Response(
+                json_encode($response),
+                200,
+                ['Content-Type'=>'application/json']
+            );
+        }
+
+        $response  = ['status'=>1, 'message'=>'Permission denied'];
+        return new Response(
+            json_encode($response),
+            200,
+            ['Content-Type'=>'application/json']
+        );
     }
 
     /**
@@ -452,5 +578,20 @@ class DefaultController extends Controller
         } else {
             return $this->redirectToRoute('homepage');
         }
+    }
+
+    /**
+     * Generates empty form for CSRF protection
+     *
+     * @param string $formActionUrl From action Url
+     *
+     * @return \Symfony\Component\Form\Form
+     */
+    public function generateCSRFprotectionForm($formActionUrl)
+    {
+        return $this->createFormBuilder()
+            ->setAction($formActionUrl)
+            ->setMethod('POST')
+            ->getForm();
     }
 }

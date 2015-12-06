@@ -16,7 +16,6 @@
                     <h3>{{ "order.summary.hostedBy"|trans }}</h3>
                     <img class="img img-circle" src="{{ gravatar(hostOrder.usersId.email,100) }}" alt="host avatar">
                     <p>{{ hostOrder.usersId.name }} {{ hostOrder.usersId.surname }}</p>
-                    <a href="mailto:{{ hostOrder.usersId.email }}">{{ hostOrder.usersId.email }}</a>
                 </div>
             </div>
 
@@ -40,7 +39,7 @@
 
         {# summary widget #}
         {% if (participants is defined) and (participants is not empty) %}
-            {% set vars = { 'participants': participants , 'participantsOrders' : participantsOrders  } %}
+            {% set vars = { 'participants': participants , 'participantsOrders' : participantsOrders, 'hostOrder' : hostOrder, 'forms': forms  } %}
             {% include "IlluminatiOrderBundle:Default/Summary:summaryWidget.html.twig" with vars %}
         {% endif %}
 
@@ -53,7 +52,7 @@
 
                 {# Checking if the logged in user is the host of the main order #}
                 {% if hostOrder.stateId == 1 %}
-                    <a class="btn btn-default" href="{{ path('host_order_confirm',{'id':hostOrder.id}) }}"><span class="glyphicon glyphicon-lock"></span> {% trans %}order.summary.confirmOrderButton{% endtrans %}</a>
+                    <a class="btn btn-success" href="{{ path('host_order_confirm',{'id':hostOrder.id}) }}"><span class="glyphicon glyphicon-ok"></span> {% trans %}order.summary.confirmOrderButton{% endtrans %}</a>
                 {% else %}
                     <a href="{{ path('host_order_generate_pdf', {'id': hostOrder.id}) }}" target="_blank" class="btn btn-default"><span class="glyphicon glyphicon-save-file"></span>  {{ "order.summary.confirmation.genPDF"|trans }}</a>
                 {% endif %}
@@ -67,7 +66,9 @@
             {% if hostOrder.usersId.id == app.user.id %}
                 <p class="alert-danger help-block"><strong>{% trans %}notify.error{% endtrans %}</strong> {% trans %}notify.messages.warning.hostLeavesGroupOrder{% endtrans %}</p>
             {% endif %}
-            <a href="{{ path('host_order_leave',{'id':hostOrder.id}) }}" class="btn btn-danger pull-right"><span class="glyphicon glyphicon-log-out"></span> {% trans %}order.summary.leaveOrder{% endtrans %}</a>
+            {{ form_start(leaveOrderForm) }}
+            <button class="btn btn-danger pull-right" type="submit"><span class="glyphicon glyphicon-log-out"></span> {% trans %}order.summary.leaveOrder{% endtrans %}</button>
+            {{ form_end(leaveOrderForm) }}
         </div>
         {% endif %}
         <br>

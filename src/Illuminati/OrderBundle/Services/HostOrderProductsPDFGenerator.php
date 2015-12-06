@@ -26,6 +26,8 @@ class HostOrderProductsPDFGenerator extends FPDF implements OrderProductsPDFGene
         $repo = $this->em
             ->getRepository('IlluminatiOrderBundle:Host_order');
 
+        $hostedOrderHost = $hostOrder->getUsersId();
+
         $products = $repo
             ->findOrderedProducts($hostOrder->getId());
 
@@ -75,6 +77,11 @@ class HostOrderProductsPDFGenerator extends FPDF implements OrderProductsPDFGene
             $this->Ln();
 
             foreach ($participants as $participant) {
+                // We skip the host of the order in the list
+                if ($participant->getUsersId() == $hostedOrderHost) {
+                    continue;
+                }
+
                 $this->Cell($w[0], 6, "{$counter}.", "LR", 0, "C");
                 $this->Cell(
                     $w[1],
