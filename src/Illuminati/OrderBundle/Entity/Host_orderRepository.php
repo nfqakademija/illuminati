@@ -115,7 +115,16 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
                 )
                 ->setParameter('id', $orders[$i]['id'])
                 ->getResult();
+            $orders[$i]['paidCnt']=$this->getEntityManager()
+                ->createQuery(
+                    "SELECT COUNT(UO.hostOrderId) AS paidCnt
+                    FROM Illuminati\OrderBundle\Entity\User_order UO
+                    WHERE UO.hostOrderId = :id AND UO.deleted = 0 AND UO.payed = 0"
+                )
+                ->setParameter('id', $orders[$i]['id'])
+                ->getResult();
             $orders[$i]['pCnt'] = $orders[$i]['pCnt'][0]['pCnt'];
+            $orders[$i]['paidCnt'] = $orders[$i]['paidCnt'][0]['paidCnt']-1;
         }
         return $orders;
     }
@@ -151,7 +160,16 @@ class Host_orderRepository extends \Doctrine\ORM\EntityRepository
                 )
                 ->setParameter('id', $orders[$i]['id'])
                 ->getResult();
+            $orders[$i]['paidCnt']=$this->getEntityManager()
+                ->createQuery(
+                    "SELECT COUNT(UO.hostOrderId) AS paidCnt
+                    FROM Illuminati\OrderBundle\Entity\User_order UO
+                    WHERE UO.hostOrderId = :id AND UO.deleted = 0 AND UO.payed = 0"
+                )
+                ->setParameter('id', $orders[$i]['id'])
+                ->getResult();
             $orders[$i]['pCnt'] = $orders[$i]['pCnt'][0]['pCnt'];
+            $orders[$i]['paidCnt'] = $orders[$i]['paidCnt'][0]['paidCnt']-1;
         }
         return $orders;
     }

@@ -37,3 +37,8 @@ host_order_confirmed:
 host_order_generate_pdf:
     path: /genpdf/{id}
     defaults: { _controller: "IlluminatiOrderBundle:Default:genPdf"}
+
+mark_as_paid:
+  path: /paid/{hostOrderId}/{userOrderId}
+  defaults: { _controller: "IlluminatiOrderBundle:Default:markAsPaid" }
+  methods: [POST]

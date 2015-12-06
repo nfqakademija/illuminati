@@ -29,9 +29,7 @@ class User extends BaseUser
      * @ORM\Column(name="name", type="string", length=50)
      * @Assert\NotBlank(message="name.notBlank", groups={"Registration", "Profile"})
      * @Assert\Length(
-     *     min=3,
      *     max=50,
-     *     minMessage="name.tooShort",
      *     maxMessage="name.tooLong",
      *     groups={"Registration", "Profile"}
      * )
@@ -42,9 +40,7 @@ class User extends BaseUser
      * @ORM\Column(name="surname", type="string", length=50)
      * @Assert\NotBlank(message="surname.notBlank", groups={"Registration", "Profile"})
      * @Assert\Length(
-     *     min=3,
      *     max=50,
-     *     minMessage="surname.tooShort",
      *     maxMessage="surname.tooLong",
      *     groups={"Registration", "Profile"}
      * )

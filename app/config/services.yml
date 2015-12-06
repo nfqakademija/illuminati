@@ -17,6 +17,11 @@ services:
             class: Illuminati\UserBundle\Form\ChangePasswordType
             tags:
                 - { name: form.type, alias: app_password_change }
+
+  app.form.resetting:
+              class: Illuminati\UserBundle\Form\ResettingType
+              tags:
+                  - { name: form.type, alias: app_resetting }
 #    service_name:
 #        class: AppBundle\Directory\ClassName
 #        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]

@@ -4,55 +4,48 @@
     <div class="container">
         {% if orders %}
             {% if type == 'hosted' %}
-                <h1 class="history">{% trans %}order.history.hosted{% endtrans %}</h1>
+                <h1 class="page-header text-center">{% trans %}order.history.hosted{% endtrans %}</h1>
             {% elseif type == 'joined' %}
-                <h1 class="history">{% trans %}order.history.joined{% endtrans %}</h1>
+                <h1 class="page-header text-center">{% trans %}order.history.joined{% endtrans %}</h1>
             {% endif %}
-            {% for i in 0..orders|length-1 %}
-                <hr>
-                <div class="orders">
-                {% if orders[i]['state'] == 1 %}
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">{{ orders[i]['title'] }}</h3>
-                        </div>
-                        <div class="panel-body">
-                            <div class="pull-left">
-                                <h3>{% trans %}order.history.closes{% endtrans %}: {{ orders[i]['closeDate'] }}</h3>
-                                <h3>{% trans %}order.history.participants{% endtrans %}: {{ orders[i]['pCnt'] }}</h3>
-                            </div>
-                            <div class="pull-right">
-                                    <h3>{% trans %}order.history.state{% endtrans %}: {% trans %}order.history.stateOpen{% endtrans %}</h3>
-                                <a href="/order/summary/{{ orders[i]['id'] }}"><button class="btn btn-default">{% trans %}order.history.view{% endtrans %}</button></a>
-                            </div>
-                        </div>
-                    </div>
-                {% else %}
+        <div class="row">
+                {% for i in 0..orders|length-1 %}
+                    <div class="orders col-sm-4">
+                    {% if orders[i]['state'] == 1 %}
+                        <div class="panel panel-primary">
+                    {% else %}
                         <div class="panel panel-danger">
+                    {% endif %}
                             <div class="panel-heading">
                                 <h3 class="panel-title">{{ orders[i]['title'] }}</h3>
                             </div>
                             <div class="panel-body">
                                 <div class="pull-left">
-                                    <h3>{% trans %}order.history.closes{% endtrans %}: {{ orders[i]['closeDate'] }}</h3>
-                                    <h3>{% trans %}order.history.participants{% endtrans %}: {{ orders[i]['pCnt'] }}</h3>
+                                    <p><strong>{% trans %}order.history.closes{% endtrans %}:</strong> {{ orders[i]['closeDate'] }}</p>
+                                    <p><strong>{% trans %}order.history.participants{% endtrans %}:</strong> {{ orders[i]['pCnt'] }}</p>
+                                    {% if type == 'hosted' %}
+                                    <p><strong>{% trans %}order.history.paidCount{% endtrans %}:</strong> {{ orders[i]['paidCnt'] }}</p>
+                                    {% endif %}
                                 </div>
                                 <div class="pull-right">
-                                    <h3>{% trans %}order.history.state{% endtrans %}: {% trans %}order.history.stateClosed{% endtrans %}</h3>
+                                        <p><strong>{% trans %}order.history.state{% endtrans %}:</strong>
+                                        {% if orders[i]['state'] == 1 %}
+                                            {% trans %}order.history.stateOpen{% endtrans %}
+                                        {% else %}
+                                            {% trans %}order.history.stateClosed{% endtrans %}
+                                        {% endif %}
+                                        </p>
                                     <a href="/order/summary/{{ orders[i]['id'] }}"><button class="btn btn-default">{% trans %}order.history.view{% endtrans %}</button></a>
                                 </div>
                             </div>
                         </div>
-                    {% endif %}
-                </div>
-            {% endfor %}
+                    </div>
+                {% endfor %}
+        </div>
         {% elseif type == 'hosted' %}
-            <h1 class="history">{% trans %}order.history.noHosted{% endtrans %}, <a href="/order/">{% trans %}order.history.create{% endtrans %}.</a></h1>
+            <h1 class="page-header text-center">{% trans %}order.history.noHosted{% endtrans %}, <a href="/order/">{% trans %}order.history.create{% endtrans %}.</a></h1>
         {% else %}
-            <h1 class="history">{% trans %}order.history.noJoined{% endtrans %}, <a href="/order/">{% trans %}order.history.create{% endtrans %}.</a></h1>
+            <h1 class="page-header text-center">{% trans %}order.history.noJoined{% endtrans %}, <a href="/order/">{% trans %}order.history.create{% endtrans %}.</a></h1>
         {% endif %}
     </div>
-
-
-
 {% endblock %}

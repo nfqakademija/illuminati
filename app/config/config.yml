@@ -94,6 +94,9 @@ fos_user:
     change_password:
             form:
                type: app_password_change
+    resetting:
+            form:
+                type: app_resetting
 
 
 doctrine_migrations:
