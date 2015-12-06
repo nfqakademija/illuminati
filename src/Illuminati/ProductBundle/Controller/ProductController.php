@@ -2,6 +2,7 @@
 
 namespace Illuminati\ProductBundle\Controller;
 
+use Illuminati\CartBundle\Form\CartItemAddType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -31,6 +32,8 @@ class ProductController extends Controller implements ProductControllerInterface
      */
     public function indexAction($orderId)
     {
+        $addToCartForms = array();
+
         $entityManager = $this->getDoctrine()->getManager();
 
         $order = $this->getRelatedOrder($orderId);
@@ -39,9 +42,21 @@ class ProductController extends Controller implements ProductControllerInterface
             'supplier' => $order->getSupplierId()
         ]);
 
+        foreach ($productEntities as $entity) {
+            $addToCartForms[$entity->getId()] = $this->createForm(
+                new CartItemAddType(),
+                [
+                    'orderId' => $orderId,
+                    'productId' => $entity->getId()
+                ],
+                ['action' => $this->generateUrl('cart_add')]
+            )->createView();
+        }
+
         return $this->render('ProductBundle:Product:index.html.twig', [
             'ProductEntities' => $productEntities,
             'order' => $order,
+            'addToCartForms' => $addToCartForms,
         ]);
     }
 
@@ -63,6 +78,18 @@ class ProductController extends Controller implements ProductControllerInterface
         return $this->render('ProductBundle:Product:show.html.twig', [
             'entity' => $entity,
             'order' => $this->getRelatedOrder($orderId),
+            'addToCartForm' => $this->createForm(
+                new CartItemAddType(),
+                [
+                    'orderId' => $orderId,
+                    'productId' => $id,
+                    'redirectUrl' => $this->generateUrl('product_show', [
+                        'id' => $id,
+                        'orderId' => $orderId
+                    ]),
+                ],
+                ['action' => $this->generateUrl('cart_add')]
+            )->createView()
         ]);
     }
 }

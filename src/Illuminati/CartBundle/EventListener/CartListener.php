@@ -58,6 +58,7 @@ class CartListener
                     ->findOneBy([
                         'hostOrderId' => $orderId,
                         'usersId' => $user->getId(),
+                        'deleted' => 0,
                     ]);
 
                 if (!$order) {

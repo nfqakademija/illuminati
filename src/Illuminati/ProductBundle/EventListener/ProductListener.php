@@ -60,6 +60,7 @@ class ProductListener
                     ->findOneBy([
                         'hostOrderId' => $orderId,
                         'usersId' => $user->getId(),
+                        'deleted' => 0,
                     ]);
 
                 if (!$order) {

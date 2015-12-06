@@ -6,6 +6,6 @@
 {% block sidebar_right %}
     {{ render(controller(
     'CartBundle:Cart:sidebarWidget',
-    { 'orderId': order.id }
+    { 'orderId': order.id, 'redirectUrl': redirectUrl }
     )) }}
 {% endblock %}

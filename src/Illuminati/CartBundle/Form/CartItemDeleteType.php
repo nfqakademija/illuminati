@@ -6,25 +6,23 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class CheckoutType
+ * Class CartItemDeleteType
  * @package Illuminati\CartBundle\Form
  */
-class CheckoutType extends AbstractType
+class CartItemDeleteType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
+     * @return \Symfony\Component\Form\FormConfigBuilderInterface
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('items', 'collection', [
-                'type' => new CartItemType()
-            ])
-            ->add('save', 'submit', [
-                'label' => 'cart.confirm',
-                'attr' => ['class'=>'btn btn-primary']
-            ]);
+        return $builder
+            ->add('orderId', 'integer', ['attr' => ['class' => 'hidden']])
+            ->add('productId', 'integer', ['attr' => ['class' => 'hidden']])
+            ->add('redirectUrl', 'hidden')
+            ->setMethod('DELETE');
     }
 
     /**
@@ -32,6 +30,6 @@ class CheckoutType extends AbstractType
      */
     public function getName()
     {
-        return 'illuminati_cart_bundle_checkout';
+        return 'IlluminatiCartBundleItemDeleteType';
     }
 }

@@ -1,6 +1,6 @@
 <div class="panel panel-default checkout">
     <div class="panel-body">
-        {{ form_start(checkoutForm) }}
+
         <table class="table table-responsive" data-order-id="{{ orderId }}">
             <thead>
             <tr>
@@ -13,8 +13,7 @@
             </tr>
             </thead>
             <tbody>
-            {% for item in checkoutForm.items %}
-                {% set product = products[item.vars.value.product_id] %}
+            {% for product in products %}
                 <tr data-row="{{ product.id }}">
                     <td>
                         <a href="{{ path('product_show', { id:product.id, 'orderId': orderId }) }}" class="thumbnail">
@@ -27,28 +26,33 @@
                         </a>
                     </td>
                     <td>
-                        {{ form_widget(item.quantity) }}
-                        {{ form_errors(item.quantity) }}
-                        {{ form_widget(item.product_id) }}
+                        {{ form_start(cartItemUpdateForms[product.id]) }}
+                            {{ form_widget(cartItemUpdateForms[product.id].orderId) }}
+                            {{ form_widget(cartItemUpdateForms[product.id].productId) }}
+                        {{ form_end(cartItemUpdateForms[product.id]) }}
                     </td>
                     <td>{{ product.price }} {{ cart.getProviderCurrency }}</td>
                     <td>{{ cart.geItemTotalAmount(product.id, product.price) }} {{ cart.getProviderCurrency }}</td>
                     <td>
-                        <a class="pull-right" data-remove="{{ product.id }}" href="{{ path('cart_remove', {productId:product.id, orderId : orderId}) }}">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </a>
+                        {{ form_start(cartItemDeleteForms[product.id]) }}
+                            {{ form_widget(cartItemDeleteForms[product.id].orderId) }}
+                            {{ form_widget(cartItemDeleteForms[product.id].productId) }}
+                            <button type="submit" class="pull-right btn btn-link">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        {{ form_end(cartItemDeleteForms[product.id]) }}
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
             <tfoot>
-            <tr>
-                <td colspan="6">
-                    {{ 'cart.total_amount'|trans }}: <strong>{{ cart.getAmount }}</strong> {{ cart.getProviderCurrency }}
-                </td>
-            </tr>
+                <tr>
+                    <td colspan="6">
+                        {{ 'cart.total_amount'|trans }}: <strong>{{ cart.getAmount }}</strong> {{ cart.getProviderCurrency }}
+                    </td>
+                </tr>
             </tfoot>
         </table>
-        {{ form_end(checkoutForm) }}
+        {{ form(checkoutConfirmForm) }}
     </div>
 </div>

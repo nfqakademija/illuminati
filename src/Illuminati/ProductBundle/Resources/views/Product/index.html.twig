@@ -18,7 +18,7 @@
             {% include 'ProductBundle::Product/items.html.twig' %}
         </div>
         <div class="col-md-3">
-            {% include 'ProductBundle:Product:cart.sidebar.html.twig' %}
+            {% include 'ProductBundle:Product:cart.sidebar.html.twig' with { 'redirectUrl': '' } %}
         </div>
     </div>
 {% endblock %}

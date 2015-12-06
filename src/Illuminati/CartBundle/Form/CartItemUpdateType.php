@@ -6,10 +6,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 /**
- * Class CartItemType
+ * Class CartItemUpdateType
  * @package Illuminati\CartBundle\Form
  */
-class CartItemType extends AbstractType
+class CartItemUpdateType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -18,19 +18,13 @@ class CartItemType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
+            ->setMethod('PUT')
+            ->add('orderId', 'integer', ['attr' => ['class' => 'hidden']])
+            ->add('productId', 'integer', ['attr' => ['class' => 'hidden']])
             ->add('quantity', 'integer', [
                 'label' => false,
-                'attr' => [
-                    'class' => 'form-control quantity',
-                    'data-quantity' => 'true'
-                ]
-            ])
-            ->add('product_id', 'hidden', [
-                'attr' => [
-                    'data-product-id' => 'true'
-                ]
-            ])
-        ;
+                'attr' => ['class' => 'form-control quantity']
+            ]);
     }
 
     /**
@@ -38,6 +32,6 @@ class CartItemType extends AbstractType
      */
     public function getName()
     {
-        return 'illuminati_cart_bundle_cart_item';
+        return 'IlluminatiCartBundleItemUpdateType';
     }
 }

@@ -1,4 +1,4 @@
-<div class="panel panel-default">
+<div class="panel panel-default panel-cart-widget">
     <div class="panel-heading">
         {{ 'cart.title'|trans }}
     </div>
@@ -12,9 +12,16 @@
                         </a>
                     </div>
                     <div class="col-md-8">
-                        <a class="pull-right" href="{{ path('cart_remove', { 'productId': product.id, 'orderId': orderId }) }}">
-                            <span class="glyphicon glyphicon-remove"></span>
-                        </a>
+
+                        {{ form_start(deleteForms[product.id]) }}
+                            {{ form_widget(deleteForms[product.id].productId) }}
+                            {{ form_widget(deleteForms[product.id].orderId) }}
+                            {{ form_widget(deleteForms[product.id].redirectUrl) }}
+                            <button type="submit" class="pull-right btn btn-link">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        {{ form_end(deleteForms[product.id]) }}
+
                         <a href="{{ path('product_show', { 'id': product.id, 'orderId': orderId }) }}">
                             {{ product.title }}
                         </a>
