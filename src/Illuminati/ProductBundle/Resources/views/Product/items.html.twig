@@ -11,15 +11,19 @@
                     <a href="{{ path('product_show', { 'id': entity.id, 'orderId': order.id }) }}" title="{{ entity.title }}">
                         {{ entity.title }}
                     </a>
-                    <div class="price pull-right">{{ entity.price }} {{ entity.currency }}</div>
+                    <span class="price pull-right">{{ entity.price }} {{ entity.currency }}</span>
                 </h3>
                 <p>
                     {{ entity.description | raw }}
                 </p>
-                <a href="{{ path('cart_add', { 'productId': entity.id, 'orderId': order.id }) }}" class="pull-right btn btn-sm btn-default">
-                    <span class="glyphicon glyphicon-shopping-cart"></span>
-                    {{ 'product.add_to_cart'|trans }}
-                </a>
+                {{ form_start(addToCartForms[entity.id]) }}
+                    {{ form_widget(addToCartForms[entity.id].orderId) }}
+                    {{ form_widget(addToCartForms[entity.id].productId) }}
+                    <button type="submit" class="pull-right btn btn-sm btn-default">
+                        <span class="glyphicon glyphicon-shopping-cart"></span>
+                        {{ 'product.add_to_cart'|trans }}
+                    </button>
+                {{ form_end(addToCartForms[entity.id]) }}
             </div>
         </div>
     {% endfor %}

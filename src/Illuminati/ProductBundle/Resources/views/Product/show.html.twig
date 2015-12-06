@@ -16,14 +16,14 @@
 {% endblock %}
 
 {% block content %}
-<div class="products">
+<div class="products show">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <a href="{{ entity.image }}" target="_blank" class="thumbnail" title="{{ entity.title }}">
                 <img src="{{ entity.image }}" title="{{ entity.title }}" alt="{{ entity.title }}" />
             </a>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <h2 class="product-title">
                 <a href="{{ path('product_show', { 'id': entity.id, 'orderId': order.id }) }}" title="{{ entity.title }}">
                     {{ entity.title }}
@@ -32,11 +32,18 @@
             <p class="price"><strong>Price:</strong> {{ entity.price }} {{ entity.currency }}</p>
             <p>{{ entity.description | raw }}</p>
             <p>
-                <a href="{{ path('cart_add', { 'productId': entity.id, 'orderId': order.id }) }}" class="btn btn-sm btn-default">
+                {{ form_start(addToCartForm) }}
+                {{ form_widget(addToCartForm.orderId) }}
+                {{ form_widget(addToCartForm.productId) }}
+                <button type="submit" class="btn btn-sm btn-default">
                     <span class="glyphicon glyphicon-shopping-cart"></span>
                     {{ 'product.add_to_cart'|trans }}
-                </a>
+                </button>
+                {{ form_end(addToCartForm) }}
             </p>
+        </div>
+        <div class="col-md-3">
+            {% include 'ProductBundle:Product:cart.sidebar.html.twig' with { 'redirectUrl' : path('product_show', { 'id': entity.id, 'orderId': order.id }) } %}
         </div>
     </div>
 </div>

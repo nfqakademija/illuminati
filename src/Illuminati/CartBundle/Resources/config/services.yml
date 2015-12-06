@@ -6,3 +6,9 @@ services:
     cart.provider:
         class: Illuminati\CartBundle\CartProvider
         arguments: [@session, @doctrine.orm.entity_manager, %cart.provider%]
+
+    cart.action_listener:
+        class: Illuminati\CartBundle\EventListener\CartListener
+        arguments: [@doctrine.orm.entity_manager]
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }

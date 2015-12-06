@@ -1,19 +1,17 @@
 <?php
 
-namespace Illuminati\ProductBundle\EventListener;
+namespace Illuminati\CartBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
-use Illuminati\ProductBundle\Controller\ProductControllerInterface;
+use Illuminati\CartBundle\Controller\CartControllerInterface;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * ProductController event listener checks if an order belongs to user
- * and loads cart data from database
- * Class ProductListener
- * @package Illuminati\ProductBundle\EventListener
+ * Class CartListener
+ * @package Illuminati\CartBundle\EventListener
  */
-class ProductListener
+class CartListener
 {
     /**
      * @var EntityManager
@@ -45,7 +43,7 @@ class ProductListener
             return;
         }
 
-        if ($controller[0] instanceof ProductControllerInterface) {
+        if ($controller[0] instanceof CartControllerInterface) {
 
             $user = $controller[0]
                 ->get('security.token_storage')
@@ -66,12 +64,6 @@ class ProductListener
                 if (!$order) {
                     throw new NotFoundHttpException('Order not found!');
                 }
-            }
-
-            // Load cart items from database
-            $cart = $controller[0]->get('cart.provider');
-            if ($cart->getStorage() === null) {
-                $cart->load($user->getId(), $orderId);
             }
         }
     }
