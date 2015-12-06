@@ -52,6 +52,7 @@ order:
     hosted: Orders you have hosted
     joined: Orders you have joined
     closes: Closes
+    paidCount: Unpaid participants
     participants: Participants
     state: State
     stateClosed: Closed

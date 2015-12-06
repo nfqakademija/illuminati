@@ -4,9 +4,9 @@
     <div class="container">
         {% if orders %}
             {% if type == 'hosted' %}
-                <h1 class="history page-header">{% trans %}order.history.hosted{% endtrans %}</h1>
+                <h1 class="page-header text-center">{% trans %}order.history.hosted{% endtrans %}</h1>
             {% elseif type == 'joined' %}
-                <h1 class="history page-header">{% trans %}order.history.joined{% endtrans %}</h1>
+                <h1 class="page-header text-center">{% trans %}order.history.joined{% endtrans %}</h1>
             {% endif %}
         <div class="row">
                 {% for i in 0..orders|length-1 %}
@@ -23,6 +23,9 @@
                                 <div class="pull-left">
                                     <p><strong>{% trans %}order.history.closes{% endtrans %}:</strong> {{ orders[i]['closeDate'] }}</p>
                                     <p><strong>{% trans %}order.history.participants{% endtrans %}:</strong> {{ orders[i]['pCnt'] }}</p>
+                                    {% if type == 'hosted' %}
+                                    <p><strong>{% trans %}order.history.paidCount{% endtrans %}:</strong> {{ orders[i]['paidCnt'] }}</p>
+                                    {% endif %}
                                 </div>
                                 <div class="pull-right">
                                         <p><strong>{% trans %}order.history.state{% endtrans %}:</strong>
@@ -40,9 +43,9 @@
                 {% endfor %}
         </div>
         {% elseif type == 'hosted' %}
-            <h1 class="history">{% trans %}order.history.noHosted{% endtrans %}, <a href="/order/">{% trans %}order.history.create{% endtrans %}.</a></h1>
+            <h1 class="page-header text-center">{% trans %}order.history.noHosted{% endtrans %}, <a href="/order/">{% trans %}order.history.create{% endtrans %}.</a></h1>
         {% else %}
-            <h1 class="history">{% trans %}order.history.noJoined{% endtrans %}, <a href="/order/">{% trans %}order.history.create{% endtrans %}.</a></h1>
+            <h1 class="page-header text-center">{% trans %}order.history.noJoined{% endtrans %}, <a href="/order/">{% trans %}order.history.create{% endtrans %}.</a></h1>
         {% endif %}
     </div>
 {% endblock %}
