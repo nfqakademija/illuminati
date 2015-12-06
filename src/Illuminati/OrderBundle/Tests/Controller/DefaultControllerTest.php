@@ -64,7 +64,7 @@ class DefaultControllerTest extends WebTestCase
         $crawler = $this->client->request('GET', '/history/joined');
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
-        $this->assertTrue($crawler->filter('h1.history:contains("You haven\'t joined any orders")')->count() > 0);
+        $this->assertTrue($crawler->filter('h1:contains("You haven\'t joined any orders")')->count() > 0);
     }
 
     public function testHostedOrdersHistoryAction()
