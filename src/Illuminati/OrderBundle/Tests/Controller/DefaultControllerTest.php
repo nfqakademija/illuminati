@@ -181,6 +181,56 @@ class DefaultControllerTest extends WebTestCase
 
     }
 
+    public function testLeaveOrder()
+    {
+        $this->client->followRedirects();
+
+        $csrfToken = $this
+            ->client
+            ->getContainer()
+            ->get('form.csrf_provider')
+            ->generateCsrfToken('form');
+
+        $db = $this->client->getContainer()->get('database_connection');
+
+        $hostOrderDeleted = $db->fetchAll(
+            'SELECT deleted from host_order WHERE id = 6 AND deleted = 0'
+        );
+
+        $userOrderDeleted = $db->fetchAll(
+            'SELECT deleted from user_order WHERE id = 6 AND deleted = 0'
+        );
+
+        $this->assertNotEmpty($hostOrderDeleted);
+        $this->assertTrue($hostOrderDeleted[0]['deleted'] == 0);
+        $this->assertNotEmpty($userOrderDeleted);
+        $this->assertTrue($userOrderDeleted[0]['deleted'] == 0);
+
+        $this->client->request(
+            'POST',
+            '/order/leave/6',
+            [
+                'form' => [
+                    '_token' => $csrfToken
+                ]
+            ]
+        );
+
+
+        $hostOrderDeleted = $db->fetchAll(
+            'SELECT deleted from host_order WHERE id = 6 AND deleted = 1'
+        );
+
+        $userOrderDeleted = $db->fetchAll(
+            'SELECT deleted from user_order WHERE id = 6 AND deleted = 1'
+        );
+
+        $this->assertNotEmpty($hostOrderDeleted);
+        $this->assertTrue($hostOrderDeleted[0]['deleted'] == 1);
+        $this->assertNotEmpty($userOrderDeleted);
+        $this->assertTrue($userOrderDeleted[0]['deleted'] == 1);
+    }
+
     /**
      * @return \Symfony\Bundle\FrameworkBundle\Client
      */
