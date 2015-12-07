@@ -12,7 +12,11 @@ class DefaultControllerTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createAuthorizedClient();
+//        $this->client = $this->createAuthorizedClient();
+        $this->client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'user1@mailinator.com',
+            'PHP_AUTH_PW'   => 'pass',
+        ));
     }
 
     public function testIndex()
@@ -100,6 +104,163 @@ class DefaultControllerTest extends WebTestCase
             'application/pdf'
         ));
     }
+
+    public function testHostOrderCreation()
+    {
+        $this->client->followRedirects();
+
+        $csrfToken = $this
+            ->client
+            ->getContainer()
+            ->get('form.csrf_provider')
+            ->generateCsrfToken('illuminati_orderbundle_host_order');
+
+
+        $crawler = $this->client->request('GET', '/order/new');
+        $buttonCrawlerNode = $crawler->selectButton('illuminati_orderbundle_host_order[submit]');
+
+        $orderDate = date("Y-m-d H:i", time() + 86400);
+
+        $form = $buttonCrawlerNode->form(
+            [
+                'illuminati_orderbundle_host_order[title]'       => 'testOrder',
+                'illuminati_orderbundle_host_order[description]' => 'test Description ...',
+                'illuminati_orderbundle_host_order[supplier_id]' => 1,
+                'illuminati_orderbundle_host_order[closeDate]'   => $orderDate,
+                'illuminati_orderbundle_host_order[_token]'      => $csrfToken
+            ]
+        );
+
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $crawler = $this->client->submit($form);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertTrue($crawler->filter('html:contains("Order Summary")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("testOrder")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("test Description ...")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("Due Date : ' . $orderDate . '")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("Hosted By:")')->count() > 0);
+
+    }
+
+    public function testHostOrderEdit()
+    {
+        $this->client->followRedirects();
+
+        $csrfToken = $this
+            ->client
+            ->getContainer()
+            ->get('form.csrf_provider')
+            ->generateCsrfToken('illuminati_orderbundle_host_order');
+
+
+        $crawler = $this->client->request('GET', '/order/6/edit');
+        $buttonCrawlerNode = $crawler->selectButton('illuminati_orderbundle_host_order[submit]');
+
+        $orderDate = date("Y-m-d H:i", time() + 86400);
+
+        $form = $buttonCrawlerNode->form(
+            [
+                'illuminati_orderbundle_host_order[title]'       => 'testOrder1',
+                'illuminati_orderbundle_host_order[description]' => 'test Description1 ...',
+                'illuminati_orderbundle_host_order[supplier_id]' => 1,
+                'illuminati_orderbundle_host_order[closeDate]'   => $orderDate,
+                'illuminati_orderbundle_host_order[_token]'      => $csrfToken
+            ]
+        );
+
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $crawler = $this->client->submit($form);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertTrue($crawler->filter('html:contains("Order Summary")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("testOrder1")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("test Description1 ...")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("Due Date : ' . $orderDate . '")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("Hosted By:")')->count() > 0);
+
+    }
+
+    public function testLeaveOrder()
+    {
+        $this->client->followRedirects();
+
+        $csrfToken = $this
+            ->client
+            ->getContainer()
+            ->get('form.csrf_provider')
+            ->generateCsrfToken('form');
+
+        $db = $this->client->getContainer()->get('database_connection');
+
+        $hostOrderDeleted = $db->fetchAll(
+            'SELECT deleted from host_order WHERE id = 6'
+        );
+
+        $userOrderDeleted = $db->fetchAll(
+            'SELECT deleted from user_order WHERE id = 6'
+        );
+
+        $this->assertNotEmpty($hostOrderDeleted);
+        $this->assertTrue($hostOrderDeleted[0]['deleted'] == 0);
+        $this->assertNotEmpty($userOrderDeleted);
+        $this->assertTrue($userOrderDeleted[0]['deleted'] == 0);
+
+        $this->client->request(
+            'POST',
+            '/order/leave/6',
+            [
+                'form' => [
+                    '_token' => $csrfToken
+                ]
+            ]
+        );
+
+
+        $hostOrderDeleted = $db->fetchAll(
+            'SELECT deleted from host_order WHERE id = 6'
+        );
+
+        $userOrderDeleted = $db->fetchAll(
+            'SELECT deleted from user_order WHERE id = 6'
+        );
+
+        $this->assertNotEmpty($hostOrderDeleted);
+        $this->assertTrue($hostOrderDeleted[0]['deleted'] == 1);
+        $this->assertNotEmpty($userOrderDeleted);
+        $this->assertTrue($userOrderDeleted[0]['deleted'] == 1);
+    }
+
+    public function testOrderConfirmation()
+    {
+        $csrfToken = $this
+            ->client
+            ->getContainer()
+            ->get('form.csrf_provider')
+            ->generateCsrfToken('form');
+
+        $this->client->request(
+            'POST',
+            '/order/confirmed/1',
+            [
+                'form' => [
+                    '_token' => $csrfToken
+                ]
+            ]
+        );
+
+        $orderCheck = $this
+            ->client
+            ->getContainer()
+            ->get('database_connection')
+            ->fetchAll(
+                'SELECT state_id FROM host_order WHERE id = 1'
+            );
+
+        $this->assertNotEmpty($orderCheck);
+        $this->assertTrue($orderCheck[0]['state_id'] == 0);
+    }
+
 
     /**
      * @return \Symfony\Bundle\FrameworkBundle\Client

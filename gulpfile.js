@@ -6,12 +6,25 @@ var uglify = require('gulp-uglify');
 var uglifycss = require('gulp-uglifycss');
 
 gulp.task('sass', function () {
-    gulp.src('./app/Resources/public/sass/master.scss')
+    return gulp.src('./app/Resources/public/sass/master.scss')
         .pipe(sass({sourceComments: 'map'}))
         .pipe(uglifycss({
             "max-line-len": 80
         }))
         .pipe(gulp.dest('./web/assets/'));
+});
+
+gulp.task('css',['sass'], function() {
+    return gulp.src([
+       './web/assets/master.css',
+       './web/assets/vendor/datetimepicker/jquery.datetimepicker.css'
+    ])
+       .pipe(concat('master.css'))
+       .pipe(uglifycss({
+           "max-line-len": 80
+       }))
+       .pipe(gulp.dest('./web/assets/'));
+
 });
 
 gulp.task('fonts', function () {
@@ -23,6 +36,7 @@ gulp.task('js', function() {
     return gulp.src([
             './web/assets/vendor/jquery/dist/jquery.min.js',
             './web/assets/vendor/bootstrap-sass/assets/javascripts/bootstrap.min.js',
+            './web/assets/vendor/datetimepicker/jquery.datetimepicker.js',
             './app/Resources/public/js/common.js',
             './src/Illuminati/CartBundle/Resources/public/js/checkout.js',
             './src/Illuminati/UserBundle/Resources/public/js/userBundle.js',
@@ -60,4 +74,4 @@ gulp.task('watch', function () {
         .on('change', onChange);
 });
 
-gulp.task('default', ['sass', 'fonts', 'js']);
+gulp.task('default', ['sass', 'fonts', 'js', 'css']);

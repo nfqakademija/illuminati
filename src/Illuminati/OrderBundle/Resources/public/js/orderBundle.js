@@ -17,4 +17,10 @@ $(function(){
        }
 
    });
+
+    // datetime picker
+
+    jQuery('.datetime').datetimepicker({
+        format: 'Y-m-d H:00'
+    });
 });
