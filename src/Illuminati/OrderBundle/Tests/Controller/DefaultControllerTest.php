@@ -194,11 +194,11 @@ class DefaultControllerTest extends WebTestCase
         $db = $this->client->getContainer()->get('database_connection');
 
         $hostOrderDeleted = $db->fetchAll(
-            'SELECT deleted from host_order WHERE id = 6 AND deleted = 0'
+            'SELECT deleted from host_order WHERE id = 6'
         );
 
         $userOrderDeleted = $db->fetchAll(
-            'SELECT deleted from user_order WHERE id = 6 AND deleted = 0'
+            'SELECT deleted from user_order WHERE id = 6'
         );
 
         $this->assertNotEmpty($hostOrderDeleted);
@@ -218,11 +218,11 @@ class DefaultControllerTest extends WebTestCase
 
 
         $hostOrderDeleted = $db->fetchAll(
-            'SELECT deleted from host_order WHERE id = 6 AND deleted = 1'
+            'SELECT deleted from host_order WHERE id = 6'
         );
 
         $userOrderDeleted = $db->fetchAll(
-            'SELECT deleted from user_order WHERE id = 6 AND deleted = 1'
+            'SELECT deleted from user_order WHERE id = 6'
         );
 
         $this->assertNotEmpty($hostOrderDeleted);
@@ -230,6 +230,37 @@ class DefaultControllerTest extends WebTestCase
         $this->assertNotEmpty($userOrderDeleted);
         $this->assertTrue($userOrderDeleted[0]['deleted'] == 1);
     }
+
+    public function testOrderConfirmation()
+    {
+        $csrfToken = $this
+            ->client
+            ->getContainer()
+            ->get('form.csrf_provider')
+            ->generateCsrfToken('form');
+
+        $this->client->request(
+            'POST',
+            '/order/confirmed/1',
+            [
+                'form' => [
+                    '_token' => $csrfToken
+                ]
+            ]
+        );
+
+        $orderCheck = $this
+            ->client
+            ->getContainer()
+            ->get('database_connection')
+            ->fetchAll(
+                'SELECT state_id FROM host_order WHERE id = 1'
+            );
+
+        $this->assertNotEmpty($orderCheck);
+        $this->assertTrue($orderCheck[0]['state_id'] == 0);
+    }
+
 
     /**
      * @return \Symfony\Bundle\FrameworkBundle\Client
