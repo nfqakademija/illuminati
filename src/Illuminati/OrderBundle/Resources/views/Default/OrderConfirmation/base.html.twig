@@ -2,11 +2,8 @@
 
 {% block body %}
     <div class="container">
-        <h1>{{ "order.summary.confirmation.title"|trans }}</h1>
-        <a href="{{ path('host_order_summary',{'id':orderId}) }}" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span>{{ "order.summary.confirmation.returnToSummary"|trans }}</a>
-        <hr>
-
-
+        <a href="{{ path('host_order_summary',{'id':orderId}) }}" ><span class="glyphicon glyphicon-chevron-left"></span>{{ "order.summary.confirmation.returnToSummary"|trans }}</a>
+        <h1 class="page-header">{{ "order.summary.confirmation.title"|trans }}</h1>
 
         {% if products %}
             {% set vars = {'products':products, 'orderId':orderId} %}
@@ -14,9 +11,11 @@
 
             <hr>
 
-            <div class="btn-group pull-right" role="group">
-                <a href="{{ path('host_order_generate_pdf', {'id': orderId}) }}" target="_blank" class="btn btn-default"><span class="glyphicon glyphicon-save-file"></span>  {{ "order.summary.confirmation.genPDF"|trans }}</a>
-                <a href="{{ path('host_order_confirmed', {'id': orderId}) }}" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> {{ "order.summary.confirmation.confirm"|trans }}</a>
+            <a href="{{ path('host_order_generate_pdf', {'id': orderId}) }}" target="_blank" class="btn btn-default"><span class="glyphicon glyphicon-save-file"></span>  {{ "order.summary.confirmation.genPDF"|trans }}</a>
+            <div class="pull-right">
+                {{ form_start(form) }}
+                <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-ok"></span> {{ "order.summary.confirmation.confirm"|trans }}</button>
+                {{ form_end(form) }}
             </div>
         {% else %}
             <div class="text-center">

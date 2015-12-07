@@ -5,3 +5,9 @@ cart:
   checkout: Checkout
   total_amount: Total amount
   empty: Your cart is empty
+  product: Product
+  quantity: Quantity
+  price_for_item: Price for item
+  total: Total
+  qty: Qty.
+  item_added: Item added succesfully

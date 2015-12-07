@@ -1,9 +1,24 @@
+
 cart_add:
-    path:     /cart/add/product/{productId}/order/{orderId}
+    path:     /cart/add
+    methods: [POST]
     defaults: { _controller: CartBundle:Cart:add }
+
+cart_update:
+    path:     /cart/update
+    methods: [PUT]
+    defaults: { _controller: CartBundle:Cart:update }
+
 cart_remove:
-    path:     /cart/remove/product/{productId}/order/{orderId}
+    path:     /cart/remove
+    methods: [DELETE]
     defaults: { _controller: CartBundle:Cart:remove }
+
 cart_checkout:
     path:     /cart/checkout/{orderId}
     defaults: { _controller: CartBundle:Cart:checkout }
+
+cart_checkout_confirm:
+    path:     /cart/checkout/confirm/{orderId}
+    methods: [PUT]
+    defaults: { _controller: CartBundle:Cart:confirm }

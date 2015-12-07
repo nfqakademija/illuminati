@@ -18,17 +18,7 @@
             {% include 'ProductBundle::Product/items.html.twig' %}
         </div>
         <div class="col-md-3">
-            <div class="panel panel-default text-center">
-                <div class="panel-body">
-                    <strong>{{ order.supplierId.name }}</strong>
-                </div>
-            </div>
-            {% block sidebar_right %}
-                {{ render(controller(
-                'CartBundle:Cart:sidebarWidget',
-                { 'orderId': order.id }
-                )) }}
-            {% endblock %}
+            {% include 'ProductBundle:Product:cart.sidebar.html.twig' with { 'redirectUrl': '' } %}
         </div>
     </div>
 {% endblock %}
