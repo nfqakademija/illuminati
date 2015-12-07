@@ -1,21 +1,21 @@
 {% extends ":default:index.html.twig" %}
 {% trans_default_domain 'messages' %}
 {% block body %}
-<div id="wrapper">
+<div id="wrapper" class="home">
 
     <header class="main-header">
         <div class="container">
             <div class="row text-center">
                 <div class="col-md-5 hidden-sm hidden-xs">
-                    {% image '@IlluminatiMainBundle/Resources/public/images/logo-min.png' %}
+                    {% image '@IlluminatiMainBundle/Resources/public/images/burger.png' %}
                     <img class="img img-responsive center-block" src="{{ asset_url }}" alt="">
                     {% endimage %}
                 </div>
                 <div class="col-md-7 parent">
                     <div class="child">
                         <h1>{{ "headerTitle"|trans }}</h1>
-                        <p>{{ "headerSubTitle"|trans }}</p>
-                        <a class="btn btn-primary" href="/order/new">{{ "headerButton"|trans }}</a>
+                        <h2>{{ "headerSubTitle"|trans }}</h2>
+                        <p><a class="btn btn-lg btn-success" href="/order/new">{{ "headerButton"|trans }}</a></p>
                     </div>
                 </div>
             </div>
@@ -23,34 +23,34 @@
     </header>
 
     <div class="container">
-        <div id="welcome">
+
             <h2 class="page-header text-center">
                 {{ "whyUseTheSystem"|trans }}
             </h2>
-            <div class="row">
-                <div class="container col-sm-4 pull-right">
+
+            <div class="row welcome-blocks">
+                <div class="col-sm-4">
+                    <div class="block-icon"><span class="glyphicon glyphicon-ok-circle"></span></div>
+                    <strong>{{ "reasonOneTitle"|trans }}</strong>
                     <p>{{ "reasonOne"|trans }}</p>
                 </div>
-            </div>
-            </div>
-            <div class="row">
-                <div class="container col-sm-4 pull-left">
+                <div class="col-sm-4">
+                    <div class="block-icon"><span class="glyphicon glyphicon-ok-circle"></span></div>
+                    <strong>{{ "reasonTwoTitle"|trans }}</strong>
                     <p>{{ "reasonTwo"|trans }}</p>
                 </div>
-            </div>
-            <div class="row">
-                <div class="container col-sm-4 pull-right">
+                <div class="col-sm-4">
+                    <div class="block-icon"><span class="glyphicon glyphicon-ok-circle"></span></div>
+                    <strong>{{ "reasonThreeTitle"|trans }}</strong>
                     <p>{{ "reasonThree"|trans }}</p>
                 </div>
             </div>
-            <div class="row">
-                <div class="container col-sm-4 pull-left">
-                    <p>{{ "reasonFour"|trans }} <a href="/register">{{ "registerLink"|trans }}.</a> </p>
-                </div>
-            </div>
-            </div>
-        </div>
 
+            <p>&nbsp;</p>
+
+            <div class="well text-center">
+                <h4>{{ "reasonFour"|trans }} <a href="/register">{{ "registerLink"|trans }}.</a> </h4>
+            </div>
     </div>
 </div>
     <br>

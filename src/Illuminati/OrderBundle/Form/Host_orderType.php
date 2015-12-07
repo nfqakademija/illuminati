@@ -26,7 +26,11 @@ class Host_orderType extends AbstractType
                 },
                 'label'=>'order.supplier'
             ))
-            ->add('closeDate','datetime', array("label"=>"order.closeDate"))
+            ->add('closeDate', 'datetime', array(
+                "label"=>"order.closeDate",
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd H:mm',
+            ))
             ->add('submit','submit',array("label"=>"order.submit"));
         ;
     }
