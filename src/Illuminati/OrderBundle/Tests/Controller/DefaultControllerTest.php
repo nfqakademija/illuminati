@@ -12,7 +12,11 @@ class DefaultControllerTest extends WebTestCase
 
     public function setUp()
     {
-        $this->client = static::createAuthorizedClient();
+//        $this->client = $this->createAuthorizedClient();
+        $this->client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'user1@mailinator.com',
+            'PHP_AUTH_PW'   => 'pass',
+        ));
     }
 
     public function testIndex()
@@ -99,6 +103,44 @@ class DefaultControllerTest extends WebTestCase
             'Content-Type',
             'application/pdf'
         ));
+    }
+
+    public function testHostOrderCreation()
+    {
+        $this->client->followRedirects();
+
+        $csrfToken = $this
+            ->client
+            ->getContainer()
+            ->get('form.csrf_provider')
+            ->generateCsrfToken('illuminati_orderbundle_host_order');
+
+
+        $crawler = $this->client->request('GET', '/order/new');
+        $buttonCrawlerNode = $crawler->selectButton('illuminati_orderbundle_host_order[submit]');
+
+        $orderDate = date("Y-m-d H:i", time() + 86400);
+
+        $form = $buttonCrawlerNode->form(
+            [
+                'illuminati_orderbundle_host_order[title]'       => 'testOrder',
+                'illuminati_orderbundle_host_order[description]' => 'test Description ...',
+                'illuminati_orderbundle_host_order[supplier_id]' => 1,
+                'illuminati_orderbundle_host_order[closeDate]'   => $orderDate,
+                'illuminati_orderbundle_host_order[_token]'      => $csrfToken
+            ]
+        );
+
+
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $crawler = $this->client->submit($form);
+        $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
+        $this->assertTrue($crawler->filter('html:contains("Order Summary")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("testOrder")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("test Description ...")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("Due Date : ' . $orderDate . '")')->count() > 0);
+        $this->assertTrue($crawler->filter('html:contains("Hosted By:")')->count() > 0);
+
     }
 
     /**
