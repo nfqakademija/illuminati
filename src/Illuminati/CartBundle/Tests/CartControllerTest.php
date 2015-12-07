@@ -26,6 +26,61 @@ class CartControllerTest extends WebTestCase
         parent::setUp();
     }
 
+    public function testRemoveAction()
+    {
+        $session = $this->client->getContainer()->get('session');
+        $session->set('cart', [1=>1]);
+        $session->save();
+
+        $csrfToken = $this->client
+            ->getContainer()
+            ->get('form.csrf_provider')
+            ->generateCsrfToken('IlluminatiCartBundleItemDeleteType');
+
+        $this->client->followRedirects();
+
+        $crawler = $this->client->request('DELETE', '/cart/remove', [
+            'IlluminatiCartBundleItemDeleteType' => [
+                'orderId' => 1,
+                'productId' => 1,
+                '_token' => $csrfToken,
+            ]
+        ]);
+
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('html:contains("Your cart is empty")')->count()
+        );
+    }
+
+    public function testUpdateAction()
+    {
+        $session = $this->client->getContainer()->get('session');
+        $session->set('cart', [1=>1]);
+        $session->save();
+
+        $csrfToken = $this->client
+            ->getContainer()
+            ->get('form.csrf_provider')
+            ->generateCsrfToken('IlluminatiCartBundleItemUpdateType');
+
+        $this->client->followRedirects();
+
+        $crawler = $this->client->request('PUT', '/cart/update', [
+            'IlluminatiCartBundleItemUpdateType' => [
+                'quantity' => 10,
+                'productId' => 1,
+                'orderId' => 1,
+                '_token' => $csrfToken,
+            ]
+        ]);
+
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('.totalAmount:contains("50")')->count()
+        );
+    }
+
     public function testAddAction()
     {
         $csrfToken = $this->client
