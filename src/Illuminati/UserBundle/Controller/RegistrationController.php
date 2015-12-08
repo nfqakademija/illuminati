@@ -14,7 +14,7 @@ class RegistrationController extends BaseController
 {
     public function registerAction(Request $request)
     {
-        if ($this->container->get('security.token_storage')->getToken()->getUser() !== "anon."){
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
             return $this->redirectToRoute('homepage');
         }
 

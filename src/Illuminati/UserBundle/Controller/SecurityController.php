@@ -17,7 +17,7 @@ class SecurityController extends BaseController
      */
     protected function renderLogin(array $data)
     {
-        if ($this->container->get('security.token_storage')->getToken()->getUser() !== "anon.") {
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('homepage');
         }
 
