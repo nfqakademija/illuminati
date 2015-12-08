@@ -4,8 +4,12 @@ namespace Illuminati\ProductBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Illuminati\ProductBundle\Controller\ProductControllerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * ProductController event listener checks if an order belongs to user
@@ -21,12 +25,26 @@ class ProductListener
     public $entityManager;
 
     /**
+     * @var Session
+     */
+    public $session;
+
+    /**
+     * @var TranslatorInterface
+     */
+    public $translator;
+
+    /**
      * ProductListener constructor.
      * @param EntityManager $entityManager
+     * @param Session $session
+     * @param TranslatorInterface $translator
      */
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, Session $session, TranslatorInterface $translator)
     {
         $this->entityManager = $entityManager;
+        $this->session = $session;
+        $this->translator = $translator;
     }
 
     /**
@@ -34,6 +52,9 @@ class ProductListener
      */
     public function onKernelController(FilterControllerEvent $event)
     {
+        /**
+         * @var $controller Controller
+         */
         $controller = $event->getController();
 
         /*
@@ -65,6 +86,38 @@ class ProductListener
 
                 if (!$order) {
                     throw new NotFoundHttpException('Order not found!');
+                }
+
+                $redirectUrl = $controller[0]->generateUrl('host_order_summary', [
+                    'id' => $orderId
+                ]);
+
+                $closeDate = $order->getHostOrderId()->getCloseDate();
+                $now = new \DateTime('now');
+                if ($closeDate < $now) {
+
+                    $this->session->getFlashBag()->add(
+                        'info',
+                        $this->translator->trans('product.order_expired')
+                    );
+
+                    // redirect to summary if order is expired
+                    $event->setController(function() use ($redirectUrl) {
+                        return new RedirectResponse($redirectUrl);
+                    });
+                }
+
+                // redirect to summary if order is closed or confirmed
+                if ($order->getHostOrderId()->getStateId() == 0) {
+
+                    $this->session->getFlashBag()->add(
+                        'info',
+                        $this->translator->trans('product.order_closed')
+                    );
+
+                    $event->setController(function() use ($redirectUrl) {
+                        return new RedirectResponse($redirectUrl);
+                    });
                 }
             }
 

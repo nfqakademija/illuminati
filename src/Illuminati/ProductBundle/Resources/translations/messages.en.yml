@@ -3,3 +3,5 @@ product:
   size: Size
   add_to_cart: Add to cart
   list: Product list
+  order_expired: An order has been expired already
+  order_closed: An order has been closed already
