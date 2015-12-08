@@ -29,7 +29,7 @@
 
         {# Checking if host order's state is open #}
         {% if hostOrder.stateId == 1 %}
-            {% if hostOrder.closeDate < "now"|date("Y-m-d H:i") %}
+            {% if hostOrder.closeDate|date('Y-m-d H:i') > "now"|date("Y-m-d H:i") %}
                 <a href="{{ path('product', { orderId : hostOrder.id } ) }}"><button class="btn btn-default"><span class="glyphicon glyphicon-shopping-cart"></span> {% trans %}order.summary.goToShopButton{% endtrans %} </button></a>
             {% endif %}
             {% if app.user.id == hostOrder.usersId.id %}

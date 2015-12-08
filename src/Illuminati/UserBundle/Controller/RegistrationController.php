@@ -16,7 +16,7 @@ class RegistrationController extends BaseController
 {
     public function registerAction(Request $request)
     {
-        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('homepage');
         }
 
@@ -49,11 +49,19 @@ class RegistrationController extends BaseController
             $userManager->updateUser($user);
 
             if (null === $response = $event->getResponse()) {
-                $url = $this->generateUrl('fos_user_registration_confirmed');
-                $response = new RedirectResponse($url);
+                if ($request->get('_target_path') === null) {
+                    $url = $this->generateUrl('fos_user_registration_confirmed');
+                    $response = new RedirectResponse($url);
+                } else {
+                    $response = new RedirectResponse($request->get('_target_path'));
+                }
+
             }
 
-            $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+            $dispatcher->dispatch(
+                FOSUserEvents::REGISTRATION_COMPLETED,
+                new FilterUserResponseEvent($user, $request, $response)
+            );
 
             return $response;
         }
