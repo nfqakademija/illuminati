@@ -59,6 +59,10 @@
 
         {{ form_widget(form._token) }}
 
+        {% if app.request.get('_target_path') != null %}
+            <input type="hidden" name="_target_path" value="{{ app.request.get('_target_path') }}">
+        {% endif %}
+
         <div class="form-group">
             <div class="col-sm-offset-4">
                 <input type="submit" class="btn btn-primary" value="{{ 'form.registration.submit'|trans({},'messages') }}" />

@@ -96,7 +96,9 @@ class DefaultControllerTest extends WebTestCase
 
     public function testPdfGenAction()
     {
+        ob_start();
         $this->client->request('GET', '/order/genpdf/1');
+        ob_end_clean();
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
         $this->assertTrue($this->client->getResponse()->headers->contains(
@@ -229,6 +231,10 @@ class DefaultControllerTest extends WebTestCase
         $this->assertTrue($hostOrderDeleted[0]['deleted'] == 1);
         $this->assertNotEmpty($userOrderDeleted);
         $this->assertTrue($userOrderDeleted[0]['deleted'] == 1);
+
+        $db->executeQuery(
+            'UPDATE host_order SET deleted = 0 WHERE id = 6'
+        );
     }
 
     public function testOrderConfirmation()
@@ -241,7 +247,7 @@ class DefaultControllerTest extends WebTestCase
 
         $this->client->request(
             'POST',
-            '/order/confirmed/1',
+            '/order/confirmed/6',
             [
                 'form' => [
                     '_token' => $csrfToken
@@ -254,7 +260,7 @@ class DefaultControllerTest extends WebTestCase
             ->getContainer()
             ->get('database_connection')
             ->fetchAll(
-                'SELECT state_id FROM host_order WHERE id = 1'
+                'SELECT state_id FROM host_order WHERE id = 6'
             );
 
         $this->assertNotEmpty($orderCheck);
