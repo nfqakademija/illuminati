@@ -47,7 +47,7 @@ order:
       qty: Qty
       price: Price
       sum: SUM
-      confirmedSuccess: Host order has been confirmed and marked as done!
+      confirmedSuccess: Host order has been confirmed and marked as fineshed!
 
   history:
     hosted: Orders you have hosted
@@ -56,7 +56,7 @@ order:
     paidCount: Unpaid participants
     participants: Participants
     state: State
-    stateClosed: Closed
+    stateClosed: Fineshed
     stateOpen: Open
     view: View Order
     noHosted: You haven't hosted any orders
