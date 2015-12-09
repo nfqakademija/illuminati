@@ -15,7 +15,19 @@
                     <div class="child">
                         <h1>{{ "headerTitle"|trans }}</h1>
                         <h2>{{ "headerSubTitle"|trans }}</h2>
-                        <p><a class="btn btn-lg btn-success" href="/order/new">{{ "headerButton"|trans }}</a></p>
+
+                        {#
+                            If the user is logged in display link to new host order creation
+                            if not, redirect to registrations page with _target_parth to new order creation
+                        #}
+                        {% if app.user %}
+                            <p><a class="btn btn-lg btn-success" href="{{ path('host_order_new') }}">{{ "headerButton"|trans }}</a></p>
+                        {% else %}
+                            <form action="{{ path('fos_user_registration_register') }}" method="post">
+                                <input type="hidden" name="_target_path" value="{{ path('host_order_new') }}">
+                                <button class="btn btn-lg btn-success" type="submit">{{ "headerButton"|trans }}</button>
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>
