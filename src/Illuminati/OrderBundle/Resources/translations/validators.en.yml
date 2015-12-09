@@ -6,3 +6,6 @@ max:
   Title: Title is too long
 
 pastDate: You cannot set a passed date.
+
+notBlank.title: Order must have a title
+notBlank.description: Order must have a description
